@@ -1,0 +1,264 @@
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import './register.dart';
+import './forgotPassword.dart';
+import '../providers/auth.dart';
+import '../widgets/loginLogoCode.dart';
+
+class User {
+  final String username;
+  final String password;
+
+  User({
+    this.username,
+    this.password,
+  });
+}
+
+class Login extends StatefulWidget {
+  static const String id = 'Login';
+
+  @override
+  _LoginState createState() => _LoginState();
+}
+
+class _LoginState extends State<Login> {
+  bool _spinner = false;
+  final _passwordFocusNode = FocusNode();
+  User signingUser = User(username: '', password: '');
+  final _form = GlobalKey<FormState>();
+
+  @override
+  void dispose() {
+    _passwordFocusNode.dispose();
+    super.dispose();
+  }
+
+  void _submit() async {
+    ///necessary code for saving the form
+    final isValid = _form.currentState.validate();
+    if (!isValid) {
+      return;
+    }
+    _form.currentState.save();
+
+    setState(() {
+      _spinner = true;
+    });
+
+    Provider.of<Auth>(context, listen: false)
+        .authenticate(signingUser.username, signingUser.password)
+        .then((value) async {
+      if (value == true) {
+        setState(() {
+          _spinner = false;
+        });
+        // Navigator.pushReplacementNamed(context, Home.id);
+        Navigator.pushReplacementNamed(context, '/');
+      } else {
+        setState(() {
+          _spinner = false;
+        });
+        return showDialog(
+          context: context,
+          builder: (ctx) => AlertDialog(
+            backgroundColor: Theme.of(context).accentColor,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(
+                Radius.circular(10),
+              ),
+              side: BorderSide(
+                color: Theme.of(context).primaryColor,
+                width: 1,
+              ),
+            ),
+            title: const Text('Oooppsssss!'),
+            content: Text('Wrong Email Id or Password. Please try again.'),
+            actions: [
+              FlatButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text('Ok'),
+              ),
+            ],
+          ),
+        );
+      }
+    }).catchError((error) {
+      print('login.dart :: error ::::::::::::::: $error');
+      setState(() {
+        _spinner = false;
+      });
+      return showDialog(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          title: const Text('An Error Occurred!'),
+          content: Text(error.toString()),
+          actions: [
+            FlatButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text('Ok'),
+            ),
+          ],
+        ),
+      );
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return LoginLogoCode(
+      widget: Form(
+        key: _form,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            TextFormField(
+              style: const TextStyle(color: Colors.white),
+              decoration: const InputDecoration(
+                labelText: 'Email Id',
+                labelStyle: const TextStyle(color: Colors.white),
+                border: const UnderlineInputBorder(
+                  borderSide: const BorderSide(color: Colors.white),
+                ),
+                enabledBorder: const UnderlineInputBorder(
+                  borderSide: const BorderSide(color: Colors.white),
+                ),
+                focusedBorder: const UnderlineInputBorder(
+                  borderSide: const BorderSide(color: Colors.white),
+                ),
+              ),
+              enableSuggestions: false,
+              autocorrect: false,
+              textInputAction: TextInputAction.next,
+              keyboardType: TextInputType.emailAddress,
+              validator: (val) {
+                var urlPattern =
+                    r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+";
+                if (val.isEmpty) {
+                  return 'Please enter your Email Id';
+                }
+                var result =
+                    RegExp(urlPattern, caseSensitive: false).hasMatch(val);
+                if (!result) {
+                  return 'Email Id entered is incorrect';
+                }
+                return null;
+              },
+              onFieldSubmitted: (_) =>
+                  FocusScope.of(context).requestFocus(_passwordFocusNode),
+              onSaved: (newValue) {
+                signingUser = User(
+                  username: newValue,
+                  password: signingUser.password,
+                );
+              },
+              controller: TextEditingController(text: signingUser.username),
+            ),
+            SizedBox(height: 15),
+            TextFormField(
+              style: const TextStyle(color: Colors.white),
+              decoration: const InputDecoration(
+                labelText: 'Password',
+                labelStyle: const TextStyle(color: Colors.white),
+                border: const UnderlineInputBorder(
+                  borderSide: const BorderSide(color: Colors.white),
+                ),
+                enabledBorder: const UnderlineInputBorder(
+                  borderSide: const BorderSide(color: Colors.white),
+                ),
+                focusedBorder: const UnderlineInputBorder(
+                  borderSide: const BorderSide(color: Colors.white),
+                ),
+              ),
+              focusNode: _passwordFocusNode,
+              obscureText: true,
+              enableSuggestions: false,
+              autocorrect: false,
+              validator: (value) {
+                if (value.isEmpty) {
+                  return 'Please enter your password';
+                }
+                return null;
+              },
+              onSaved: (newValue) {
+                signingUser = User(
+                  username: signingUser.username,
+                  password: newValue,
+                );
+              },
+              onFieldSubmitted: (_) => _submit(),
+            ),
+            const SizedBox(height: 45),
+            _spinner == true
+                ? Center(
+                    child: const CircularProgressIndicator(
+                      valueColor:
+                          AlwaysStoppedAnimation<Color>(Colors.pinkAccent),
+                    ),
+                  )
+                : SizedBox(height: 0),
+            RaisedButton(
+              onPressed: () {
+                _submit();
+              },
+              color: Colors.pinkAccent,
+              child: Text(
+                'Submit',
+                style: Theme.of(context).textTheme.button,
+              ),
+            ),
+            SizedBox(height: 25),
+            Container(
+              height: 20,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  FlatButton(
+                    onPressed: () {
+                      Navigator.pushReplacement(
+                        context,
+                        PageRouteBuilder(
+                          pageBuilder: (context, animation1, animation2) =>
+                              Register(),
+                          transitionDuration: Duration(seconds: 0),
+                        ),
+                      );
+                    },
+                    child: Text(
+                      'Register',
+                      style: Theme.of(context).textTheme.button,
+                    ),
+                  ),
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: 10),
+                    child: Text('|', style: Theme.of(context).textTheme.button),
+                  ),
+                  FlatButton(
+                    onPressed: () {
+                      Navigator.pushReplacement(
+                        context,
+                        PageRouteBuilder(
+                          pageBuilder: (context, animation1, animation2) =>
+                              ForgotPassword(),
+                          transitionDuration: Duration(seconds: 0),
+                        ),
+                      );
+                    },
+                    child: Text(
+                      'Forgot password',
+                      style: Theme.of(context).textTheme.button,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(height: 15),
+          ],
+        ),
+      ),
+    );
+  }
+}
