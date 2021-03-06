@@ -1,10 +1,10 @@
-import 'dart:io';
-import 'dart:async';
+// import 'dart:io';
+// import 'dart:async';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:path_provider/path_provider.dart';
+// import 'package:path_provider/path_provider.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 
 
@@ -72,6 +72,14 @@ class OpenWebState extends State<OpenWeb> {
       FloatingActionButton(
         onPressed: () async {
           final result = await webView.takeScreenshot();
+
+          /// compress file
+            var image = await FlutterImageCompress.compressWithList(
+              result,
+              minHeight: 960,
+              minWidth: 540,
+              quality: 40,
+            );
           // var len = result.lengthInBytes;
           // final directory = (await getApplicationDocumentsDirectory()).path;
           // String fileName = 'myImage';
@@ -89,7 +97,7 @@ class OpenWebState extends State<OpenWeb> {
           //             );
           //           },
           //         );
-          Navigator.pop(context, result);
+          Navigator.pop(context, image);
         },
         child: FaIcon(
           FontAwesomeIcons.check,

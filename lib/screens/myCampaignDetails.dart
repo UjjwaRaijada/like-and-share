@@ -13,6 +13,7 @@ import '../widgets/startingCode.dart';
 import '../widgets/shadowBox.dart';
 import '../widgets/customDivider.dart';
 import '../widgets/halfRow.dart';
+import '../widgets/bottomButtonPink.dart';
 
 class MyCampaignDetails extends StatefulWidget {
   static const String id = 'MyCampaignDetails';
@@ -23,6 +24,7 @@ class MyCampaignDetails extends StatefulWidget {
 
 class _MyCampaignDetailsState extends State<MyCampaignDetails> {
   bool _spinner = false;
+  bool _done = true;
   int _campaignId;
   String _complain;
   CampaignClass _campaignData;
@@ -46,11 +48,6 @@ class _MyCampaignDetailsState extends State<MyCampaignDetails> {
       Provider.of<CompletedData>(context, listen: false)
           .read(_campaignId)
           .then((_) {
-        _dataCompleted =
-            Provider.of<CompletedData>(context, listen: false).data.toList();
-        print('name is :::::::: ${_dataCompleted[0].userName}');
-        print('stop triggered');
-        print('data completed ::::::: ${_dataCompleted.length}');
         setState(() {
           _spinner = false;
         });
@@ -61,9 +58,6 @@ class _MyCampaignDetailsState extends State<MyCampaignDetails> {
         });
       });
     }
-    // _dataApprovalPending = _data
-    //     .where((val) => ((val.approveBy == '') && (val.complain == '')))
-    //     .toList();
     super.didChangeDependencies();
   }
 
@@ -75,69 +69,69 @@ class _MyCampaignDetailsState extends State<MyCampaignDetails> {
     }
   }
 
-  void _showImage(Completed complete) {
-    Widget okButton = RawMaterialButton(
-      onPressed: () {
-        _approve(complete.id);
-        Navigator.pop(context);
-      },
-      constraints: const BoxConstraints(
-        maxWidth: 30,
-        minWidth: 30,
-        maxHeight: 30,
-        minHeight: 30,
-      ),
-      child: const FaIcon(
-        FontAwesomeIcons.check,
-        size: 18,
-        color: Colors.white,
-      ),
-      fillColor: Colors.green,
-      shape: const CircleBorder(),
-    );
-
-    Widget cancelButton = RawMaterialButton(
-      onPressed: () {
-        Navigator.pop(context);
-        _cancelAlert(complete);
-      },
-      constraints: const BoxConstraints(
-        maxWidth: 30,
-        minWidth: 30,
-        maxHeight: 30,
-        minHeight: 30,
-      ),
-      child: const FaIcon(
-        FontAwesomeIcons.times,
-        size: 20,
-        color: Colors.white,
-      ),
-      fillColor: Colors.red,
-      shape: const CircleBorder(),
-    );
-
-    // set up the AlertDialog
-    AlertDialog alert = AlertDialog(
-      title: Text(
-        complete.userName,
-        style: Theme.of(context).textTheme.headline1,
-      ),
-      content: Container(
-        height: 250,
-        width: 250,
-        child: Image.network(complete.screenshot),
-      ),
-      actions: [okButton, cancelButton],
-    );
-
-    // show the dialog
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return alert;
-      },
-    );
-  }
+  // void _showImage(Completed complete) {
+  //   Widget okButton = RawMaterialButton(
+  //     onPressed: () {
+  //       _approve(complete.id);
+  //       Navigator.pop(context);
+  //     },
+  //     constraints: const BoxConstraints(
+  //       maxWidth: 30,
+  //       minWidth: 30,
+  //       maxHeight: 30,
+  //       minHeight: 30,
+  //     ),
+  //     child: const FaIcon(
+  //       FontAwesomeIcons.check,
+  //       size: 18,
+  //       color: Colors.white,
+  //     ),
+  //     fillColor: Colors.green,
+  //     shape: const CircleBorder(),
+  //   );
+  //
+  //   Widget cancelButton = RawMaterialButton(
+  //     onPressed: () {
+  //       Navigator.pop(context);
+  //       _cancelAlert(complete);
+  //     },
+  //     constraints: const BoxConstraints(
+  //       maxWidth: 30,
+  //       minWidth: 30,
+  //       maxHeight: 30,
+  //       minHeight: 30,
+  //     ),
+  //     child: const FaIcon(
+  //       FontAwesomeIcons.times,
+  //       size: 20,
+  //       color: Colors.white,
+  //     ),
+  //     fillColor: Colors.red,
+  //     shape: const CircleBorder(),
+  //   );
+  //
+  //   // set up the AlertDialog
+  //   AlertDialog alert = AlertDialog(
+  //     title: Text(
+  //       complete.userName,
+  //       style: Theme.of(context).textTheme.headline1,
+  //     ),
+  //     content: Container(
+  //       height: 250,
+  //       width: 250,
+  //       child: Image.network(complete.screenshot),
+  //     ),
+  //     actions: [okButton, cancelButton],
+  //   );
+  //
+  //   // show the dialog
+  //   showDialog(
+  //     context: context,
+  //     builder: (BuildContext context) {
+  //       return alert;
+  //     },
+  //   );
+  // }
 
   void refreshPage() {
     setState(() {
@@ -161,7 +155,7 @@ class _MyCampaignDetailsState extends State<MyCampaignDetails> {
     }
   }
 
-  void _cancelAlert(Completed complete) {
+  void _reportAlert(int compId) {
     Widget backButton = RawMaterialButton(
       onPressed: () {
         Navigator.pop(context);
@@ -173,7 +167,7 @@ class _MyCampaignDetailsState extends State<MyCampaignDetails> {
     );
 
     Widget submitButton = RawMaterialButton(
-      onPressed: () => _cancel(complete.id),
+      onPressed: () => _report(compId),
       child: Text(
         'Submit',
         style: Theme.of(context).textTheme.bodyText1,
@@ -216,7 +210,7 @@ class _MyCampaignDetailsState extends State<MyCampaignDetails> {
     );
   }
 
-  void _cancel(int id) {
+  void _report(int id) {
     Provider.of<CompletedData>(context, listen: false)
         .cancel(id, _complain)
         .then((value) {
@@ -229,7 +223,7 @@ class _MyCampaignDetailsState extends State<MyCampaignDetails> {
             title: Text('An Error Occurred!'),
             content: Text('Something went wrong. Please try again.'),
             actions: [
-              FlatButton(
+              TextButton(
                 onPressed: () => Navigator.pop(context),
                 child: Text('Ok'),
               ),
@@ -244,30 +238,17 @@ class _MyCampaignDetailsState extends State<MyCampaignDetails> {
   void _approve(int compId) {
     // Provider.of<CampaignData>(context, listen: false).approveCompleted(campId);
     Provider.of<CompletedData>(context, listen: false)
-        .approve(compId)
-        .then((value) {
-      if (value == true) {
-        refreshPage();
-      } else {
-        return showDialog(
-          context: context,
-          builder: (ctx) => AlertDialog(
-            title: Text('An Error Occurred!'),
-            content: Text('Something went wrong. Please try again.'),
-            actions: [
-              FlatButton(
-                onPressed: () => Navigator.pop(context),
-                child: Text('Ok'),
-              ),
-            ],
-          ),
-        );
-      }
+        .approve(compId);
+    setState(() {
+      _done = true;
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    _dataCompleted =
+        Provider.of<CompletedData>(context, listen: false).data.toList();
+
     actionIcon = _campaignData.action;
 
     return StartingCode(
@@ -278,102 +259,99 @@ class _MyCampaignDetailsState extends State<MyCampaignDetails> {
             children: [
               HalfRow(
                   title:
-                      'Likes: ${_campaignData.heartPending + _campaignData.heartGiven}'),
-              HalfRow(title: 'Approved: ${_campaignData.heartGiven}'),
+                      'Approved: ${(_campaignData.heartGiven / _campaignData.cost).round()}'),
+              HalfRow(title: 'Pending: ${(_campaignData.heartPending / _campaignData.cost).round()}'),
             ],
           ),
           ShadowBox(
-            widget: Row(
-              children: [
-                Container(
-                  width: 150,
-                  height: 150,
-                  child: Image.network(_campaignData.urlImage),
-                ),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          height: 40,
-                          child: RawMaterialButton(
-                            onPressed: () => _launchURL(_campaignData.pageUrl),
-                            child: Text(
-                              _campaignData.pageUrl,
-                              style: const TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                              ),
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                        ),
-                        Container(
-                          height: 40,
-                          child: Text(
-                            DateFormat.yMMMd()
-                                .format(_campaignData.createdOn)
-                                .toString(),
-                            softWrap: true,
-                            overflow: TextOverflow.fade,
-                            style: const TextStyle(
-                              fontSize: 14,
-                            ),
-                          ),
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Container(
-                                  height: 16,
-                                  child: Text(
-                                    'Target: ${_campaignData.qty}',
-                                    style:
-                                        Theme.of(context).textTheme.headline2,
-                                  ),
-                                ),
-                                const SizedBox(width: 5),
-                                Icon(
-                                  actionToIcon,
-                                  size: 15,
-                                ),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                Container(
-                                  height: 16,
-                                  child: Text(
-                                    'Cost: ${_campaignData.cost}',
-                                    style:
-                                        Theme.of(context).textTheme.headline2,
-                                  ),
-                                ),
-                                const SizedBox(width: 5),
-                                const Icon(
-                                  FontAwesomeIcons.solidHeart,
-                                  color: Colors.red,
-                                  size: 15,
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ],
+            widget: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 18),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    width: double.infinity,
+                    child: Text('Campaign name will come here',
+                      style: Theme.of(context).textTheme.headline1,
+                      textAlign: TextAlign.center,
                     ),
                   ),
-                ),
-              ],
+                  const SizedBox(height: 15),
+                  Container(
+                    height: 20,
+                    child: RawMaterialButton(
+                      onPressed: () => _launchURL(_campaignData.pageUrl),
+                      child: Text(
+                        _campaignData.pageUrl,
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ),
+                  Container(
+                    child: Text(
+                      DateFormat.yMMMd()
+                          .format(_campaignData.createdOn)
+                          .toString(),
+                      softWrap: true,
+                      overflow: TextOverflow.fade,
+                      style: const TextStyle(
+                        fontSize: 14,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 15),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            height: 16,
+                            child: Text(
+                              'Target: ${_campaignData.qty}',
+                              style:
+                                  Theme.of(context).textTheme.headline2,
+                            ),
+                          ),
+                          const SizedBox(width: 5),
+                          Icon(
+                            actionToIcon,
+                            size: 15,
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          Container(
+                            height: 16,
+                            child: Text(
+                              'Expense: ${_campaignData.cost*_campaignData.qty}',
+                              style:
+                                  Theme.of(context).textTheme.headline2,
+                            ),
+                          ),
+                          const SizedBox(width: 5),
+                          const Icon(
+                            FontAwesomeIcons.solidHeart,
+                            color: Colors.red,
+                            size: 15,
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 10),
 
           // Row(
           //   children: [
@@ -382,18 +360,23 @@ class _MyCampaignDetailsState extends State<MyCampaignDetails> {
           //   ],
           // ),
           _spinner == true
-              ? Center(
-                  child: CircularProgressIndicator(),
+              ? Expanded(
+                  child: Center(
+                    child: CircularProgressIndicator(
+                      backgroundColor: Theme.of(context).primaryColor,
+                    ),
+                  ),
                 )
               : Expanded(
-                  child: ShadowBox(
-                    widget: _dataCompleted == null
+                    child: _dataCompleted == null
                         ? Center(
-                            child: RaisedButton(
+                            child: ElevatedButton(
                               onPressed: () => Navigator.pushNamed(
                                   context, RestartCampaign.id,
                                   arguments: _campaignData.id),
-                              color: Colors.pinkAccent,
+                              style: ButtonStyle(
+                                backgroundColor: MaterialStateProperty.all<Color>(Theme.of(context).primaryColor),
+                              ),
                               child: Text(
                                 'Restart Campaign',
                                 style: Theme.of(context).textTheme.button,
@@ -401,54 +384,110 @@ class _MyCampaignDetailsState extends State<MyCampaignDetails> {
                             ),
                           )
                         : _dataCompleted.isEmpty
-                            ? Center(
-                                child: Padding(
-                                  padding: const EdgeInsets.all(18.0),
-                                  child: Text(
-                                    'Great job! You have shared hearts with people who cared about you. Create a new campaign and enjoy.',
-                                    style:
-                                        Theme.of(context).textTheme.bodyText1,
-                                  ),
+                            ? Padding(
+                              padding: const EdgeInsets.all(18.0),
+                              child: DefaultTextStyle(
+                                style: Theme.of(context).textTheme.bodyText1,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      'Great job! You have shared hearts with people who cared about you. Create a new campaign and enjoy.',
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    Text('You can also try Refreshing the page!'),
+                                    SizedBox(height: 5),
+                                    ElevatedButton(
+                                      onPressed: () => refreshPage(),
+                                      style: ButtonStyle(
+                                        backgroundColor: MaterialStateProperty.all<Color>(
+                                          Theme.of(context).primaryColor
+                                        ),
+                                      ),
+                                      child: Text('Refresh Page',
+                                        style: Theme.of(context).textTheme.button,
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              )
-                            : ListView.builder(
-                                padding: EdgeInsets.zero,
-                                itemBuilder: (context, index) {
-                                  int _diffTime = DateTime.now()
-                                      .difference(
-                                          _dataCompleted[index].submitDate)
-                                      .inMinutes;
-                                  int _minLeft = 24 * 60 - _diffTime;
-                                  int _hourL = (_minLeft ~/ 60).toInt();
-                                  int _minL = _minLeft % 60;
-                                  String _hour;
-                                  String _min;
-
-                                  if (_hourL < 10) {
-                                    _hour = '0$_hourL';
-                                  } else {
-                                    _hour = '$_hourL';
-                                  }
-                                  if (_minL < 10) {
-                                    _min = '0$_minL';
-                                  } else {
-                                    _min = '$_minL';
-                                  }
-                                  return Tile(
-                                    onPress: () =>
-                                        _showImage(_dataCompleted[index]),
-                                    onPressOk: () {
-                                      _approve(_dataCompleted[index].id);
-                                    },
-                                    name: _dataCompleted[index].userName,
-                                    days: '$_hour:$_min',
-                                  );
-                                },
-                                itemCount: _dataCompleted.length,
                               ),
+                            )
+                            // : ListView.builder(
+                            //     padding: EdgeInsets.zero,
+                            //     itemBuilder: (context, index) {
+                            //       int _diffTime = DateTime.now()
+                            //           .difference(
+                            //               _dataCompleted[index].submitDate)
+                            //           .inMinutes;
+                            //       int _minLeft = 24 * 60 - _diffTime;
+                            //       int _hourL = (_minLeft ~/ 60).toInt();
+                            //       int _minL = _minLeft % 60;
+                            //       String _hour;
+                            //       String _min;
+                            //
+                            //       if (_hourL < 10) {
+                            //         _hour = '0$_hourL';
+                            //       } else {
+                            //         _hour = '$_hourL';
+                            //       }
+                            //       if (_minL < 10) {
+                            //         _min = '0$_minL';
+                            //       } else {
+                            //         _min = '$_minL';
+                            //       }
+                            //       return Tile(
+                            //         onPress: () =>
+                            //             _showImage(_dataCompleted[index]),
+                            //         onPressOk: () {
+                            //           _approve(_dataCompleted[index].id);
+                            //         },
+                            //         name: _dataCompleted[index].userName,
+                            //         days: '$_hour:$_min',
+                            //       );
+                            //     },
+                            //     itemCount: _dataCompleted.length,
+                            //   ),
+                          : Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(3.0),
+                                child: Text(_dataCompleted[0].userName),
+                              ),
+                              Image.network(
+                                  _dataCompleted[0].screenshot,
+                              ),
+                            ],
+                          ),
                   ),
-                ),
+          SizedBox(height: 85),
         ],
+      ),
+      bottomS: Container(
+        height: 80,
+        color: Colors.white70,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            BottomButtonPink(
+              onPress: _done == false ? (){}
+                  :() => _reportAlert(_dataCompleted[0].id),
+              icon: FontAwesomeIcons.solidFlag,
+              label: 'Report',
+            ),
+            BottomButtonPink(
+              onPress: _done == false ? (){}
+                  :() {
+                setState(() {
+                  _done = false;
+                });
+                _approve(_dataCompleted[0].id);
+              },
+              icon: FontAwesomeIcons.check,
+              label: 'Approve',
+            ),
+          ],
+        ),
       ),
     );
   }

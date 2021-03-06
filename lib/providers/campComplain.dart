@@ -23,7 +23,7 @@ class CampComplainData with ChangeNotifier {
 
   Future<bool> createComplain(CampComplain newData) async {
     const _url = '$_halfUrl/campComplain/create.php';
-    return await http
+    final result = await http
         .post(
       _url,
       headers: {
@@ -36,21 +36,19 @@ class CampComplainData with ChangeNotifier {
         'user': _user,
         'complain': newData.complain,
       }),
-    )
-        .then((value) {
-      ///
-      if (value.statusCode == 401) {
-        Auth().logout();
-      }
-
-      ///
-      if (value.statusCode == 200) {
-        return true;
-      } else {
-        return false;
-      }
-    }).catchError((error) {
-      return false;
+    ).catchError((error) {
+      print('campComplain.dart :: createComplain :: error ::::::::::::::::: $error');
     });
+    print('campComplain.dart :: createComplain :: result ::::::::::::::::: ${jsonDecode(result.body)}');
+    ///
+    if (result.statusCode == 401) {
+      Auth().logout();
+    }
+    ///
+    if (result.statusCode == 201) {
+      return true;
+    } else {
+      return false;
+    }
   }
 }

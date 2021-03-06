@@ -1,7 +1,8 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+
+import './campaignData.dart';
 
 class FAQs {
   final String ques;
@@ -11,6 +12,31 @@ class FAQs {
     this.ques,
     this.ans,
   });
+}
+
+class ActionCost {
+  final ActionType name;
+  final int cost;
+
+  ActionCost({
+    this.name,
+    this.cost,
+  });
+}
+
+List <ActionCost> _actionCostData = [
+  ActionCost(name: ActionType.Like, cost: 20),
+  ActionCost(name: ActionType.Share, cost: 60),
+  ActionCost(name: ActionType.Follow, cost: 100),
+  ActionCost(name: ActionType.Retweet, cost: 60),
+  ActionCost(name: ActionType.Rate, cost: 60),
+  ActionCost(name: ActionType.Love, cost: 20),
+  ActionCost(name: ActionType.Subscribe, cost: 160),
+  ActionCost(name: ActionType.Review, cost: 100),
+];
+
+List<ActionCost> get actionCostData {
+  return [..._actionCostData];
 }
 
 class Misc extends ChangeNotifier {

@@ -12,10 +12,14 @@ import './screens/enterOtp.dart';
 import './screens/resetPassword.dart';
 import './screens/home.dart';
 import './screens/socialMediaPage.dart';
-import './screens/socialMediaDetails.dart';
 import './screens/socialMediaName.dart';
+import './screens/socialMediaDetails.dart';
+import './screens/socialMediaNew.dart';
+import './screens/socialMediaPremium.dart';
+import './screens/badges.dart';
 import './screens/history.dart';
 import './screens/historyDetails.dart';
+import './screens/historyNew.dart';
 import './screens/createCampaign.dart';
 import './screens/profile.dart';
 import './screens/changePassword.dart';
@@ -108,6 +112,7 @@ class MyApp extends StatelessWidget {
         builder: (ctx, auth, _) => MaterialApp(
           title: 'Flutter Demo',
           theme: ThemeData(
+            fontFamily: 'RocknRoll',
             primaryColor: Colors.pinkAccent,
             primarySwatch: Colors.blue,
             accentColor: Colors.yellow,
@@ -160,16 +165,20 @@ class MyApp extends StatelessWidget {
             ResetPassword.id: (context) => ResetPassword(),
             // Home.id: (context) => Home(),
             SocialMediaPage.id: (context) => SocialMediaPage(),
+            SocialMediaName.id: (context) => SocialMediaName(),
             SocialMediaDetails.id: (context) => SocialMediaDetails(),
+            SocialMediaNew.id: (context) => SocialMediaNew(),
+            SocialMediaPremium.id: (context) => SocialMediaPremium(),
+            Badges.id: (context) => Badges(),
             History.id: (context) => History(),
             HistoryDetails.id: (context) => HistoryDetails(),
+            HistoryNew.id: (context) => HistoryNew(),
             CreateCampaign.id: (context) => CreateCampaign(),
             TAndC.id: (context) => TAndC(),
             Profile.id: (context) => Profile(),
             ChangePassword.id: (context) => ChangePassword(),
             MyCampaign.id: (context) => MyCampaign(),
             MyCampaignDetails.id: (context) => MyCampaignDetails(),
-            SocialMediaName.id: (context) => SocialMediaName(),
             RestartCampaign.id: (context) => RestartCampaign(),
             OpenWeb.id: (context) => OpenWeb(),
             ReferAndEarn.id: (context) => ReferAndEarn(),

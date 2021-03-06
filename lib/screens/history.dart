@@ -46,7 +46,7 @@ class _HistoryState extends State<History> {
               title: Text('An Error Occurred!'),
               content: Text('Something went wrong. Please try again.'),
               actions: [
-                FlatButton(
+                TextButton(
                   onPressed: () => Navigator.pop(context),
                   child: Text('Ok'),
                 ),
@@ -79,6 +79,7 @@ class _HistoryState extends State<History> {
               child: CircularProgressIndicator(),
             )
           : Column(
+
               children: [
                 Text(
                   'Hearts to be Received: ${Provider.of<MyProfileData>(context).data.holdIn}',

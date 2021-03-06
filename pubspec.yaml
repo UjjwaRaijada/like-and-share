@@ -71,6 +71,9 @@ flutter:
     - family: Lobster
       fonts:
         - asset: assets/fonts/Lobster_Regular.ttf
+    - family: RocknRoll
+      fonts:
+        - asset: assets/fonts/RocknRollOne_Regular.ttf
 
   #   - family: Trajan Pro
   #     fonts:

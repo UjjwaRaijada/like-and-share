@@ -14,6 +14,7 @@ class Profile extends StatefulWidget {
 class _ProfileState extends State<Profile> {
   bool _spinner = false;
   bool _onlyRead = true;
+  FocusNode _nameFocus = FocusNode();
   FocusNode _cityFocus = FocusNode();
   FocusNode _facebookFocus = FocusNode();
   FocusNode _instagramFocus = FocusNode();
@@ -71,7 +72,7 @@ class _ProfileState extends State<Profile> {
               title: Text('An Error Occurred!'),
               content: Text('Something went wrong. Please try again.'),
               actions: [
-                FlatButton(
+                TextButton(
                   onPressed: () => Navigator.pop(context),
                   child: Text('Ok'),
                 ),
@@ -89,7 +90,7 @@ class _ProfileState extends State<Profile> {
             title: Text('An Error Occurred!'),
             content: Text('Something went wrong. Please try again.'),
             actions: [
-              FlatButton(
+              TextButton(
                 onPressed: () => Navigator.pop(context),
                 child: Text('Ok'),
               ),
@@ -110,6 +111,7 @@ class _ProfileState extends State<Profile> {
 
   @override
   void dispose() {
+    _nameFocus.dispose();
     _cityFocus.dispose();
     _facebookFocus.dispose();
     _instagramFocus.dispose();
@@ -144,7 +146,7 @@ class _ProfileState extends State<Profile> {
             title: Text('Hurrayyy!'),
             content: Text('Your profile data was successfully changed.'),
             actions: [
-              FlatButton(
+              TextButton(
                 onPressed: () =>
                     // Navigator.pushReplacementNamed(context, Home.id),
                     Navigator.pushReplacementNamed(context, '/'),
@@ -160,7 +162,7 @@ class _ProfileState extends State<Profile> {
             title: Text('It is embarrassing!'),
             content: Text('Something went wrong. Please try again.'),
             actions: [
-              FlatButton(
+              TextButton(
                 onPressed: () => Navigator.pop(context),
                 child: Text('Ok'),
               ),
@@ -189,6 +191,7 @@ class _ProfileState extends State<Profile> {
                       initValue: _myProfile.name,
                       onlyRead: _onlyRead,
                       save: (val) => _name = val,
+                      focusName: _nameFocus,
                       fieldSubmit: (_) =>
                           FocusScope.of(context).requestFocus(_cityFocus),
                     ),
@@ -197,8 +200,9 @@ class _ProfileState extends State<Profile> {
                       initValue: _myProfile.city,
                       onlyRead: _onlyRead,
                       save: (val) => _city = val,
-                      fieldSubmit: (_) =>
-                          FocusScope.of(context).requestFocus(_facebookFocus),
+                      focusName: _cityFocus,
+                      fieldSubmit: (_) => _saveProfile(),
+                          // FocusScope.of(context).requestFocus(_facebookFocus),
                     ),
                     ProfileTile(
                       title: 'Email Id',
@@ -208,58 +212,58 @@ class _ProfileState extends State<Profile> {
                       title: 'Mobile',
                       initValue: _myProfile.mobile.toString(),
                     ),
-                    const SizedBox(height: 30),
-                    const Text('Enter your name as displayed on :'),
-                    MediaTextField(
-                      url: 'assets/images/facebook.png',
-                      title: 'Facebook',
-                      initValue: _facebook,
-                      onlyRead: _onlyRead,
-                      focus: _facebookFocus,
-                      save: (val) => _facebook = val,
-                      fieldSubmit: (_) =>
-                          FocusScope.of(context).requestFocus(_instagramFocus),
-                    ),
-                    MediaTextField(
-                      url: 'assets/images/instagram.png',
-                      title: 'Instagram',
-                      initValue: _instagram,
-                      onlyRead: _onlyRead,
-                      focus: _instagramFocus,
-                      save: (val) => _instagram = val,
-                      fieldSubmit: (_) =>
-                          FocusScope.of(context).requestFocus(_twitterFocus),
-                    ),
-                    MediaTextField(
-                      url: 'assets/images/twitter.png',
-                      title: 'Twitter',
-                      initValue: _twitter,
-                      onlyRead: _onlyRead,
-                      focus: _twitterFocus,
-                      save: (val) => _twitter = val,
-                      fieldSubmit: (_) =>
-                          FocusScope.of(context).requestFocus(_youtubeFocus),
-                    ),
-                    MediaTextField(
-                      url: 'assets/images/youtube.png',
-                      title: 'Youtube',
-                      initValue: _youtube,
-                      onlyRead: _onlyRead,
-                      focus: _youtubeFocus,
-                      save: (val) => _youtube = val,
-                      fieldSubmit: (_) =>
-                          FocusScope.of(context).requestFocus(_googleFocus),
-                    ),
-                    MediaTextField(
-                      url: 'assets/images/google.png',
-                      title: 'Google',
-                      initValue: _google,
-                      onlyRead: _onlyRead,
-                      focus: _googleFocus,
-                      save: (val) => _google = val,
-                      fieldSubmit: (_) => _saveProfile(),
-                    ),
-                    const SizedBox(height: 100),
+                    // const SizedBox(height: 30),
+                    // const Text('Enter your name as displayed on :'),
+                    // MediaTextField(
+                    //   url: 'assets/images/facebook.png',
+                    //   title: 'Facebook',
+                    //   initValue: _facebook,
+                    //   onlyRead: _onlyRead,
+                    //   focus: _facebookFocus,
+                    //   save: (val) => _facebook = val,
+                    //   fieldSubmit: (_) =>
+                    //       FocusScope.of(context).requestFocus(_instagramFocus),
+                    // ),
+                    // MediaTextField(
+                    //   url: 'assets/images/instagram.png',
+                    //   title: 'Instagram',
+                    //   initValue: _instagram,
+                    //   onlyRead: _onlyRead,
+                    //   focus: _instagramFocus,
+                    //   save: (val) => _instagram = val,
+                    //   fieldSubmit: (_) =>
+                    //       FocusScope.of(context).requestFocus(_twitterFocus),
+                    // ),
+                    // MediaTextField(
+                    //   url: 'assets/images/twitter.png',
+                    //   title: 'Twitter',
+                    //   initValue: _twitter,
+                    //   onlyRead: _onlyRead,
+                    //   focus: _twitterFocus,
+                    //   save: (val) => _twitter = val,
+                    //   fieldSubmit: (_) =>
+                    //       FocusScope.of(context).requestFocus(_youtubeFocus),
+                    // ),
+                    // MediaTextField(
+                    //   url: 'assets/images/youtube.png',
+                    //   title: 'Youtube',
+                    //   initValue: _youtube,
+                    //   onlyRead: _onlyRead,
+                    //   focus: _youtubeFocus,
+                    //   save: (val) => _youtube = val,
+                    //   fieldSubmit: (_) =>
+                    //       FocusScope.of(context).requestFocus(_googleFocus),
+                    // ),
+                    // MediaTextField(
+                    //   url: 'assets/images/google.png',
+                    //   title: 'Google',
+                    //   initValue: _google,
+                    //   onlyRead: _onlyRead,
+                    //   focus: _googleFocus,
+                    //   save: (val) => _google = val,
+                    //   fieldSubmit: (_) => _saveProfile(),
+                    // ),
+                    // const SizedBox(height: 100),
                   ],
                 ),
               ),
@@ -283,6 +287,7 @@ class _ProfileState extends State<Profile> {
             maxHeight: 50,
           ),
           onPressed: () {
+            FocusScope.of(context).requestFocus(_nameFocus);
             _onlyRead == false
                 ? setState(() {
                     _saveProfile();

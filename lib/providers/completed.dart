@@ -58,10 +58,9 @@ class CompletedData with ChangeNotifier {
   }
 
   Future<bool> createCompleted(Completed newData) async {
-    print('completed.dart :: screenshot :::::::::::: ${newData.screenshot}');
+    // print('completed.dart :: screenshot :::::::::::: ${newData.screenshot}');
     const _url = '$_halfUrl/completed/create.php';
     const _urlImage = '$_halfUrl/completed/create_image.php';
-    bool status;
 
     var request = http.MultipartRequest("POST", Uri.parse(_urlImage));
     var pic =
@@ -72,39 +71,52 @@ class CompletedData with ChangeNotifier {
     //Get the response from the server
     var responseData = await response.stream.toBytes();
     var responseString = String.fromCharCodes(responseData);
-    print(responseString);
+    print('completed.dart :: createCompleted :: responseString ::::::::::::::::::::::: $responseString');
 
-    await http
+    final result = await http
         .post(
       _url,
       headers: {'content-type': 'application/json', 'authorization': '$_auth'},
       body: json.encode({
         'campaign': newData.campaignId,
         'author': newData.authorId,
-        'user': newData.userId,
+        'user': _user,
         'screenshot': responseString,
       }),
-    )
-        .then((value) async {
-      ///
-      if (value.statusCode == 401) {
-        Auth().logout();
-      }
-
-      ///
-      if (value.statusCode == 201) {
-        print('201');
-        status = true;
-        return true;
-      } else {
-        status = false;
-        print('false');
-        return false;
-      }
-    }).catchError((error) {
-      return false;
+    ).catchError((error) {
+      print('completed.dart :: createCompleted :: error ::::::::::::::::::::::: $error');
     });
-    return status;
+    print('completed.dart :: createCompleted :: response ::::::::::::::::::::::: ${result.body}');
+    ///
+    if (result.statusCode == 401) {
+      Auth().logout();
+    }
+    ///
+    if (result.statusCode == 201) {
+      print('201');
+      return true;
+    } else {
+      print('false');
+      return false;
+    }
+  }
+
+  Future<void> next(Completed newData) async {
+    print('completed.dart :: next :::::::::::::::::::::::: next called');
+    const _url = '$_halfUrl/completed/next.php';
+    final result = await http.post(
+        _url,
+        headers: {'content-type': 'application/json', 'authorization': '$_auth'},
+        body: jsonEncode({
+          'campaign': newData.campaignId,
+          'author': newData.authorId,
+          'user': _user,
+        })
+    ).catchError((error) {
+      print('completed.dart :: next :: error :::::::::::::::::::::: $error');
+      throw error;
+    });
+    print('completed.dart :: next :: response :::::::::::::::::::::: ${jsonDecode(result.body)}');
   }
 
   Future<void> read(int campId) async {
@@ -144,24 +156,24 @@ class CompletedData with ChangeNotifier {
   }
 
   Future<bool> approve(int compId) async {
+    _data.removeWhere((ele) => ele.id == compId);
+    notifyListeners();
+
     final _url = '$_halfUrl/completed/approve.php?id=$compId';
-
-    return await http
-        .patch(_url, headers: {'authorization': '$_auth'}).then((value) {
-      ///
-      if (value.statusCode == 401) {
-        Auth().logout();
-      }
-
-      ///
-      if (value.statusCode == 201) {
-        return true;
-      } else {
-        return false;
-      }
-    }).catchError((error) {
+    final result = await http
+        .patch(_url, headers: {'authorization': '$_auth'}).catchError((error) {
       throw error;
     });
+    ///
+    if (result.statusCode == 401) {
+      Auth().logout();
+    }
+    ///
+    if (result.statusCode == 201) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   Future<bool> cancel(int compId, String complain) async {

@@ -50,25 +50,31 @@ class _MyCampaignState extends State<MyCampaign> {
       widget: _spinner == true
           ? Center(child: CircularProgressIndicator())
           : _data.isEmpty
-              ? Column(
-                  children: [
-                    Text(
-                      'Support a campaign and get rewarded.',
-                      style: Theme.of(context).textTheme.bodyText1,
+              ? Padding(
+                padding: const EdgeInsets.all(18.0),
+                child: DefaultTextStyle(
+                  style: Theme.of(context).textTheme.bodyText1,
+                  textAlign: TextAlign.center,
+                  child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Support a campaign and get rewarded.',
+                        ),
+                        const SizedBox(height: 10),
+                        Text(
+                          'To support a campaign, click on any social media icon on the home page.',
+                        ),
+                        const SizedBox(height: 5),
+                        Text(
+                            'Do Like or Share or other action as per requested and click Done.'),
+                        const SizedBox(height: 10),
+                        Text(
+                            'You can use these heart points to promote your social media pages.'),
+                      ],
                     ),
-                    const SizedBox(height: 10),
-                    Text(
-                      'To support a campaign, click on any social media icon on the home page.',
-                      style: Theme.of(context).textTheme.bodyText1,
-                    ),
-                    const SizedBox(height: 5),
-                    Text(
-                        'Click on the campaign you want to support & get heart points as reward.'),
-                    const SizedBox(height: 10),
-                    Text(
-                        'You can use these heart points to promote your social media pages.'),
-                  ],
-                )
+                ),
+              )
               : Column(
                   children: [
                     Row(
@@ -194,7 +200,7 @@ class SocialMediaTile extends StatelessWidget {
                                     Container(
                                       height: 16,
                                       child: Text(
-                                        'Cost: $costPerAction',
+                                        'Expense: $costPerAction',
                                         style: Theme.of(context)
                                             .textTheme
                                             .headline2,

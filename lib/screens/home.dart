@@ -2,16 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 
-import './history.dart';
-import './createCampaign.dart';
 import './myCampaign.dart';
-import './socialMediaPage.dart';
-import './socialMediaDetails.dart';
+import './socialMediaNew.dart';
+import './socialMediaPremium.dart';
+import './badges.dart';
 import '../providers/campaignData.dart';
 import '../providers/myProfile.dart';
 import '../widgets/customDrawer.dart';
 import '../widgets/customDivider.dart';
 import '../widgets/socialMediaIcon.dart';
+import '../widgets/homeButtonModal.dart';
 
 class Home extends StatefulWidget {
   static const String id = 'Home';
@@ -23,12 +23,14 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   bool _spinner = false;
   MyProfile _myProfile;
-  CampaignClass _premium;
+  List<CampaignClass> _premium = [];
 
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
+    media = Media.Facebook;
+    action = ActionType.Like;
     setState(() {
       _spinner = true;
     });
@@ -37,49 +39,56 @@ class _HomeState extends State<Home> {
 
   @override
   void didChangeDependencies() {
-    if (ModalRoute.of(context).settings.arguments == 'snackBar') {
-      _addSnackBar(context);
-    }
+    // if (ModalRoute.of(context).settings.arguments == 'snackBar') {
+    //   _addSnackBar(context);
+    // }
     if (_spinner == true) {
       Provider.of<MyProfileData>(context, listen: false).refreshData();
-
       Provider.of<CampaignData>(context, listen: false).premiumCamp().then((_) {
         setState(() {
           _spinner = false;
         });
-      }).catchError((error) {
-        print('home.dart :: error ::::::::::: $error');
       });
     }
     super.didChangeDependencies();
   }
 
-  void _addSnackBar(BuildContext context) {
-    _scaffoldKey.currentState.showSnackBar(
-      SnackBar(
-        content: Padding(
-          padding: const EdgeInsets.all(14.0),
-          child: const Text(
-            'Congratulations! Your campaign is ready to be supported by many.',
-            textAlign: TextAlign.center,
-            style: const TextStyle(fontSize: 16),
-          ),
-        ),
-        duration: const Duration(seconds: 3),
-        margin: const EdgeInsets.only(bottom: 80),
-        behavior: SnackBarBehavior.floating,
-        backgroundColor: Colors.blueAccent,
-      ),
+  // void _addSnackBar(BuildContext context) {
+  //   _scaffoldKey.currentState.showSnackBar(
+  //     SnackBar(
+  //       content: Padding(
+  //         padding: const EdgeInsets.all(14.0),
+  //         child: const Text(
+  //           'Congratulations! Your campaign is ready to be supported by many.',
+  //           textAlign: TextAlign.center,
+  //           style: const TextStyle(fontSize: 16),
+  //         ),
+  //       ),
+  //       duration: const Duration(seconds: 3),
+  //       margin: const EdgeInsets.only(bottom: 80),
+  //       behavior: SnackBarBehavior.floating,
+  //       backgroundColor: Colors.blueAccent,
+  //     ),
+  //   );
+  // }
+
+  void _modalBottomSheetMenu(){
+    showModalBottomSheet(
+        context: context,
+        builder: (builder){
+          return HomeBottomModal();
+        }
     );
   }
 
   @override
   Widget build(BuildContext context) {
     _myProfile = Provider.of<MyProfileData>(context).data;
-    if (Provider.of<CampaignData>(context).premiumData.isNotEmpty) {
-      _premium = Provider.of<CampaignData>(context).premiumData[0];
-      actionIcon = _premium.action;
-      mediaImage = _premium.media;
+    _premium = Provider.of<CampaignData>(context).premiumData;
+
+    if (_premium.isNotEmpty) {
+      actionIcon = _premium[0].action;
+      mediaImage = _premium[0].media;
     }
 
     return Scaffold(
@@ -162,40 +171,45 @@ class _HomeState extends State<Home> {
                             children: [
                               SocialMediaIcon(
                                 onPress: () {
+                                  Provider.of<CampaignData>(context, listen: false).clearData();
                                   Navigator.pushNamed(
-                                      context, SocialMediaPage.id,
+                                      context, SocialMediaNew.id,
                                       arguments: Media.Facebook);
                                 },
                                 iconUrl: 'assets/images/v_facebook.png',
                               ),
                               SocialMediaIcon(
                                 onPress: () {
+                                  Provider.of<CampaignData>(context, listen: false).clearData();
                                   Navigator.pushNamed(
-                                      context, SocialMediaPage.id,
+                                      context, SocialMediaNew.id,
                                       arguments: Media.Instagram);
                                 },
                                 iconUrl: 'assets/images/v_instagram.png',
                               ),
                               SocialMediaIcon(
                                 onPress: () {
+                                  Provider.of<CampaignData>(context, listen: false).clearData();
                                   Navigator.pushNamed(
-                                      context, SocialMediaPage.id,
+                                      context, SocialMediaNew.id,
                                       arguments: Media.Twitter);
                                 },
                                 iconUrl: 'assets/images/v_twitter.png',
                               ),
                               SocialMediaIcon(
                                 onPress: () {
+                                  Provider.of<CampaignData>(context, listen: false).clearData();
                                   Navigator.pushNamed(
-                                      context, SocialMediaPage.id,
+                                      context, SocialMediaNew.id,
                                       arguments: Media.YouTube);
                                 },
                                 iconUrl: 'assets/images/v_youtube.png',
                               ),
                               SocialMediaIcon(
                                 onPress: () {
+                                  Provider.of<CampaignData>(context, listen: false).clearData();
                                   Navigator.pushNamed(
-                                      context, SocialMediaPage.id,
+                                      context, SocialMediaNew.id,
                                       arguments: Media.GoogleReview);
                                 },
                                 iconUrl: 'assets/images/v_google.png',
@@ -220,10 +234,10 @@ class _HomeState extends State<Home> {
                                     ),
                                   ),
                                   RawMaterialButton(
-                                    onPressed: _premium != null
+                                    onPressed: _premium.isNotEmpty
                                         ? () => Navigator.pushNamed(
-                                            context, SocialMediaDetails.id,
-                                            arguments: _premium.id)
+                                            context, SocialMediaPremium.id,
+                                            arguments: _premium[0].id)
                                         : () {},
                                     child: Container(
                                       margin: const EdgeInsets.symmetric(
@@ -241,23 +255,23 @@ class _HomeState extends State<Home> {
                                           Radius.circular(15),
                                         ),
                                       ),
-                                      child: _premium != null
+                                      child: _premium.isNotEmpty
                                           ? Column(
                                               children: [
                                                 Container(
-                                                  width: 200,
-                                                  height: 200,
-                                                  child: Image.network(
-                                                      _premium.urlImage),
+                                                  padding: EdgeInsets.all(20),
+                                                  width: 150,
+                                                  height: 150,
+                                                  child: Image.asset(mediaToImage),
                                                 ),
                                                 Text(
-                                                  _premium.authorName,
+                                                  _premium[0].authorName,
                                                   style: Theme.of(context)
                                                       .textTheme
                                                       .headline1,
                                                 ),
                                                 Text(
-                                                  _premium.pageUrl,
+                                                  _premium[0].pageUrl,
                                                   overflow: TextOverflow.fade,
                                                   maxLines: 2,
                                                   textAlign: TextAlign.center,
@@ -278,38 +292,40 @@ class _HomeState extends State<Home> {
                                                       Radius.circular(15),
                                                     ),
                                                   ),
-                                                  child: Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceAround,
-                                                    children: [
-                                                      Container(
-                                                        height: 18,
-                                                        child: Image.asset(
-                                                            mediaToImage),
-                                                      ),
-                                                      Icon(
-                                                        actionToIcon,
-                                                        size: 18,
-                                                      ),
-                                                      Row(
-                                                        children: [
-                                                          Text(
-                                                            _premium.cost
-                                                                .toString(),
-                                                            style: Theme.of(
-                                                                    context)
-                                                                .textTheme
-                                                                .headline1,
-                                                          ),
-                                                          const Icon(
-                                                            Icons.favorite,
-                                                            color: Colors.pink,
-                                                            size: 18,
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ],
+                                                  child: DefaultTextStyle(
+                                                    style: Theme.of(context)
+                                                        .textTheme
+                                                        .headline2,
+                                                    child: Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceAround,
+                                                      children: [
+                                                        Row(
+                                                          children: [
+                                                            Text('Action Required :  '),
+                                                            Icon(
+                                                              actionToIcon,
+                                                              size: 18,
+                                                            ),
+                                                          ],
+                                                        ),
+                                                        Row(
+                                                          children: [
+                                                            Text('Reward :  '),
+                                                            Text(
+                                                              _premium[0].cost
+                                                                  .toString(),
+                                                            ),
+                                                            const Icon(
+                                                              Icons.favorite,
+                                                              color: Colors.pink,
+                                                              size: 18,
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ],
+                                                    ),
                                                   ),
                                                 ),
                                               ],
@@ -351,20 +367,30 @@ class _HomeState extends State<Home> {
               icon: FontAwesomeIcons.bars,
               label: 'Menu',
             ),
+            // BottomButton(
+            //   onPress: () {
+            //     // Navigator.pushNamed(context, History.id);
+            //     Navigator.pushNamed(context, HistoryNew.id);
+            //   },
+            //   icon: FontAwesomeIcons.history,
+            //   label: 'History',
+            // ),
             BottomButton(
               onPress: () {
-                Navigator.pushNamed(context, History.id);
+                // Navigator.pushNamed(context, History.id);
+                Navigator.pushNamed(context, Badges.id);
               },
-              icon: FontAwesomeIcons.history,
-              label: 'History',
+              icon: FontAwesomeIcons.medal,
+              label: 'Badges',
             ),
             BottomButton(
               onPress: () {
-                Navigator.pushNamed(context, CreateCampaign.id).then((value) {
-                  if (value == 'snackBar') {
-                    _addSnackBar(context);
-                  }
-                });
+                // Navigator.pushNamed(context, CreateCampaign.id).then((value) {
+                //   if (value == 'snackBar') {
+                //     _addSnackBar(context);
+                //   }
+                // });
+                _modalBottomSheetMenu();
               },
               icon: FontAwesomeIcons.plus,
               label: 'Add',
@@ -405,14 +431,14 @@ class BottomButton extends StatelessWidget {
         children: [
           Icon(
             icon,
-            color: Colors.yellowAccent,
+            color: Theme.of(context).accentColor,
             size: 25,
           ),
           const SizedBox(height: 3),
           Text(
             label,
-            style: const TextStyle(
-              color: Colors.yellowAccent,
+            style: TextStyle(
+              color: Theme.of(context).accentColor,
               fontSize: 12,
               fontWeight: FontWeight.bold,
             ),
@@ -422,3 +448,4 @@ class BottomButton extends StatelessWidget {
     );
   }
 }
+
