@@ -30,6 +30,7 @@ class Badges {
   final String name;
   final String image;
   final String nextName;
+  final int nextScore;
 
   Badges ({
     this.score,
@@ -37,6 +38,7 @@ class Badges {
     this.name,
     this.image,
     this.nextName,
+    this.nextScore,
   });
 }
 
@@ -112,4 +114,43 @@ class Misc extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+  Badges _badgeData = Badges(
+    level: 0,
+    name: '',
+    image: 'https://www.likeandshare.app/admin/v1/badgeImages/NEWBIE.png',
+    nextName: '',
+    nextScore: 0,
+  );
+  Badges get badgeData {
+    return _badgeData;
+    notifyListeners();
+  }
+
+  Future<void> getBadge(int score) async {
+    print('misc.dart :: getBadge :::::::::::::::::::: getBadge() called');
+
+    final _url = '$_halfUrl/misc/badges.php?score=$score';
+    final result = await http.get(
+        _url, headers: {'authorization': '$_auth'}).catchError((error) {
+      print('misc :: faqs :: error ::::::::::::::::::: $error');
+      throw error;
+    });
+    print('misc.dart :: getBadge :: result :::::::::::::::::: ${jsonDecode(result.body)}');
+
+    if (result.statusCode == 200) {
+      final _extractedData = jsonDecode(result.body) as Map<String, dynamic>;
+      print('misc.dart :: getBadge :: _extractedData :::::::::::::::::: $_extractedData');
+
+      _badgeData = Badges(
+        level: int.parse(_extractedData['data']['badge']['level']),
+        name: _extractedData['data']['badge']['name'],
+        image: _extractedData['data']['badge']['image'],
+        nextName: _extractedData['data']['badge']['nextName'],
+        nextScore: int.parse(_extractedData['data']['badge']['nextScore']),
+      );
+      notifyListeners();
+    }
+  }
+
 }

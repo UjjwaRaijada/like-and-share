@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../providers/misc.dart';
+import '../providers/myProfile.dart';
 import '../widgets/startingCode.dart';
 
 class Badge extends StatelessWidget {
@@ -7,6 +10,11 @@ class Badge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    int _score = 0;
+
+    _score = Provider.of<MyProfileData>(context).data.score;
+    Provider.of<Misc>(context, listen: false).getBadge(_score);
+    Badges _data = Provider.of<Misc>(context).badgeData;
 
     return StartingCode(
       title: 'Badge',
@@ -21,11 +29,13 @@ class Badge extends StatelessWidget {
                   constraints: BoxConstraints(
                     maxHeight: 200
                   ),
-                  child: Image.network('assets/images/beginner.png'),
+                  child: _data == null
+                    ? Image.asset('assets/images/NOVICE.png')
+                    : Image.network(_data.image),
                 ),
                 const SizedBox(height: 15),
                 Text(
-                  'LEVEL 1',
+                  'LEVEL ${_data.level}',
                   style: Theme.of(context).textTheme.headline1.copyWith(
                     fontSize: 22,
                     color: Theme.of(context).primaryColor
@@ -33,12 +43,12 @@ class Badge extends StatelessWidget {
                 ),
                 const SizedBox(height: 5),
                 Text(
-                  'Points :  0',
+                  'Points :  $_score',
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 25),
                 Text(
-                  'The next badge is CURIOUS... upon achieving 10 points',
+                  'The next badge is ${_data.nextName}... upon achieving ${_data.nextScore} points',
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 45),

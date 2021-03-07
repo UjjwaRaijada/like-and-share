@@ -22,6 +22,7 @@ class MyProfile with ChangeNotifier {
   final String google;
   final int refBy;
   final int chosen;
+  final int score;
 
   MyProfile({
     this.id,
@@ -41,6 +42,7 @@ class MyProfile with ChangeNotifier {
     this.google,
     this.refBy,
     this.chosen,
+    this.score,
   });
 }
 
@@ -162,6 +164,7 @@ class MyProfileData with ChangeNotifier {
           youtube: _extractedData['data']['campaign']['youtube'],
           google: _extractedData['data']['campaign']['google'],
           chosen: int.parse(_extractedData['data']['campaign']['chosen']),
+          score: int.parse(_extractedData['data']['campaign']['score']),
         );
         notifyListeners();
         status = true;

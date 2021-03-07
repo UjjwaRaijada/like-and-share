@@ -118,7 +118,7 @@ class DrawerButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 38,
+      // height: 38,
       child: RawMaterialButton(
         onPressed: onPress,
         child: Row(
