@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:share/share.dart';
 
 import './myCampaign.dart';
 import './socialMediaNew.dart';
@@ -24,6 +25,8 @@ class _HomeState extends State<Home> {
   bool _spinner = false;
   MyProfile _myProfile;
   List<CampaignClass> _premium = [];
+  final String _message =
+      'Hey! I am promoting my Social Media page for FREE!  Use my referral code and get extra Heart points which can be converted to likes or shares!!!';
 
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
@@ -226,11 +229,13 @@ class _HomeState extends State<Home> {
                                           MediaQuery.of(context).size.height /
                                               25),
                                   Text(
-                                    'Premium',
+                                    _premium.isNotEmpty
+                                      ? 'Premium'
+                                      : 'Share & Earn',
                                     style: const TextStyle(
                                       fontSize: 22,
                                       color: Colors.white,
-                                      fontWeight: FontWeight.bold,
+                                      // fontWeight: FontWeight.bold,
                                     ),
                                   ),
                                   RawMaterialButton(
@@ -238,7 +243,7 @@ class _HomeState extends State<Home> {
                                         ? () => Navigator.pushNamed(
                                             context, SocialMediaPremium.id,
                                             arguments: _premium[0].id)
-                                        : () {},
+                                        : () => Share.share('$_message \n Referral Code : ${_myProfile.mobile}'),
                                     child: Container(
                                       margin: const EdgeInsets.symmetric(
                                         horizontal: 30,
@@ -331,14 +336,26 @@ class _HomeState extends State<Home> {
                                               ],
                                             )
                                           : Container(
-                                              height: 300,
-                                              child: Center(
-                                                child: Text(
-                                                  'Do you want to see your campaign here? Contact us today.',
-                                                  textAlign: TextAlign.center,
-                                                  style: Theme.of(context)
-                                                      .textTheme
-                                                      .headline2,
+                                        padding: EdgeInsets.all(6),
+                                              color: Colors.white.withOpacity(0.1),
+                                              height: 250,
+                                              child: DefaultTextStyle(
+                                                textAlign: TextAlign.center,
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .headline2,
+                                                child: Column(
+                                                  mainAxisAlignment: MainAxisAlignment.center,
+                                                  children: [
+                                                    Text(
+                                                        'Sharing is caring and we appreciate when you care about someone. As a token of appreciation we will give you & your loved one some extra Heart points.',
+                                                    ),
+                                                    SizedBox(height: 10),
+                                                    Text(
+                                                      'Click to Share!',
+                                                      style: TextStyle(decoration: TextDecoration.underline),
+                                                    ),
+                                                  ],
                                                 ),
                                               ),
                                             ),

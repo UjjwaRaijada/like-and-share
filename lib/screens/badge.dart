@@ -13,8 +13,10 @@ class Badge extends StatelessWidget {
     int _score = 0;
 
     _score = Provider.of<MyProfileData>(context).data.score;
-    Provider.of<Misc>(context, listen: false).getBadge(_score);
     Badges _data = Provider.of<Misc>(context).badgeData;
+    if(_data.level == 0) {
+      Provider.of<Misc>(context, listen: false).getBadge(_score);
+    }
 
     return StartingCode(
       title: 'Badge',

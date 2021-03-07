@@ -793,29 +793,45 @@ class _CreateCampaignState extends State<CreateCampaign> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      'Cost',
-                      style: const TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
                     Row(
+                      crossAxisAlignment: CrossAxisAlignment.baseline,
+                      textBaseline: TextBaseline.alphabetic,
                       children: [
                         Text(
-                          cost.toString(),
+                          'Cost ',
                           style: const TextStyle(
                             fontSize: 22,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
+                        Text('($cost'),
                         const FaIcon(
                           FontAwesomeIcons.solidHeart,
                           color: Colors.redAccent,
-                          size: 12,
+                          size: 14,
                         ),
-                        const SizedBox(width: 30),
+                        Text(' per $actionString)'),
                       ],
+                    ),
+                    Container(
+                      width: 100,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            '${cost * _newCampaign.qty} ',
+                            style: const TextStyle(
+                              fontSize: 22,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const FaIcon(
+                            FontAwesomeIcons.solidHeart,
+                            color: Colors.redAccent,
+                            size: 18,
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),
