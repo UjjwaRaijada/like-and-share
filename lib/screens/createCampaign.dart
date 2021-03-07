@@ -13,6 +13,7 @@ import '../providers/misc.dart';
 // import '../widgets/customDivider.dart';
 import '../widgets/startingCode.dart';
 import '../widgets/alertBox.dart';
+import '../widgets/textFormBorder.dart';
 
 class CreateCampaign extends StatefulWidget {
   static const String id = 'CreateCampaign';
@@ -654,21 +655,11 @@ class _CreateCampaignState extends State<CreateCampaign> {
                 child: TextFormField(
                     decoration: InputDecoration(
                       labelText: 'Campaign Name',
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(25.0),
-                        borderSide: BorderSide(
-                          color: Theme.of(context).primaryColor,
-                          width: 2.0,
-                        ),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(25.0),
-                        borderSide: BorderSide(
-                          color: Theme.of(context).primaryColor,
-                          width: 2.0,
-                        ),
-                      ),
+                      enabledBorder: textFormBorder(context),
+                      // focusedBorder: textFormBorder(context),
+                      border: textFormBorder(context),
                     ),
+                    maxLength: 100,
                     onFieldSubmitted: (_) => FocusScope.of(context).requestFocus(_urlFocus),
                     controller: _forCampName,
                     enableSuggestions: false,
@@ -747,20 +738,9 @@ class _CreateCampaignState extends State<CreateCampaign> {
                 child: TextFormField(
                     decoration: InputDecoration(
                       labelText: 'Enter URL',
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(25.0),
-                        borderSide: BorderSide(
-                          color: Theme.of(context).primaryColor,
-                          width: 2.0,
-                        ),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(25.0),
-                        borderSide: BorderSide(
-                          color: Theme.of(context).primaryColor,
-                          width: 2.0,
-                        ),
-                      ),
+                      enabledBorder: textFormBorder(context),
+                      // focusedBorder: buildOutlineInputBorder(context),
+                      border: textFormBorder(context),
                       suffixIcon: IconButton(
                         icon: FaIcon(
                           FontAwesomeIcons.search,
@@ -987,7 +967,6 @@ class _CreateCampaignState extends State<CreateCampaign> {
               cost: cost,
             );
           });
-          _spinner = true;
           _saveForm();
         },
         child: Container(
@@ -1017,6 +996,7 @@ class _CreateCampaignState extends State<CreateCampaign> {
       ),
     );
   }
+
 }
 
 class IconRowTile extends StatelessWidget {

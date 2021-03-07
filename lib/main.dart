@@ -16,7 +16,7 @@ import './screens/socialMediaName.dart';
 import './screens/socialMediaDetails.dart';
 import './screens/socialMediaNew.dart';
 import './screens/socialMediaPremium.dart';
-import './screens/badges.dart';
+import './screens/badge.dart';
 import './screens/history.dart';
 import './screens/historyDetails.dart';
 import './screens/historyNew.dart';
@@ -169,7 +169,7 @@ class MyApp extends StatelessWidget {
             SocialMediaDetails.id: (context) => SocialMediaDetails(),
             SocialMediaNew.id: (context) => SocialMediaNew(),
             SocialMediaPremium.id: (context) => SocialMediaPremium(),
-            Badges.id: (context) => Badges(),
+            Badge.id: (context) => Badge(),
             History.id: (context) => History(),
             HistoryDetails.id: (context) => HistoryDetails(),
             HistoryNew.id: (context) => HistoryNew(),

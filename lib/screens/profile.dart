@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../providers/myProfile.dart';
 import '../widgets/startingCode.dart';
+import '../widgets/textFormBorder.dart';
 
 class Profile extends StatefulWidget {
   static const String id = 'Profile';
@@ -397,7 +398,12 @@ class ProfileTile extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10),
       child: TextFormField(
-        decoration: InputDecoration(labelText: title),
+        decoration: InputDecoration(
+          labelText: title,
+          enabledBorder: textFormBorder(context),
+          // focusedBorder: textFormBorder(context),
+          border: textFormBorder(context),
+        ),
         initialValue: initValue,
         obscureText: passwordField,
         enableSuggestions: false,

@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import './myCampaign.dart';
 import './socialMediaNew.dart';
 import './socialMediaPremium.dart';
-import './badges.dart';
+import './badge.dart';
 import '../providers/campaignData.dart';
 import '../providers/myProfile.dart';
 import '../widgets/customDrawer.dart';
@@ -378,10 +378,10 @@ class _HomeState extends State<Home> {
             BottomButton(
               onPress: () {
                 // Navigator.pushNamed(context, History.id);
-                Navigator.pushNamed(context, Badges.id);
+                Navigator.pushNamed(context, Badge.id);
               },
               icon: FontAwesomeIcons.medal,
-              label: 'Badges',
+              label: 'Badge',
             ),
             BottomButton(
               onPress: () {
@@ -399,8 +399,8 @@ class _HomeState extends State<Home> {
               onPress: () {
                 Navigator.pushNamed(context, MyCampaign.id);
               },
-              icon: FontAwesomeIcons.boxes,
-              label: 'My Campaigns',
+              icon: FontAwesomeIcons.database,
+              label: 'Campaigns',
             ),
           ],
         ),

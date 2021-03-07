@@ -687,6 +687,7 @@ class CampaignData with ChangeNotifier {
           aString = int.parse(value['action']);
           _fetchedData.add(CampaignClass(
             id: int.parse(value['id']),
+            name: value['name'],
             author: int.parse(value['author']),
             authorName: value['authorName'],
             media: stringToMedia,

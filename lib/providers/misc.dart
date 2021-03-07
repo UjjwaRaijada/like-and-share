@@ -24,6 +24,22 @@ class ActionCost {
   });
 }
 
+class Badges {
+  final int score;
+  final int level;
+  final String name;
+  final String image;
+  final String nextName;
+
+  Badges ({
+    this.score,
+    this.level,
+    this.name,
+    this.image,
+    this.nextName,
+  });
+}
+
 List <ActionCost> _actionCostData = [
   ActionCost(name: ActionType.Like, cost: 20),
   ActionCost(name: ActionType.Share, cost: 60),

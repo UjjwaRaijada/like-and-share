@@ -16,7 +16,7 @@ class _HomeBottomModalState extends State<HomeBottomModal> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      // height: 470,
+      height: 350,
       color: Colors.transparent, //could change this to Color(0xFF737373),
       //so you don't have to change MaterialApp canvasColor
       child: Container(
@@ -33,7 +33,7 @@ class _HomeBottomModalState extends State<HomeBottomModal> {
         child: Column(
           children: [
             Container(
-              padding: EdgeInsets.only(top: 20, bottom: 10),
+              padding: EdgeInsets.only(top: 10),
               child: Text(
                 "Add Campaign",
                 style: Theme.of(context).textTheme.headline1,
@@ -41,7 +41,7 @@ class _HomeBottomModalState extends State<HomeBottomModal> {
             ),
             CustomDivider(),
             Container(
-              padding: EdgeInsets.only(top: 20, bottom: 30),
+              padding: EdgeInsets.only(top: 10, bottom: 20),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
@@ -105,7 +105,7 @@ class _HomeBottomModalState extends State<HomeBottomModal> {
             ),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 10),
-              height: 50,
+              height: 48,
               child: ((() {
                 if (media == Media.Facebook) {
                   return Row(
@@ -310,7 +310,7 @@ class _HomeBottomModalState extends State<HomeBottomModal> {
                 }
               })()),
             ),
-            const SizedBox(height: 30),
+            const SizedBox(height: 20),
             Text(
               'Create campaign for :  $mediaString',
               style: Theme.of(context).textTheme.headline2,

@@ -267,44 +267,35 @@ class _MyCampaignDetailsState extends State<MyCampaignDetails> {
             widget: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 18),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Container(
-                    width: double.infinity,
-                    child: Text('Campaign name will come here',
-                      style: Theme.of(context).textTheme.headline1,
-                      textAlign: TextAlign.center,
-                    ),
+                  Text(
+                    _campaignData.name,
+                    style: Theme.of(context).textTheme.headline1,
                   ),
-                  const SizedBox(height: 15),
+                  const SizedBox(height: 5),
                   Container(
-                    height: 20,
+                    height: 16,
                     child: RawMaterialButton(
                       onPressed: () => _launchURL(_campaignData.pageUrl),
                       child: Text(
                         _campaignData.pageUrl,
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
+                        // style: const TextStyle(
+                        //   fontSize: 16,
+                        //   fontWeight: FontWeight.bold,
+                        // ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
                     ),
                   ),
-                  Container(
-                    child: Text(
-                      DateFormat.yMMMd()
-                          .format(_campaignData.createdOn)
-                          .toString(),
-                      softWrap: true,
-                      overflow: TextOverflow.fade,
-                      style: const TextStyle(
-                        fontSize: 14,
-                      ),
-                    ),
+                  const SizedBox(height: 5),
+                  Text(
+                    DateFormat.yMMMd()
+                        .format(_campaignData.createdOn)
+                        .toString(),
                   ),
-                  const SizedBox(height: 15),
+                  const SizedBox(height: 5),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -313,35 +304,31 @@ class _MyCampaignDetailsState extends State<MyCampaignDetails> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Container(
-                            height: 16,
                             child: Text(
-                              'Target: ${_campaignData.qty}',
-                              style:
-                                  Theme.of(context).textTheme.headline2,
+                              'Target: ${_campaignData.qty} ',
+                              // style:
+                              //     Theme.of(context).textTheme.headline2,
                             ),
                           ),
-                          const SizedBox(width: 5),
                           Icon(
                             actionToIcon,
-                            size: 15,
+                            size: 12,
                           ),
                         ],
                       ),
                       Row(
                         children: [
                           Container(
-                            height: 16,
                             child: Text(
-                              'Expense: ${_campaignData.cost*_campaignData.qty}',
-                              style:
-                                  Theme.of(context).textTheme.headline2,
+                              'Expense: ${_campaignData.cost*_campaignData.qty} ',
+                              // style:
+                              //     Theme.of(context).textTheme.headline2,
                             ),
                           ),
-                          const SizedBox(width: 5),
                           const Icon(
                             FontAwesomeIcons.solidHeart,
                             color: Colors.red,
-                            size: 15,
+                            size: 12,
                           ),
                         ],
                       ),
@@ -447,17 +434,19 @@ class _MyCampaignDetailsState extends State<MyCampaignDetails> {
                             //     },
                             //     itemCount: _dataCompleted.length,
                             //   ),
-                          : Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.all(3.0),
-                                child: Text(_dataCompleted[0].userName),
-                              ),
-                              Image.network(
-                                  _dataCompleted[0].screenshot,
-                              ),
-                            ],
+                          : SingleChildScrollView(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.all(3.0),
+                                  child: Text(_dataCompleted[0].userName),
+                                ),
+                                Image.network(
+                                    _dataCompleted[0].screenshot,
+                                ),
+                              ],
+                            ),
                           ),
                   ),
           SizedBox(height: 85),

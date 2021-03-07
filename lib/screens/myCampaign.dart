@@ -96,6 +96,7 @@ class _MyCampaignState extends State<MyCampaign> {
                           media = _data[index].media;
                           return SocialMediaTile(
                             campaignId: _data[index].id,
+                            name: _data[index].name,
                             imageUrl: _data[index].urlImage,
                             action: _data[index].action,
                             actionQty: _data[index].qty,
@@ -116,6 +117,7 @@ class SocialMediaTile extends StatelessWidget {
   final int campaignId;
   final String imageUrl;
   final Media media;
+  final String name;
   final ActionType action;
   final int actionQty;
   final int costPerAction;
@@ -125,6 +127,7 @@ class SocialMediaTile extends StatelessWidget {
     this.campaignId,
     this.imageUrl,
     this.media,
+    this.name,
     this.action,
     this.actionQty,
     this.costPerAction,
@@ -142,84 +145,73 @@ class SocialMediaTile extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 15),
             height: 110,
             child: ShadowBox(
-              widget: Row(
+              widget: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Container(
-                    width: 80,
-                    height: 80,
-                    child: Image.network(imageUrl),
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    child: Text(
+                      '$name',
+                      // '$mediaString :  $name',
+                      style: Theme.of(context).textTheme.headline1,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 8),
-                          height: 20,
-                          child: Text(
-                            mediaString,
-                            style: Theme.of(context).textTheme.headline1,
-                          ),
-                        ),
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 8),
-                          child: Text(
-                            DateFormat.yMMMd().format(date).toString(),
-                            softWrap: true,
-                            overflow: TextOverflow.fade,
-                            style: Theme.of(context).textTheme.headline3,
-                          ),
-                        ),
-                        Expanded(
-                          child: Center(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Container(
-                                      height: 16,
-                                      child: Text(
-                                        'Target: $actionQty',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .headline2,
-                                      ),
-                                    ),
-                                    const SizedBox(width: 5),
-                                    Icon(
-                                      actionToIcon,
-                                      size: 15,
-                                    ),
-                                  ],
-                                ),
-                                Row(
-                                  children: [
-                                    Container(
-                                      height: 16,
-                                      child: Text(
-                                        'Expense: $costPerAction',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .headline2,
-                                      ),
-                                    ),
-                                    const SizedBox(width: 5),
-                                    const Icon(
-                                      FontAwesomeIcons.solidHeart,
-                                      color: Colors.red,
-                                      size: 15,
-                                    ),
-                                  ],
-                                ),
-                              ],
+                  // Container(
+                  //   padding: const EdgeInsets.symmetric(horizontal: 8),
+                  //   child: Text(
+                  //     DateFormat.yMMMd().format(date).toString(),
+                  //     softWrap: true,
+                  //     overflow: TextOverflow.fade,
+                  //     style: Theme.of(context).textTheme.headline3,
+                  //   ),
+                  // ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(mediaString),
+                      Container(
+                        child: Text(DateFormat.yMMMd().format(date).toString()),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            child: Text(
+                              'Target: $actionQty',
                             ),
                           ),
-                        ),
-                      ],
-                    ),
+                          const SizedBox(width: 5),
+                          Icon(
+                            actionToIcon,
+                            size: 12,
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          Container(
+                            child: Text(
+                              'Expense: $costPerAction',
+                            ),
+                          ),
+                          const SizedBox(width: 5),
+                          const Icon(
+                            FontAwesomeIcons.solidHeart,
+                            color: Colors.red,
+                            size: 12,
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
                 ],
               ),
