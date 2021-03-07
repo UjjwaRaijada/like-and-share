@@ -944,9 +944,9 @@ class _CreateCampaignState extends State<CreateCampaign> {
                   CircularProgressIndicator(
                     backgroundColor: Theme.of(context).primaryColor,
                   )
-              : _urlWeb != null ?
-                  Container(
-                height: 500,
+              : _urlWeb != null
+                  ? Container(
+                height: 700,
                 child: InAppWebView(
                   initialUrl: _urlWeb,
                   initialOptions: InAppWebViewGroupOptions(

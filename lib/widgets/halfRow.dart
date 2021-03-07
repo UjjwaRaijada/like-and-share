@@ -12,7 +12,6 @@ class HalfRow extends StatelessWidget {
       child: Center(
         child: Text(
           title,
-          style: Theme.of(context).textTheme.headline2,
         ),
       ),
     );

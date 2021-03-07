@@ -275,7 +275,7 @@ class _MyCampaignDetailsState extends State<MyCampaignDetails> {
                   ),
                   const SizedBox(height: 5),
                   Container(
-                    height: 16,
+                    height: 18,
                     child: RawMaterialButton(
                       onPressed: () => _launchURL(_campaignData.pageUrl),
                       child: Text(

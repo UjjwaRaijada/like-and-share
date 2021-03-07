@@ -80,7 +80,7 @@ class _MyCampaignState extends State<MyCampaign> {
                     Row(
                       children: [
                         HalfRow(
-                          title: 'Running: ${_data.length}',
+                          title: 'Running: ${_data.where((ele) => ele.qty * ele.cost != ele.heartPending + ele.heartGiven + ele.heartReturned).length}',
                         ),
                         HalfRow(
                           title: 'Total: ${_data.length}',

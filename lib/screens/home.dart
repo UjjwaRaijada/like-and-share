@@ -26,7 +26,7 @@ class _HomeState extends State<Home> {
   MyProfile _myProfile;
   List<CampaignClass> _premium = [];
   final String _message =
-      'Hey! I am promoting my Social Media page for FREE!  Use my referral code and get extra Heart points which can be converted to likes or shares!!!';
+      'Hey! I am promoting my Social Media page for FREE!  Use my referral code and get extra Heart points!!!';
 
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
@@ -348,7 +348,7 @@ class _HomeState extends State<Home> {
                                                   mainAxisAlignment: MainAxisAlignment.center,
                                                   children: [
                                                     Text(
-                                                        'Sharing is caring and we appreciate when you care about someone. As a token of appreciation we will give you & your loved one some extra Heart points.',
+                                                        'Sharing is caring and we appreciate when you care about someone. As a token of appreciation we will give you & your loved one extra Heart points.',
                                                     ),
                                                     SizedBox(height: 10),
                                                     Text(
