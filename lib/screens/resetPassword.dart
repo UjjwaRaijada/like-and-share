@@ -42,7 +42,7 @@ class _ResetPasswordState extends State<ResetPassword> {
             title: Text('An Error Occurred!'),
             content: Text('Something went wrong. Please try again.'),
             actions: [
-              FlatButton(
+              TextButton(
                 onPressed: () => Navigator.pop(context),
                 child: Text('Ok'),
               ),
@@ -116,11 +116,13 @@ class _ResetPasswordState extends State<ResetPassword> {
             onFieldSubmitted: (_) => _submit(),
           ),
           const SizedBox(height: 45),
-          RaisedButton(
+          ElevatedButton(
             onPressed: () {
               _submit();
             },
-            color: Colors.pinkAccent,
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all<Color>(Theme.of(context).primaryColor),
+            ),
             child: const Text(
               'Submit',
               style: const TextStyle(
@@ -130,7 +132,7 @@ class _ResetPasswordState extends State<ResetPassword> {
           SizedBox(height: 25),
           Container(
             height: 15,
-            child: FlatButton(
+            child: TextButton(
               onPressed: () {
                 Navigator.pushReplacement(
                   context,

@@ -47,7 +47,7 @@ class _ChangePasswordState extends State<ChangePassword> {
               title: Text('An Error Occurred!'),
               content: Text('Something went wrong. Please try again.'),
               actions: [
-                FlatButton(
+                TextButton(
                   onPressed: () => Navigator.pop(context),
                   child: Text('Ok'),
                 ),
@@ -65,7 +65,7 @@ class _ChangePasswordState extends State<ChangePassword> {
             title: Text('An Error Occurred!'),
             content: Text('Something went wrong. Please try again.'),
             actions: [
-              FlatButton(
+              TextButton(
                 onPressed: () => Navigator.pop(context),
                 child: Text('Ok'),
               ),
@@ -97,7 +97,7 @@ class _ChangePasswordState extends State<ChangePassword> {
             title: Text('Superb!'),
             content: Text('Your password was changed successfully.'),
             actions: [
-              FlatButton(
+              TextButton(
                 onPressed: () =>
                     // Navigator.pushReplacementNamed(context, Home.id),
                     Navigator.pushReplacementNamed(context, '/'),
@@ -113,7 +113,7 @@ class _ChangePasswordState extends State<ChangePassword> {
             title: Text('Oooppssssss!'),
             content: Text('You entered wrong password.'),
             actions: [
-              FlatButton(
+              TextButton(
                 onPressed: () =>
                     // Navigator.pushReplacementNamed(context, Home.id),
                     Navigator.pushReplacementNamed(context, '/'),
@@ -156,11 +156,13 @@ class _ChangePasswordState extends State<ChangePassword> {
                 fieldSubmit: (_) => _submit(),
               ),
               const SizedBox(height: 30),
-              RaisedButton(
+              ElevatedButton(
                 onPressed: () {
                   _submit();
                 },
-                color: Colors.pinkAccent,
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all<Color>(Theme.of(context).primaryColor),
+                ),
                 child: const Text(
                   'Submit',
                   style: const TextStyle(

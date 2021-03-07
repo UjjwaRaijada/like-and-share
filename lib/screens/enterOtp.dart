@@ -20,7 +20,7 @@ class EnterOtp extends StatelessWidget {
             content:
                 Text('We have sent a new OTP at your registered email id.'),
             actions: [
-              FlatButton(
+              TextButton(
                 onPressed: () => Navigator.pop(context),
                 child: Text('Ok'),
               ),
@@ -34,7 +34,7 @@ class EnterOtp extends StatelessWidget {
             title: Text('Oooopppsssss!'),
             content: Text('Something went wrong. Please try again.'),
             actions: [
-              FlatButton(
+              TextButton(
                 onPressed: () => Navigator.pop(context),
                 child: Text('Ok'),
               ),
@@ -65,7 +65,7 @@ class EnterOtp extends StatelessWidget {
             title: Text('Oooopppsssss!'),
             content: Text('You have entered the wrong OTP. Please try again.'),
             actions: [
-              FlatButton(
+              TextButton(
                 onPressed: () => Navigator.pop(context),
                 child: Text('Ok'),
               ),
@@ -107,11 +107,13 @@ class EnterOtp extends StatelessWidget {
             onFieldSubmitted: (_) => _submit(context, pass),
           ),
           SizedBox(height: 45),
-          RaisedButton(
+          ElevatedButton(
             onPressed: () {
               _submit(context, pass);
             },
-            color: Colors.pinkAccent,
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all<Color>(Theme.of(context).primaryColor),
+            ),
             child: Text(
               'Submit',
               style: Theme.of(context).textTheme.button,
@@ -123,7 +125,7 @@ class EnterOtp extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                FlatButton(
+                TextButton(
                   onPressed: () => resendOtp(context),
                   child: Text(
                     'Resend OTP',
@@ -134,7 +136,7 @@ class EnterOtp extends StatelessWidget {
                   '|',
                   style: Theme.of(context).textTheme.button,
                 ),
-                FlatButton(
+                TextButton(
                   onPressed: () {
                     Navigator.pushReplacement(
                       context,
@@ -154,7 +156,7 @@ class EnterOtp extends StatelessWidget {
                   '|',
                   style: Theme.of(context).textTheme.button,
                 ),
-                FlatButton(
+                TextButton(
                   onPressed: () {
                     Navigator.pushReplacement(
                       context,

@@ -43,7 +43,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
               content: Text(
                   'This email id is not registered! Don\'t miss out on the opportunity to get free publicity and promotion of your social media pages!'),
               actions: [
-                FlatButton(
+                TextButton(
                   onPressed: () => Navigator.pop(context),
                   child: Text('Ok'),
                 ),
@@ -107,11 +107,13 @@ class _ForgotPasswordState extends State<ForgotPassword> {
               controller: TextEditingController(text: email),
             ),
             SizedBox(height: 45),
-            RaisedButton(
+            ElevatedButton(
               onPressed: () {
                 _submit();
               },
-              color: Colors.pinkAccent,
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all<Color>(Theme.of(context).primaryColor),
+              ),
               child: Text(
                 'Submit',
                 style: Theme.of(context).textTheme.button,
@@ -123,7 +125,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  FlatButton(
+                  TextButton(
                     onPressed: () {
                       Navigator.pushReplacement(
                         context,
@@ -146,7 +148,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                       style: Theme.of(context).textTheme.button,
                     ),
                   ),
-                  FlatButton(
+                  TextButton(
                     onPressed: () {
                       Navigator.pushReplacement(
                         context,

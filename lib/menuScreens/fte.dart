@@ -39,9 +39,11 @@ class FTE extends StatelessWidget {
                 'To be part of this initiative, visit Round Table India website by clicking the link below.',
                 style: Theme.of(context).textTheme.bodyText1,
               ),
-              RaisedButton(
+              ElevatedButton(
                 onPressed: () => _launchURL(),
-                color: Colors.pinkAccent,
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all<Color>(Theme.of(context).primaryColor),
+                ),
                 child: Text(
                   'Visit Website',
                   style: Theme.of(context).textTheme.button,

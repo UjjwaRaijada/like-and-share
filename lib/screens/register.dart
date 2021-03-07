@@ -75,7 +75,7 @@ class _RegisterState extends State<Register> {
             title: const Text('Congratulations!!'),
             content: Text(_msg),
             actions: [
-              FlatButton(
+              TextButton(
                 onPressed: () => Navigator.pop(context),
                 child: Text('Ok'),
               ),
@@ -98,7 +98,7 @@ class _RegisterState extends State<Register> {
             title: const Text('Please check!'),
             content: Text(_msg),
             actions: [
-              FlatButton(
+              TextButton(
                 onPressed: () => Navigator.pop(context),
                 child: const Text('Ok'),
               ),
@@ -115,7 +115,7 @@ class _RegisterState extends State<Register> {
             title: const Text('An Error Occurred!'),
             content: const Text('Something went wrong. Please try again.'),
             actions: [
-              FlatButton(
+              TextButton(
                 onPressed: () => Navigator.pop(context),
                 child: Text('Ok'),
               ),
@@ -260,11 +260,13 @@ class _RegisterState extends State<Register> {
                     ),
                   )
                 : SizedBox(height: 0),
-            RaisedButton(
+            ElevatedButton(
               onPressed: () {
                 _submit();
               },
-              color: Colors.pinkAccent,
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all<Color>(Theme.of(context).primaryColor),
+              ),
               child: Text(
                 'Submit',
                 style: Theme.of(context).textTheme.button,
@@ -273,7 +275,7 @@ class _RegisterState extends State<Register> {
             const SizedBox(height: 15),
             Container(
               height: 20,
-              child: FlatButton(
+              child: TextButton(
                 onPressed: () {
                   Navigator.pushReplacement(
                     context,

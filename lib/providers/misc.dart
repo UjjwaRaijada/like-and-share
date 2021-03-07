@@ -124,7 +124,6 @@ class Misc extends ChangeNotifier {
   );
   Badges get badgeData {
     return _badgeData;
-    notifyListeners();
   }
 
   Future<void> getBadge(int score) async {

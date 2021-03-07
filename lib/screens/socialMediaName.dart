@@ -20,8 +20,10 @@ class SocialMediaName extends StatelessWidget {
                 textAlign: TextAlign.justify,
               ),
               const SizedBox(height: 45),
-              RaisedButton(
-                color: Colors.pinkAccent,
+              ElevatedButton(
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all<Color>(Theme.of(context).primaryColor),
+                ),
                 onPressed: () {
                   Navigator.pushNamed(context, Profile.id);
                 },

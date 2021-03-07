@@ -45,7 +45,7 @@ class AlertBox extends StatelessWidget {
       actions: [
         Container(
           height: 30,
-          child: FlatButton(
+          child: TextButton(
             onPressed: () {
               Navigator.pop(context);
             },

@@ -76,7 +76,7 @@ class _LoginState extends State<Login> {
             title: const Text('Oooppsssss!'),
             content: Text('Wrong Email Id or Password. Please try again.'),
             actions: [
-              FlatButton(
+              TextButton(
                 onPressed: () {
                   Navigator.pop(context);
                 },
@@ -97,7 +97,7 @@ class _LoginState extends State<Login> {
           title: const Text('An Error Occurred!'),
           content: Text(error.toString()),
           actions: [
-            FlatButton(
+            TextButton(
               onPressed: () => Navigator.pop(context),
               child: Text('Ok'),
             ),
@@ -200,11 +200,13 @@ class _LoginState extends State<Login> {
                     ),
                   )
                 : SizedBox(height: 0),
-            RaisedButton(
+            ElevatedButton(
               onPressed: () {
                 _submit();
               },
-              color: Colors.pinkAccent,
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all<Color>(Theme.of(context).primaryColor),
+              ),
               child: Text(
                 'Submit',
                 style: Theme.of(context).textTheme.button,
@@ -216,7 +218,7 @@ class _LoginState extends State<Login> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  FlatButton(
+                  TextButton(
                     onPressed: () {
                       Navigator.pushReplacement(
                         context,
@@ -236,7 +238,7 @@ class _LoginState extends State<Login> {
                     padding: EdgeInsets.symmetric(horizontal: 10),
                     child: Text('|', style: Theme.of(context).textTheme.button),
                   ),
-                  FlatButton(
+                  TextButton(
                     onPressed: () {
                       Navigator.pushReplacement(
                         context,
