@@ -789,7 +789,7 @@ class _CreateCampaignState extends State<CreateCampaign> {
               ),
               const SizedBox(height: 20),
               Container(
-                padding: EdgeInsets.symmetric(horizontal: 30),
+                padding: EdgeInsets.symmetric(horizontal: 20),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -798,7 +798,7 @@ class _CreateCampaignState extends State<CreateCampaign> {
                       textBaseline: TextBaseline.alphabetic,
                       children: [
                         Text(
-                          'Cost ',
+                          'Cost',
                           style: const TextStyle(
                             fontSize: 22,
                             fontWeight: FontWeight.bold,
@@ -810,7 +810,7 @@ class _CreateCampaignState extends State<CreateCampaign> {
                           color: Colors.redAccent,
                           size: 14,
                         ),
-                        Text(' per $actionString)'),
+                        Text(' / $actionString)'),
                       ],
                     ),
                     Container(
@@ -838,7 +838,7 @@ class _CreateCampaignState extends State<CreateCampaign> {
               ),
               const SizedBox(height: 10),
               Container(
-                padding: EdgeInsets.symmetric(horizontal: 30),
+                padding: EdgeInsets.symmetric(horizontal: 20),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [

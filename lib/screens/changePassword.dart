@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../providers/myProfile.dart';
 import '../widgets/startingCode.dart';
+import '../widgets/textFormBorder.dart';
 
 class ChangePassword extends StatefulWidget {
   static const String id = 'ChangePassword';
@@ -130,44 +131,52 @@ class _ChangePasswordState extends State<ChangePassword> {
   Widget build(BuildContext context) {
     return StartingCode(
       title: 'You are Awesome',
-      widget: Center(
+      widget: SingleChildScrollView(
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 35),
-          height: 400,
           child: Column(
             children: [
-              ProfileTile(
-                title: 'Old Password',
-                save: (val) => _oldPassword = val,
-                fieldSubmit: (_) =>
-                    FocusScope.of(context).requestFocus(_newPasswordFocus),
+              Container(
+                padding: EdgeInsets.all(30),
+                height: 180,
+                child: Image.asset('assets/images/logo.png', fit: BoxFit.contain,),
               ),
-              ProfileTile(
-                title: 'New Password',
-                save: (val) => _newPassword = val,
-                focusName: _newPasswordFocus,
-                fieldSubmit: (_) =>
-                    FocusScope.of(context).requestFocus(_confirmPasswordFocus),
-              ),
-              ProfileTile(
-                title: 'Retype New Password',
-                save: (val) => _confirmPassword,
-                focusName: _confirmPasswordFocus,
-                fieldSubmit: (_) => _submit(),
-              ),
-              const SizedBox(height: 30),
-              ElevatedButton(
-                onPressed: () {
-                  _submit();
-                },
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all<Color>(Theme.of(context).primaryColor),
-                ),
-                child: const Text(
-                  'Submit',
-                  style: const TextStyle(
-                      color: Colors.white, fontWeight: FontWeight.bold),
-                ),
+              Column(
+                children: [
+                  ProfileTile(
+                    title: 'Old Password',
+                    save: (val) => _oldPassword = val,
+                    fieldSubmit: (_) =>
+                        FocusScope.of(context).requestFocus(_newPasswordFocus),
+                  ),
+                  ProfileTile(
+                    title: 'New Password',
+                    save: (val) => _newPassword = val,
+                    focusName: _newPasswordFocus,
+                    fieldSubmit: (_) =>
+                        FocusScope.of(context).requestFocus(_confirmPasswordFocus),
+                  ),
+                  ProfileTile(
+                    title: 'Retype New Password',
+                    save: (val) => _confirmPassword,
+                    focusName: _confirmPasswordFocus,
+                    fieldSubmit: (_) => _submit(),
+                  ),
+                  const SizedBox(height: 30),
+                  ElevatedButton(
+                    onPressed: () {
+                      _submit();
+                    },
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all<Color>(Theme.of(context).primaryColor),
+                    ),
+                    child: const Text(
+                      'Submit',
+                      style: const TextStyle(
+                          color: Colors.white, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
@@ -195,7 +204,11 @@ class ProfileTile extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10),
       child: TextFormField(
-        decoration: InputDecoration(labelText: title),
+        decoration: InputDecoration(
+          labelText: title,
+          border: textFormBorder(context),
+          enabledBorder: textFormBorder(context),
+        ),
         obscureText: true,
         enableSuggestions: false,
         autocorrect: false,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+// import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/myProfile.dart';
@@ -187,6 +188,24 @@ class _ProfileState extends State<Profile> {
                 padding: EdgeInsets.symmetric(horizontal: 35),
                 child: Column(
                   children: [
+                    Container(
+                      height: 150,
+                      child: Center(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              '${_myProfile.hearts} ',
+                              style: TextStyle(
+                                color: Theme.of(context).primaryColor,
+                                fontSize: 40
+                              ),
+                            ),
+                            Icon(Icons.favorite, color: Theme.of(context).primaryColor, size: 40,)
+                          ],
+                        ),
+                      ),
+                    ),
                     ProfileTile(
                       title: 'Full Name',
                       initValue: _myProfile.name,
@@ -288,7 +307,9 @@ class _ProfileState extends State<Profile> {
             maxHeight: 50,
           ),
           onPressed: () {
-            FocusScope.of(context).requestFocus(_nameFocus);
+            _myProfile.city.isEmpty
+            ? FocusScope.of(context).requestFocus(_cityFocus)
+            : FocusScope.of(context).requestFocus(_nameFocus);
             _onlyRead == false
                 ? setState(() {
                     _saveProfile();

@@ -63,12 +63,13 @@ class StartingCode extends StatelessWidget {
                   child: Row(
                     children: [
                       Text(
-                        _userHearts.toString(),
+                        _userHearts > 999
+                        ? (_userHearts / 1000).toStringAsFixed(1) + 'K '
+                        : '$_userHearts ',
                         // '${_myProfile.hearts}',
                         style:
                             const TextStyle(color: Colors.pink, fontSize: 20),
                       ),
-                      const SizedBox(width: 5),
                       const Icon(
                         Icons.favorite,
                         color: Colors.pink,

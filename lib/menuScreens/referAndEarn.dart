@@ -20,39 +20,50 @@ class ReferAndEarn extends StatelessWidget {
       widget: Container(
         padding: const EdgeInsets.symmetric(horizontal: 18),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
-              'Sharing is caring and we appreciate when you care about someone. As a token of appreciation we will give you & your loved one extra Heart points.',
-              style: Theme.of(context).textTheme.bodyText1,
-              textAlign: TextAlign.justify,
-            ),
-            const SizedBox(height: 20),
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: Colors.pinkAccent,
-                  width: 1,
-                ),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: DefaultTextStyle(
-                style: Theme.of(context).textTheme.bodyText1,
-                child: Column(
-                  children: [
-                    const Text('Message:'),
-                    const SizedBox(height: 10),
-                    Text(
-                      _message,
-                      textAlign: TextAlign.justify,
+              padding: EdgeInsets.all(30),
+              height: 180,
+              child: Image.asset('assets/images/logo.png', fit: BoxFit.contain,),
+            ),
+            Expanded(
+              child: Column(
+                children: [
+                  Text(
+                    'Sharing is caring and we appreciate when you care about someone. As a token of appreciation we will give you & your loved one extra Heart points.',
+                    style: Theme.of(context).textTheme.bodyText1,
+                    textAlign: TextAlign.justify,
+                  ),
+                  const SizedBox(height: 20),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: Colors.pinkAccent,
+                        width: 1,
+                      ),
+                      borderRadius: BorderRadius.circular(10),
                     ),
-                    const SizedBox(height: 8),
-                    Text(
-                      _code,
+                    child: DefaultTextStyle(
+                      style: Theme.of(context).textTheme.bodyText1,
+                      child: Column(
+                        children: [
+                          const Text('Message:'),
+                          const SizedBox(height: 10),
+                          Text(
+                            _message,
+                            textAlign: TextAlign.justify,
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                            _code,
+                          ),
+                        ],
+                      ),
                     ),
-                  ],
-                ),
+                  ),
+                  const SizedBox(height: 40),
+                ],
               ),
             ),
           ],
