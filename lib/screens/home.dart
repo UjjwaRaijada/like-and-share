@@ -157,7 +157,7 @@ class _HomeState extends State<Home> {
                                       context, SocialMediaNew.id,
                                       arguments: Media.Facebook);
                                 },
-                                iconUrl: 'assets/images/v_facebook.png',
+                                icon: FontAwesomeIcons.facebookF,
                               ),
                               SocialMediaIcon(
                                 onPress: () {
@@ -166,7 +166,7 @@ class _HomeState extends State<Home> {
                                       context, SocialMediaNew.id,
                                       arguments: Media.Instagram);
                                 },
-                                iconUrl: 'assets/images/v_instagram.png',
+                                icon: FontAwesomeIcons.instagramSquare,
                               ),
                               SocialMediaIcon(
                                 onPress: () {
@@ -175,7 +175,7 @@ class _HomeState extends State<Home> {
                                       context, SocialMediaNew.id,
                                       arguments: Media.Twitter);
                                 },
-                                iconUrl: 'assets/images/v_twitter.png',
+                                icon: FontAwesomeIcons.twitter,
                               ),
                               SocialMediaIcon(
                                 onPress: () {
@@ -184,7 +184,7 @@ class _HomeState extends State<Home> {
                                       context, SocialMediaNew.id,
                                       arguments: Media.YouTube);
                                 },
-                                iconUrl: 'assets/images/v_youtube.png',
+                                icon: FontAwesomeIcons.youtube,
                               ),
                               SocialMediaIcon(
                                 onPress: () {
@@ -193,7 +193,7 @@ class _HomeState extends State<Home> {
                                       context, SocialMediaNew.id,
                                       arguments: Media.GoogleReview);
                                 },
-                                iconUrl: 'assets/images/v_google.png',
+                                icon: FontAwesomeIcons.google,
                               ),
                             ],
                           ),

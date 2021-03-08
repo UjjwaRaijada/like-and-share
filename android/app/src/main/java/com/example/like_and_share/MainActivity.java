@@ -1,4 +1,4 @@
-package com.example.like_and_share;
+package app.likeandshare;
 
 import io.flutter.embedding.android.FlutterActivity;
 

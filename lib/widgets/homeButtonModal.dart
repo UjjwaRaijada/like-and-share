@@ -52,9 +52,10 @@ class _HomeBottomModalState extends State<HomeBottomModal> {
                         action = ActionType.Like;
                       });
                     },
-                    iconUrl: media == Media.Facebook
-                        ? 'assets/images/facebook.png'
-                        :'assets/images/v_facebook.png',
+                    icon: FontAwesomeIcons.facebookF,
+                    iconColor: media == Media.Facebook
+                        ? Colors.blueAccent
+                        : Colors.black,
                   ),
                   SocialMediaIcon(
                     onPress: () {
@@ -63,9 +64,10 @@ class _HomeBottomModalState extends State<HomeBottomModal> {
                         action = ActionType.Like;
                       });
                     },
-                    iconUrl: media == Media.Instagram
-                        ? 'assets/images/instagram.png'
-                        : 'assets/images/v_instagram.png',
+                    icon: FontAwesomeIcons.instagramSquare,
+                    iconColor: media == Media.Instagram
+                        ? Color(0xFFF58529)
+                        : Colors.black,
                   ),
                   SocialMediaIcon(
                     onPress: () {
@@ -74,9 +76,10 @@ class _HomeBottomModalState extends State<HomeBottomModal> {
                         action = ActionType.Love;
                       });
                     },
-                    iconUrl: media == Media.Twitter
-                        ? 'assets/images/twitter.png'
-                        : 'assets/images/v_twitter.png',
+                    icon: FontAwesomeIcons.twitter,
+                    iconColor: media == Media.Twitter
+                        ? Colors.lightBlueAccent
+                        : Colors.black,
                   ),
                   SocialMediaIcon(
                     onPress: () {
@@ -85,9 +88,10 @@ class _HomeBottomModalState extends State<HomeBottomModal> {
                         action = ActionType.Like;
                       });
                     },
-                    iconUrl: media == Media.YouTube
-                        ? 'assets/images/youtube.png'
-                        : 'assets/images/v_youtube.png',
+                    icon: FontAwesomeIcons.youtube,
+                    iconColor: media == Media.YouTube
+                        ? Colors.red
+                        : Colors.black,
                   ),
                   SocialMediaIcon(
                     onPress: () {
@@ -96,9 +100,10 @@ class _HomeBottomModalState extends State<HomeBottomModal> {
                         action = ActionType.Rate;
                       });
                     },
-                    iconUrl: media == Media.GoogleReview
-                        ? 'assets/images/google.png'
-                        : 'assets/images/v_google.png',
+                    icon: FontAwesomeIcons.google,
+                    iconColor: media == Media.GoogleReview
+                        ? Colors.redAccent
+                        : Colors.black,
                   ),
                 ],
               ),

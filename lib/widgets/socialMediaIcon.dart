@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class SocialMediaIcon extends StatelessWidget {
   final Function onPress;
-  final String iconUrl;
+  final IconData icon;
+  final Color iconColor;
 
-  SocialMediaIcon({this.onPress, this.iconUrl});
+  SocialMediaIcon({
+    this.onPress,
+    this.icon,
+    this.iconColor = Colors.black,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -40,8 +46,11 @@ class SocialMediaIcon extends StatelessWidget {
                   ),
                 ),
               ]),
-          child: Image.asset(
-            iconUrl,
+          child: Center(
+            child: FaIcon(
+              icon,
+              color: iconColor,
+            ),
           ),
         ),
       ),
