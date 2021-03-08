@@ -9,6 +9,7 @@ import '../widgets/customDivider.dart';
 import '../widgets/halfRow.dart';
 import '../widgets/shadowBox.dart';
 import '../widgets/startingCode.dart';
+import '../widgets/alertBox.dart';
 
 class MyCampaign extends StatefulWidget {
   static const String id = 'MyCampaign';
@@ -57,19 +58,19 @@ class _MyCampaignState extends State<MyCampaign> {
                   textAlign: TextAlign.center,
                   child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
+                      children: const [
+                        const Text(
                           'Support a campaign and get rewarded.',
                         ),
                         const SizedBox(height: 10),
-                        Text(
+                        const Text(
                           'To support a campaign, click on any social media icon on the home page.',
                         ),
                         const SizedBox(height: 5),
-                        Text(
+                        const Text(
                             'Do Like or Share or other action as per requested and click Done.'),
                         const SizedBox(height: 10),
-                        Text(
+                        const Text(
                             'You can use these heart points to promote your social media pages.'),
                       ],
                     ),
@@ -158,15 +159,6 @@ class SocialMediaTile extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
-                  // Container(
-                  //   padding: const EdgeInsets.symmetric(horizontal: 8),
-                  //   child: Text(
-                  //     DateFormat.yMMMd().format(date).toString(),
-                  //     softWrap: true,
-                  //     overflow: TextOverflow.fade,
-                  //     style: Theme.of(context).textTheme.headline3,
-                  //   ),
-                  // ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     crossAxisAlignment: CrossAxisAlignment.center,

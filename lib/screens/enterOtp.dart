@@ -6,6 +6,7 @@ import './register.dart';
 import './resetPassword.dart';
 import '../providers/otp.dart';
 import '../widgets/loginLogoCode.dart';
+import '../widgets/alertBox.dart';
 
 class EnterOtp extends StatelessWidget {
   static const String id = 'EnterOtp';
@@ -15,40 +16,26 @@ class EnterOtp extends StatelessWidget {
       if (value == true) {
         return showDialog(
           context: context,
-          builder: (ctx) => AlertDialog(
-            title: Text('Done!'),
-            content:
-                Text('We have sent a new OTP at your registered email id.'),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: Text('Ok'),
-              ),
-            ],
+          builder: (ctx) => AlertBox(
+            title: 'Done!',
+            body: 'We have sent a new OTP at your registered email id.',
+            onPress: () => Navigator.pop(context),
           ),
         );
       } else {
         return showDialog(
           context: context,
-          builder: (ctx) => AlertDialog(
-            title: Text('Oooopppsssss!'),
-            content: Text('Something went wrong. Please try again.'),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: Text('Ok'),
-              ),
-            ],
+          builder: (ctx) => AlertBox(
+            onPress: () => Navigator.pop(context),
           ),
         );
       }
     }).catchError((error) {
-      print('enterOtp.dart :: error :::::::::: $error');
+      throw error;
     });
   }
 
   void _submit(context, pass) async {
-    print('enterOtp.dart :: pass :::::::: $pass');
     Provider.of<OtpData>(context, listen: false).enterOtp(pass).then((value) {
       if (value == true) {
         Navigator.pushReplacement(
@@ -61,15 +48,10 @@ class EnterOtp extends StatelessWidget {
       } else {
         return showDialog(
           context: context,
-          builder: (ctx) => AlertDialog(
-            title: Text('Oooopppsssss!'),
-            content: Text('You have entered the wrong OTP. Please try again.'),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: Text('Ok'),
-              ),
-            ],
+          builder: (ctx) => AlertBox(
+            title: 'Oopsss!',
+            body: 'You have entered the wrong OTP. Please try again.',
+            onPress: () => Navigator.pop(context),
           ),
         );
       }
@@ -106,7 +88,7 @@ class EnterOtp extends StatelessWidget {
             textInputAction: TextInputAction.next,
             onFieldSubmitted: (_) => _submit(context, pass),
           ),
-          SizedBox(height: 45),
+          const SizedBox(height: 45),
           ElevatedButton(
             onPressed: () {
               _submit(context, pass);
@@ -119,63 +101,61 @@ class EnterOtp extends StatelessWidget {
               style: Theme.of(context).textTheme.button,
             ),
           ),
-          SizedBox(height: 25),
+          const SizedBox(height: 25),
           Container(
             height: 20,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                TextButton(
-                  onPressed: () => resendOtp(context),
-                  child: Text(
-                    'Resend OTP',
-                    style: Theme.of(context).textTheme.button,
+            child: DefaultTextStyle(
+              style: Theme.of(context).textTheme.button,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  TextButton(
+                    onPressed: () => resendOtp(context),
+                    child: const Text(
+                      'Resend OTP',
+                    ),
                   ),
-                ),
-                Text(
-                  '|',
-                  style: Theme.of(context).textTheme.button,
-                ),
-                TextButton(
-                  onPressed: () {
-                    Navigator.pushReplacement(
-                      context,
-                      PageRouteBuilder(
-                        pageBuilder: (context, animation1, animation2) =>
-                            Login(),
-                        transitionDuration: Duration(seconds: 0),
-                      ),
-                    );
-                  },
-                  child: Text(
-                    'Sign In',
-                    style: Theme.of(context).textTheme.button,
+                  const Text(
+                    '|',
                   ),
-                ),
-                Text(
-                  '|',
-                  style: Theme.of(context).textTheme.button,
-                ),
-                TextButton(
-                  onPressed: () {
-                    Navigator.pushReplacement(
-                      context,
-                      PageRouteBuilder(
-                        pageBuilder: (context, animation1, animation2) =>
-                            Register(),
-                        transitionDuration: Duration(seconds: 0),
-                      ),
-                    );
-                  },
-                  child: Text(
-                    'Register',
-                    style: Theme.of(context).textTheme.button,
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pushReplacement(
+                        context,
+                        PageRouteBuilder(
+                          pageBuilder: (context, animation1, animation2) =>
+                              Login(),
+                          transitionDuration: const Duration(seconds: 0),
+                        ),
+                      );
+                    },
+                    child: const Text(
+                      'Sign In',
+                    ),
                   ),
-                ),
-              ],
+                  const Text(
+                    '|',
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pushReplacement(
+                        context,
+                        PageRouteBuilder(
+                          pageBuilder: (context, animation1, animation2) =>
+                              Register(),
+                          transitionDuration: const Duration(seconds: 0),
+                        ),
+                      );
+                    },
+                    child: const Text(
+                      'Register',
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
-          SizedBox(height: 15),
+          const SizedBox(height: 15),
         ],
       ),
     );

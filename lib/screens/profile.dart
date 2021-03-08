@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-// import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/myProfile.dart';
 import '../widgets/startingCode.dart';
 import '../widgets/textFormBorder.dart';
+import '../widgets/alertBox.dart';
 
 class Profile extends StatefulWidget {
   static const String id = 'Profile';
@@ -70,16 +70,9 @@ class _ProfileState extends State<Profile> {
         } else {
           return showDialog(
             context: context,
-            builder: (ctx) => AlertDialog(
-              title: Text('An Error Occurred!'),
-              content: Text('Something went wrong. Please try again.'),
-              actions: [
-                TextButton(
-                  onPressed: () => Navigator.pop(context),
-                  child: Text('Ok'),
-                ),
-              ],
-            ),
+            builder: (ctx) => AlertBox(
+              onPress: () => Navigator.pop(context),
+            )
           ).then((_) {
             Navigator.pop(context);
           });
@@ -88,15 +81,8 @@ class _ProfileState extends State<Profile> {
         print('profile.dart :: error ::::::::::: $error');
         return showDialog(
           context: context,
-          builder: (ctx) => AlertDialog(
-            title: Text('An Error Occurred!'),
-            content: Text('Something went wrong. Please try again.'),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: Text('Ok'),
-              ),
-            ],
+          builder: (ctx) => AlertBox(
+            onPress: () => Navigator.pop(context),
           ),
         ).then((_) {
           Navigator.pop(context);
@@ -144,31 +130,17 @@ class _ProfileState extends State<Profile> {
       if (value == true) {
         return showDialog(
           context: context,
-          builder: (ctx) => AlertDialog(
-            title: Text('Hurrayyy!'),
-            content: Text('Your profile data was successfully changed.'),
-            actions: [
-              TextButton(
-                onPressed: () =>
-                    // Navigator.pushReplacementNamed(context, Home.id),
-                    Navigator.pushReplacementNamed(context, '/'),
-                child: Text('Ok'),
-              ),
-            ],
+          builder: (ctx) => AlertBox(
+            title: 'Hurrayyy!',
+            body: 'Your profile data was successfully changed.',
+            onPress: () => Navigator.pushReplacementNamed(context, '/'),
           ),
         );
       } else {
         return showDialog(
           context: context,
-          builder: (ctx) => AlertDialog(
-            title: Text('It is embarrassing!'),
-            content: Text('Something went wrong. Please try again.'),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: Text('Ok'),
-              ),
-            ],
+          builder: (ctx) => AlertBox(
+            onPress: () => Navigator.pop(context),
           ),
         );
       }
@@ -181,11 +153,13 @@ class _ProfileState extends State<Profile> {
       title: 'You are Awesome',
       widget: _spinner
           ? Center(
-              child: CircularProgressIndicator(),
+              child: CircularProgressIndicator(
+                backgroundColor: Theme.of(context).primaryColor,
+              ),
             )
           : SingleChildScrollView(
               child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 35),
+                padding: const EdgeInsets.symmetric(horizontal: 35),
                 child: Column(
                   children: [
                     Container(
@@ -232,58 +206,6 @@ class _ProfileState extends State<Profile> {
                       title: 'Mobile',
                       initValue: _myProfile.mobile.toString(),
                     ),
-                    // const SizedBox(height: 30),
-                    // const Text('Enter your name as displayed on :'),
-                    // MediaTextField(
-                    //   url: 'assets/images/facebook.png',
-                    //   title: 'Facebook',
-                    //   initValue: _facebook,
-                    //   onlyRead: _onlyRead,
-                    //   focus: _facebookFocus,
-                    //   save: (val) => _facebook = val,
-                    //   fieldSubmit: (_) =>
-                    //       FocusScope.of(context).requestFocus(_instagramFocus),
-                    // ),
-                    // MediaTextField(
-                    //   url: 'assets/images/instagram.png',
-                    //   title: 'Instagram',
-                    //   initValue: _instagram,
-                    //   onlyRead: _onlyRead,
-                    //   focus: _instagramFocus,
-                    //   save: (val) => _instagram = val,
-                    //   fieldSubmit: (_) =>
-                    //       FocusScope.of(context).requestFocus(_twitterFocus),
-                    // ),
-                    // MediaTextField(
-                    //   url: 'assets/images/twitter.png',
-                    //   title: 'Twitter',
-                    //   initValue: _twitter,
-                    //   onlyRead: _onlyRead,
-                    //   focus: _twitterFocus,
-                    //   save: (val) => _twitter = val,
-                    //   fieldSubmit: (_) =>
-                    //       FocusScope.of(context).requestFocus(_youtubeFocus),
-                    // ),
-                    // MediaTextField(
-                    //   url: 'assets/images/youtube.png',
-                    //   title: 'Youtube',
-                    //   initValue: _youtube,
-                    //   onlyRead: _onlyRead,
-                    //   focus: _youtubeFocus,
-                    //   save: (val) => _youtube = val,
-                    //   fieldSubmit: (_) =>
-                    //       FocusScope.of(context).requestFocus(_googleFocus),
-                    // ),
-                    // MediaTextField(
-                    //   url: 'assets/images/google.png',
-                    //   title: 'Google',
-                    //   initValue: _google,
-                    //   onlyRead: _onlyRead,
-                    //   focus: _googleFocus,
-                    //   save: (val) => _google = val,
-                    //   fieldSubmit: (_) => _saveProfile(),
-                    // ),
-                    // const SizedBox(height: 100),
                   ],
                 ),
               ),

@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import './login.dart';
 import '../providers/myProfile.dart';
 import '../widgets/loginLogoCode.dart';
+import '../widgets/alertBox.dart';
 
 class Register extends StatefulWidget {
   static const String id = 'Register';
@@ -71,21 +72,16 @@ class _RegisterState extends State<Register> {
         });
         return showDialog(
           context: context,
-          builder: (ctx) => AlertDialog(
-            title: const Text('Congratulations!!'),
-            content: Text(_msg),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: Text('Ok'),
-              ),
-            ],
+          builder: (ctx) => AlertBox(
+            title: 'Congratulations!!',
+            body: _msg,
+            onPress: () => Navigator.pop(context),
           ),
         ).then((_) => Navigator.pushReplacement(
               context,
               PageRouteBuilder(
                 pageBuilder: (context, animation1, animation2) => Login(),
-                transitionDuration: Duration(seconds: 0),
+                transitionDuration: const Duration(seconds: 0),
               ),
             ));
       } else if (value == 400) {
@@ -94,15 +90,10 @@ class _RegisterState extends State<Register> {
         });
         return showDialog(
           context: context,
-          builder: (ctx) => AlertDialog(
-            title: const Text('Please check!'),
-            content: Text(_msg),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: const Text('Ok'),
-              ),
-            ],
+          builder: (ctx) => AlertBox(
+            title: 'Please check!',
+            body: _msg,
+            onPress: () => Navigator.pop(context),
           ),
         );
       } else {
@@ -111,15 +102,8 @@ class _RegisterState extends State<Register> {
         });
         return showDialog(
           context: context,
-          builder: (ctx) => AlertDialog(
-            title: const Text('An Error Occurred!'),
-            content: const Text('Something went wrong. Please try again.'),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: Text('Ok'),
-              ),
-            ],
+          builder: (ctx) => AlertBox(
+            onPress: () => Navigator.pop(context),
           ),
         );
       }
@@ -259,7 +243,7 @@ class _RegisterState extends State<Register> {
                       ],
                     ),
                   )
-                : SizedBox(height: 0),
+                : const SizedBox(height: 0),
             ElevatedButton(
               onPressed: () {
                 _submit();

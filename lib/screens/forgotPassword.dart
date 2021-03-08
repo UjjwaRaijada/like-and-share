@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app_like4like/widgets/alertBox.dart';
 import 'package:provider/provider.dart';
 
 import './login.dart';
@@ -38,16 +39,10 @@ class _ForgotPasswordState extends State<ForgotPassword> {
         if (value == false) {
           return showDialog(
             context: context,
-            builder: (ctx) => AlertDialog(
-              title: Text('Ooopppssssss!'),
-              content: Text(
-                  'This email id is not registered! Don\'t miss out on the opportunity to get free publicity and promotion of your social media pages!'),
-              actions: [
-                TextButton(
-                  onPressed: () => Navigator.pop(context),
-                  child: Text('Ok'),
-                ),
-              ],
+            builder: (ctx) => AlertBox(
+              title: 'Oopsss!',
+              body: 'This email id is not registered! Don\'t miss out on the opportunity to get free publicity and promotion of your social media pages!',
+              onPress: () => Navigator.pop(context),
             ),
           );
         } else {
@@ -106,7 +101,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
               onSaved: (newValue) => email = newValue,
               controller: TextEditingController(text: email),
             ),
-            SizedBox(height: 45),
+            const SizedBox(height: 45),
             ElevatedButton(
               onPressed: () {
                 _submit();
@@ -119,7 +114,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                 style: Theme.of(context).textTheme.button,
               ),
             ),
-            SizedBox(height: 25),
+            const SizedBox(height: 25),
             Container(
               height: 20,
               child: Row(
@@ -167,7 +162,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                 ],
               ),
             ),
-            SizedBox(height: 15),
+            const SizedBox(height: 15),
           ],
         ),
       ),

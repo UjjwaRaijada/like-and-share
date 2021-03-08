@@ -67,13 +67,10 @@ class Auth extends ChangeNotifier {
   }
 
   Future<bool> autoLogin() async {
-    print('autoLogin() called ::::::::::::');
     final prefs = await SharedPreferences.getInstance();
     if (!prefs.containsKey('userData')) {
-      print('autoLogin :::::::::::::: false');
       return false;
     } else {
-      print('autoLogin :::::::::::: true');
       final _extractedUserData = jsonDecode(prefs.getString('userData'));
       _auth = _extractedUserData['token'];
       _userId = _extractedUserData['userId'];
@@ -95,9 +92,4 @@ class Auth extends ChangeNotifier {
     //   _authTimer = null;
     // }
   }
-
-  // void _autoLogout() {
-  //   final timeToExpiry = _expiryDate.difference(DateTime.now()).inSeconds;
-  //   _authTimer = Timer(Duration(seconds: timeToExpiry), logout);
-  // }
 }

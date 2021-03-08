@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import './login.dart';
 import '../providers/otp.dart';
 import '../widgets/loginLogoCode.dart';
+import '../widgets/alertBox.dart';
 
 class ResetPassword extends StatefulWidget {
   static const String id = 'ResetPassword';
@@ -38,15 +39,8 @@ class _ResetPasswordState extends State<ResetPassword> {
       } else {
         return showDialog(
           context: context,
-          builder: (ctx) => AlertDialog(
-            title: Text('An Error Occurred!'),
-            content: Text('Something went wrong. Please try again.'),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: Text('Ok'),
-              ),
-            ],
+          builder: (ctx) => AlertBox(
+            onPress: () => Navigator.pop(context),
           ),
         );
       }
@@ -87,7 +81,7 @@ class _ResetPasswordState extends State<ResetPassword> {
             onFieldSubmitted: (_) =>
                 FocusScope.of(context).requestFocus(_retypeFocusNode),
           ),
-          SizedBox(height: 15),
+          const SizedBox(height: 15),
           TextFormField(
             style: const TextStyle(color: Colors.white),
             decoration: const InputDecoration(
@@ -129,7 +123,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                   color: Colors.white, fontWeight: FontWeight.bold),
             ),
           ),
-          SizedBox(height: 25),
+          const SizedBox(height: 25),
           Container(
             height: 15,
             child: TextButton(
@@ -148,7 +142,7 @@ class _ResetPasswordState extends State<ResetPassword> {
               ),
             ),
           ),
-          SizedBox(height: 15),
+          const SizedBox(height: 15),
         ],
       ),
     );

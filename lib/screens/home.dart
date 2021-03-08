@@ -13,6 +13,7 @@ import '../widgets/customDrawer.dart';
 import '../widgets/customDivider.dart';
 import '../widgets/socialMediaIcon.dart';
 import '../widgets/homeButtonModal.dart';
+import '../widgets/alertBox.dart';
 
 class Home extends StatefulWidget {
   static const String id = 'Home';
@@ -42,9 +43,6 @@ class _HomeState extends State<Home> {
 
   @override
   void didChangeDependencies() {
-    // if (ModalRoute.of(context).settings.arguments == 'snackBar') {
-    //   _addSnackBar(context);
-    // }
     if (_spinner == true) {
       Provider.of<MyProfileData>(context, listen: false).refreshData();
       Provider.of<CampaignData>(context, listen: false).premiumCamp().then((_) {
@@ -55,25 +53,6 @@ class _HomeState extends State<Home> {
     }
     super.didChangeDependencies();
   }
-
-  // void _addSnackBar(BuildContext context) {
-  //   _scaffoldKey.currentState.showSnackBar(
-  //     SnackBar(
-  //       content: Padding(
-  //         padding: const EdgeInsets.all(14.0),
-  //         child: const Text(
-  //           'Congratulations! Your campaign is ready to be supported by many.',
-  //           textAlign: TextAlign.center,
-  //           style: const TextStyle(fontSize: 16),
-  //         ),
-  //       ),
-  //       duration: const Duration(seconds: 3),
-  //       margin: const EdgeInsets.only(bottom: 80),
-  //       behavior: SnackBarBehavior.floating,
-  //       backgroundColor: Colors.blueAccent,
-  //     ),
-  //   );
-  // }
 
   void _modalBottomSheetMenu(){
     showModalBottomSheet(
@@ -121,7 +100,6 @@ class _HomeState extends State<Home> {
                       style: const TextStyle(
                           color: Colors.pinkAccent,
                           fontSize: 22,
-                          // fontWeight: FontWeight.bold,
                           fontFamily: 'Lobster'),
                     ),
                     Container(
@@ -163,8 +141,9 @@ class _HomeState extends State<Home> {
                 child: _spinner == true
                     ? Center(
                         child: CircularProgressIndicator(
-                          valueColor:
-                              AlwaysStoppedAnimation<Color>(Colors.pinkAccent),
+                          backgroundColor: Theme.of(context).primaryColor,
+                          // valueColor:
+                          //     AlwaysStoppedAnimation<Color>(Colors.pinkAccent),
                         ),
                       )
                     : Column(
@@ -308,7 +287,7 @@ class _HomeState extends State<Home> {
                                                       children: [
                                                         Row(
                                                           children: [
-                                                            Text('Action Required :  '),
+                                                            const Text('Action Required :  '),
                                                             Icon(
                                                               actionToIcon,
                                                               size: 18,
@@ -317,7 +296,7 @@ class _HomeState extends State<Home> {
                                                         ),
                                                         Row(
                                                           children: [
-                                                            Text('Reward :  '),
+                                                            const Text('Reward :  '),
                                                             Text(
                                                               _premium[0].cost
                                                                   .toString(),
@@ -336,7 +315,7 @@ class _HomeState extends State<Home> {
                                               ],
                                             )
                                           : Container(
-                                        padding: EdgeInsets.all(6),
+                                              padding: const EdgeInsets.all(6),
                                               color: Colors.white.withOpacity(0.1),
                                               height: 250,
                                               child: DefaultTextStyle(
@@ -347,13 +326,13 @@ class _HomeState extends State<Home> {
                                                 child: Column(
                                                   mainAxisAlignment: MainAxisAlignment.center,
                                                   children: [
-                                                    Text(
+                                                    const Text(
                                                         'Sharing is caring and we appreciate when you care about someone. As a token of appreciation we will give you & your loved one extra Heart points.',
                                                     ),
-                                                    SizedBox(height: 10),
-                                                    Text(
+                                                    const SizedBox(height: 10),
+                                                    const Text(
                                                       'Click to Share!',
-                                                      style: TextStyle(decoration: TextDecoration.underline),
+                                                      style: const TextStyle(decoration: TextDecoration.underline),
                                                     ),
                                                   ],
                                                 ),
@@ -384,14 +363,6 @@ class _HomeState extends State<Home> {
               icon: FontAwesomeIcons.bars,
               label: 'Menu',
             ),
-            // BottomButton(
-            //   onPress: () {
-            //     // Navigator.pushNamed(context, History.id);
-            //     Navigator.pushNamed(context, HistoryNew.id);
-            //   },
-            //   icon: FontAwesomeIcons.history,
-            //   label: 'History',
-            // ),
             BottomButton(
               onPress: () {
                 // Navigator.pushNamed(context, History.id);
@@ -402,11 +373,6 @@ class _HomeState extends State<Home> {
             ),
             BottomButton(
               onPress: () {
-                // Navigator.pushNamed(context, CreateCampaign.id).then((value) {
-                //   if (value == 'snackBar') {
-                //     _addSnackBar(context);
-                //   }
-                // });
                 _modalBottomSheetMenu();
               },
               icon: FontAwesomeIcons.plus,

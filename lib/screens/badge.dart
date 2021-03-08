@@ -28,7 +28,7 @@ class Badge extends StatelessWidget {
             child: Column(
               children: [
                 Container(
-                  constraints: BoxConstraints(
+                  constraints: const BoxConstraints(
                     maxHeight: 200
                   ),
                   child: _data == null
@@ -57,11 +57,11 @@ class Badge extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
+                    const Text(
                       'If you:',
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
-                    Text(
+                    const Text(
                       'Points',
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
@@ -71,11 +71,11 @@ class Badge extends StatelessWidget {
                 Row(
                   children: [
                     Expanded(
-                      child: Text('Create a campaign'),
+                      child: const Text('Create a campaign'),
                     ),
                     Container(
                       width: 40,
-                      child: Text(
+                      child: const Text(
                         '+5',
                         textAlign: TextAlign.right,
                         style: TextStyle(color: Colors.green),
@@ -87,11 +87,11 @@ class Badge extends StatelessWidget {
                 Row(
                   children: [
                     Expanded(
-                      child: Text('Recreate a campaign'),
+                      child: const Text('Recreate a campaign'),
                     ),
                     Container(
                       width: 40,
-                      child: Text(
+                      child: const Text(
                         '+2',
                         textAlign: TextAlign.right,
                         style: TextStyle(color: Colors.green),
@@ -103,11 +103,11 @@ class Badge extends StatelessWidget {
                 Row(
                   children: [
                     Expanded(
-                      child: Text('Act on a campaign'),
+                      child: const Text('Act on a campaign'),
                     ),
                     Container(
                       width: 40,
-                      child: Text(
+                      child: const Text(
                         '+2',
                         textAlign: TextAlign.right,
                         style: TextStyle(color: Colors.green),
@@ -119,11 +119,11 @@ class Badge extends StatelessWidget {
                 Row(
                   children: [
                     Expanded(
-                      child: Text('File a report against a fake campaign'),
+                      child: const Text('File a report against a fake campaign'),
                     ),
                     Container(
                       width: 40,
-                      child: Text(
+                      child: const Text(
                         '+1',
                         textAlign: TextAlign.right,
                         style: TextStyle(color: Colors.green),
@@ -135,14 +135,14 @@ class Badge extends StatelessWidget {
                 Row(
                   children: [
                     Expanded(
-                      child: Text('File a report against a fake act'),
+                      child: const Text('File a report against a fake act'),
                     ),
                     Container(
                       width: 40,
-                      child: Text(
+                      child: const Text(
                         '+1',
                         textAlign: TextAlign.right,
-                        style: TextStyle(color: Colors.green),
+                        style: const TextStyle(color: Colors.green),
                       ),
                     ),
                   ],
@@ -151,11 +151,11 @@ class Badge extends StatelessWidget {
                 Row(
                   children: [
                     Expanded(
-                      child: Text('Genuine complain is filed against your campaign'),
+                      child: const Text('Genuine complain is filed against your campaign'),
                     ),
                     Container(
                       width: 40,
-                      child: Text(
+                      child: const Text(
                         '-10',
                         textAlign: TextAlign.right,
                         style: TextStyle(color: Colors.red),
@@ -167,11 +167,11 @@ class Badge extends StatelessWidget {
                 Row(
                   children: [
                     Expanded(
-                      child: Text('Genuine complain is filed against your act'),
+                      child: const Text('Genuine complain is filed against your act'),
                     ),
                     Container(
                       width: 40,
-                      child: Text(
+                      child: const Text(
                         '-10',
                         textAlign: TextAlign.right,
                         style: TextStyle(color: Colors.red),
@@ -183,11 +183,11 @@ class Badge extends StatelessWidget {
                 Row(
                   children: [
                     Expanded(
-                      child: Text('Fake complain is filed by you'),
+                      child: const Text('Fake complain is filed by you'),
                     ),
                     Container(
                       width: 40,
-                      child: Text(
+                      child: const Text(
                         '-10',
                         textAlign: TextAlign.right,
                         style: TextStyle(color: Colors.red),

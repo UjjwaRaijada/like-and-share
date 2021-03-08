@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../providers/myProfile.dart';
 import '../widgets/startingCode.dart';
 import '../widgets/textFormBorder.dart';
+import '../widgets/alertBox.dart';
 
 class ChangePassword extends StatefulWidget {
   static const String id = 'ChangePassword';
@@ -44,15 +45,8 @@ class _ChangePasswordState extends State<ChangePassword> {
         } else {
           return showDialog(
             context: context,
-            builder: (ctx) => AlertDialog(
-              title: Text('An Error Occurred!'),
-              content: Text('Something went wrong. Please try again.'),
-              actions: [
-                TextButton(
-                  onPressed: () => Navigator.pop(context),
-                  child: Text('Ok'),
-                ),
-              ],
+            builder: (ctx) => AlertBox(
+              onPress: () => Navigator.pop(context),
             ),
           );
         }
@@ -62,15 +56,8 @@ class _ChangePasswordState extends State<ChangePassword> {
         });
         return showDialog(
           context: context,
-          builder: (ctx) => AlertDialog(
-            title: Text('An Error Occurred!'),
-            content: Text('Something went wrong. Please try again.'),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: Text('Ok'),
-              ),
-            ],
+          builder: (ctx) => AlertBox(
+            onPress: () => Navigator.pop(context),
           ),
         );
       });
@@ -94,33 +81,20 @@ class _ChangePasswordState extends State<ChangePassword> {
       if (value == true) {
         return showDialog(
           context: context,
-          builder: (ctx) => AlertDialog(
-            title: Text('Superb!'),
-            content: Text('Your password was changed successfully.'),
-            actions: [
-              TextButton(
-                onPressed: () =>
-                    // Navigator.pushReplacementNamed(context, Home.id),
+          builder: (ctx) => AlertBox(
+            title: 'Superrrrb!',
+            body: 'Your password was changed successfully.',
+            onPress: () =>
                     Navigator.pushReplacementNamed(context, '/'),
-                child: Text('Ok'),
-              ),
-            ],
           ),
         );
       } else {
         return showDialog(
           context: context,
-          builder: (ctx) => AlertDialog(
-            title: Text('Oooppssssss!'),
-            content: Text('You entered wrong password.'),
-            actions: [
-              TextButton(
-                onPressed: () =>
-                    // Navigator.pushReplacementNamed(context, Home.id),
-                    Navigator.pushReplacementNamed(context, '/'),
-                child: Text('Ok'),
-              ),
-            ],
+          builder: (ctx) => AlertBox(
+            title: 'Oopsss!',
+            body: 'You entered wrong password.',
+            onPress: () => Navigator.pushReplacementNamed(context, '/'),
           ),
         );
       }
@@ -137,7 +111,7 @@ class _ChangePasswordState extends State<ChangePassword> {
           child: Column(
             children: [
               Container(
-                padding: EdgeInsets.all(30),
+                padding: const EdgeInsets.all(30),
                 height: 180,
                 child: Image.asset('assets/images/logo.png', fit: BoxFit.contain,),
               ),

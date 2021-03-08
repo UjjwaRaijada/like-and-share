@@ -5,6 +5,7 @@ import './register.dart';
 import './forgotPassword.dart';
 import '../providers/auth.dart';
 import '../widgets/loginLogoCode.dart';
+import '../widgets/alertBox.dart';
 
 class User {
   final String username;
@@ -62,46 +63,20 @@ class _LoginState extends State<Login> {
         });
         return showDialog(
           context: context,
-          builder: (ctx) => AlertDialog(
-            backgroundColor: Theme.of(context).accentColor,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(
-                Radius.circular(10),
-              ),
-              side: BorderSide(
-                color: Theme.of(context).primaryColor,
-                width: 1,
-              ),
-            ),
-            title: const Text('Oooppsssss!'),
-            content: Text('Wrong Email Id or Password. Please try again.'),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: Text('Ok'),
-              ),
-            ],
+          builder: (ctx) => AlertBox(
+            body: 'Wrong Email Id or Password. Please try again.',
+            onPress: () => Navigator.pop(context),
           ),
         );
       }
     }).catchError((error) {
-      print('login.dart :: error ::::::::::::::: $error');
       setState(() {
         _spinner = false;
       });
       return showDialog(
         context: context,
-        builder: (ctx) => AlertDialog(
-          title: const Text('An Error Occurred!'),
-          content: Text(error.toString()),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: Text('Ok'),
-            ),
-          ],
+        builder: (ctx) => AlertBox(
+          onPress: () => Navigator.pop(context),
         ),
       );
     });
@@ -157,7 +132,7 @@ class _LoginState extends State<Login> {
               },
               controller: TextEditingController(text: signingUser.username),
             ),
-            SizedBox(height: 15),
+            const SizedBox(height: 15),
             TextFormField(
               style: const TextStyle(color: Colors.white),
               decoration: const InputDecoration(
@@ -199,7 +174,7 @@ class _LoginState extends State<Login> {
                           AlwaysStoppedAnimation<Color>(Colors.pinkAccent),
                     ),
                   )
-                : SizedBox(height: 0),
+                : const SizedBox(height: 0),
             ElevatedButton(
               onPressed: () {
                 _submit();
@@ -212,52 +187,49 @@ class _LoginState extends State<Login> {
                 style: Theme.of(context).textTheme.button,
               ),
             ),
-            SizedBox(height: 25),
+            const SizedBox(height: 25),
             Container(
               height: 20,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  TextButton(
-                    onPressed: () {
-                      Navigator.pushReplacement(
-                        context,
-                        PageRouteBuilder(
-                          pageBuilder: (context, animation1, animation2) =>
-                              Register(),
-                          transitionDuration: Duration(seconds: 0),
-                        ),
-                      );
-                    },
-                    child: Text(
-                      'Register',
-                      style: Theme.of(context).textTheme.button,
+              child: DefaultTextStyle(
+                style: Theme.of(context).textTheme.button,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pushReplacement(
+                          context,
+                          PageRouteBuilder(
+                            pageBuilder: (context, animation1, animation2) =>
+                                Register(),
+                            transitionDuration: const Duration(seconds: 0),
+                          ),
+                        );
+                      },
+                      child: const Text('Register'),
                     ),
-                  ),
-                  Container(
-                    padding: EdgeInsets.symmetric(horizontal: 10),
-                    child: Text('|', style: Theme.of(context).textTheme.button),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      Navigator.pushReplacement(
-                        context,
-                        PageRouteBuilder(
-                          pageBuilder: (context, animation1, animation2) =>
-                              ForgotPassword(),
-                          transitionDuration: Duration(seconds: 0),
-                        ),
-                      );
-                    },
-                    child: Text(
-                      'Forgot password',
-                      style: Theme.of(context).textTheme.button,
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: const Text('|'),
                     ),
-                  ),
-                ],
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pushReplacement(
+                          context,
+                          PageRouteBuilder(
+                            pageBuilder: (context, animation1, animation2) =>
+                                ForgotPassword(),
+                            transitionDuration: const Duration(seconds: 0),
+                          ),
+                        );
+                      },
+                      child: const Text('Forgot password'),
+                    ),
+                  ],
+                ),
               ),
             ),
-            SizedBox(height: 15),
+            const SizedBox(height: 15),
           ],
         ),
       ),

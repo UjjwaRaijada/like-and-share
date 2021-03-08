@@ -11,22 +11,15 @@ import './screens/forgotPassword.dart';
 import './screens/enterOtp.dart';
 import './screens/resetPassword.dart';
 import './screens/home.dart';
-import './screens/socialMediaPage.dart';
-import './screens/socialMediaName.dart';
-import './screens/socialMediaDetails.dart';
 import './screens/socialMediaNew.dart';
 import './screens/socialMediaPremium.dart';
 import './screens/badge.dart';
-import './screens/history.dart';
-import './screens/historyDetails.dart';
-import './screens/historyNew.dart';
 import './screens/createCampaign.dart';
 import './screens/profile.dart';
 import './screens/changePassword.dart';
 import './screens/myCampaign.dart';
 import './screens/myCampaignDetails.dart';
 import './screens/restartCampaign.dart';
-import './screens/openWeb.dart';
 import './menuScreens/referAndEarn.dart';
 import './menuScreens/buyHearts.dart';
 import './menuScreens/faq.dart';
@@ -164,15 +157,9 @@ class MyApp extends StatelessWidget {
             EnterOtp.id: (context) => EnterOtp(),
             ResetPassword.id: (context) => ResetPassword(),
             // Home.id: (context) => Home(),
-            SocialMediaPage.id: (context) => SocialMediaPage(),
-            SocialMediaName.id: (context) => SocialMediaName(),
-            SocialMediaDetails.id: (context) => SocialMediaDetails(),
             SocialMediaNew.id: (context) => SocialMediaNew(),
             SocialMediaPremium.id: (context) => SocialMediaPremium(),
             Badge.id: (context) => Badge(),
-            History.id: (context) => History(),
-            HistoryDetails.id: (context) => HistoryDetails(),
-            HistoryNew.id: (context) => HistoryNew(),
             CreateCampaign.id: (context) => CreateCampaign(),
             TAndC.id: (context) => TAndC(),
             Profile.id: (context) => Profile(),
@@ -180,7 +167,6 @@ class MyApp extends StatelessWidget {
             MyCampaign.id: (context) => MyCampaign(),
             MyCampaignDetails.id: (context) => MyCampaignDetails(),
             RestartCampaign.id: (context) => RestartCampaign(),
-            OpenWeb.id: (context) => OpenWeb(),
             ReferAndEarn.id: (context) => ReferAndEarn(),
             BuyHearts.id: (context) => BuyHearts(),
             FAQ.id: (context) => FAQ(),

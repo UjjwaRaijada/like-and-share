@@ -20,20 +20,6 @@ class ContactUs extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // Container(
-            //   width: double.infinity,
-            //   child: Image.asset('assets/images/map.png'),
-            // ),
-            // SizedBox(height: 25),
-            // const Text(
-            //     'We would like to meet you in person. Do drop by and we will discuss your social media promotions over coffee. Below is our address:'),
-            // SizedBox(height: 5),
-            // const Text('D36, Subahsh Marg, C-Scheme, Jaipur - 302001'),
-            // SizedBox(height: 15),
-            // const Text('Or else, you can reach us at:'),
-            // SizedBox(height: 5),
-            // const  Text('+91 9352851051'),
-            // SizedBox(height: 15),
             const Text(
                 'We have a dedicated team to resolve your queries and consider your valuable suggestions. Do write to us below or email us at:'),
             const SizedBox(height: 5),
@@ -90,6 +76,7 @@ class ContactUs extends StatelessWidget {
                 builder: (ctx) => AlertBox(
                   title: 'Thank you!!',
                   body: 'Your suggestions are important to us. Thank you!',
+                  onPress: () => Navigator.pushReplacementNamed(context, '/'),
                 ),
               );
             }

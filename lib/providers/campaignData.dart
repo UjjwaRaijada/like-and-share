@@ -617,52 +617,6 @@ class CampaignData with ChangeNotifier {
     }
   }
 
-  // Future<void> createCompleted(CampaignClass newData) async {
-  //   const _url = '$_halfUrl/completed/create.php';
-  //
-  //   final Map<String, String> _header = {
-  //     'content-type': 'application/json',
-  //     'authorization': '$_auth',
-  //   };
-  //
-  //   var request =
-  //       new http.MultipartRequest("POST", Uri.parse(newData.urlImage));
-  //   request.files
-  //       .add(await http.MultipartFile.fromPath('imagefile', newData.urlImage));
-  //   var response = await request.send().catchError((error) {
-  //     throw error;
-  //   });
-  //
-  //   // listen for response
-  //   response.stream.transform(utf8.decoder).listen((value) {
-  //     http
-  //         .post(
-  //       _url,
-  //       headers: _header,
-  //       body: json.encode({
-  //         'campaign': newData.id,
-  //         'author': newData.author,
-  //         'user': _user,
-  //       }),
-  //     )
-  //         .then((value) {
-  //       ///
-  //       if (value.statusCode == 401) {
-  //         Auth().logout();
-  //       }
-  //
-  //       ///
-  //       final _extractedData = jsonDecode(value.body) as Map<String, dynamic>;
-  //       if (_extractedData['success'] == false) {
-  //       } else {
-  //         notifyListeners();
-  //       }
-  //     }).catchError((error) {
-  //       throw error;
-  //     });
-  //   });
-  // }
-
   Future<void> myCampaign() async {
     final _url = '$_halfUrl/campaign/my_camp.php?user=$_user';
 
@@ -756,14 +710,4 @@ class CampaignData with ChangeNotifier {
     }
   }
 /// API DONE TILL HERE ///
-
-  // void addChosen(int id) {
-  //   chosenId = id;
-  //   notifyListeners();
-  // }
-  //
-  // void removeChosen() {
-  //   chosenId = null;
-  //   notifyListeners();
-  // }
 }

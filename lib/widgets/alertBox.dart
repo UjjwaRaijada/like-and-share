@@ -5,10 +5,12 @@ import './customDivider.dart';
 class AlertBox extends StatelessWidget {
   final String title;
   final String body;
+  final Function onPress;
 
   AlertBox({
     this.title = 'Ooops!',
     this.body = 'Something went wrong! Please try again.',
+    @ required this.onPress,
   });
 
   @override
@@ -31,7 +33,8 @@ class AlertBox extends StatelessWidget {
             style: Theme.of(context)
                 .textTheme
                 .headline1
-                .copyWith(color: Theme.of(context).primaryColor),
+                .copyWith(color: Theme.of(context).primaryColor,
+            ),
           ),
           CustomDivider(),
         ],
@@ -44,17 +47,16 @@ class AlertBox extends StatelessWidget {
       ),
       actions: [
         Container(
-          height: 30,
+          height: 50,
           child: TextButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
+            onPressed: onPress,
             child: Text(
               'Ok',
               style: Theme.of(context)
                   .textTheme
                   .headline2
-                  .copyWith(color: Theme.of(context).primaryColor),
+                  .copyWith(color: Theme.of(context).primaryColor,
+              ),
             ),
           ),
         )
