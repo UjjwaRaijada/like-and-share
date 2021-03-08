@@ -145,6 +145,14 @@ class _CreateCampaignState extends State<CreateCampaign> {
   }
 
   @override
+  void dispose() {
+    _urlFocus.dispose();
+    _forCampName.dispose();
+    _forPageUrl.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return StartingCode(
       title: 'Add Campaign',
@@ -210,8 +218,8 @@ class _CreateCampaignState extends State<CreateCampaign> {
                           ? () {
                           setState(() {
                             _spinner = true;
-                            _getUrl();
                             _urlWeb = _url;
+                            _getUrl();
                           });
                         }
                         : () {}

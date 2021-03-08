@@ -385,7 +385,6 @@ class CampaignData with ChangeNotifier {
         "name" : newData.name,
         "media": mediaInt,
         "action": actionInt,
-        // "urlImage": responseString,
         "pageUrl": newData.pageUrl,
         "qty": newData.qty,
         "cost": newData.cost,

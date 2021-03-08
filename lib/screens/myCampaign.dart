@@ -9,7 +9,6 @@ import '../widgets/customDivider.dart';
 import '../widgets/halfRow.dart';
 import '../widgets/shadowBox.dart';
 import '../widgets/startingCode.dart';
-import '../widgets/alertBox.dart';
 
 class MyCampaign extends StatefulWidget {
   static const String id = 'MyCampaign';

@@ -13,7 +13,6 @@ import '../widgets/customDrawer.dart';
 import '../widgets/customDivider.dart';
 import '../widgets/socialMediaIcon.dart';
 import '../widgets/homeButtonModal.dart';
-import '../widgets/alertBox.dart';
 
 class Home extends StatefulWidget {
   static const String id = 'Home';
