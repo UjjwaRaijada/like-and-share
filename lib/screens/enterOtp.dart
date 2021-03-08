@@ -7,6 +7,7 @@ import './resetPassword.dart';
 import '../providers/otp.dart';
 import '../widgets/loginLogoCode.dart';
 import '../widgets/alertBox.dart';
+import '../widgets/textFormBorder.dart';
 
 class EnterOtp extends StatelessWidget {
   static const String id = 'EnterOtp';
@@ -71,15 +72,8 @@ class EnterOtp extends StatelessWidget {
             decoration: InputDecoration(
               labelText: 'Enter OTP (sent on your registered email)',
               labelStyle: TextStyle(color: Colors.white),
-              border: const UnderlineInputBorder(
-                borderSide: const BorderSide(color: Colors.white),
-              ),
-              enabledBorder: const UnderlineInputBorder(
-                borderSide: const BorderSide(color: Colors.white),
-              ),
-              focusedBorder: const UnderlineInputBorder(
-                borderSide: const BorderSide(color: Colors.white),
-              ),
+              border: textFormBorder(context),
+              enabledBorder: textFormBorder(context),
             ),
             keyboardType: TextInputType.number,
             onChanged: (value) => pass = int.parse(value),
@@ -103,7 +97,7 @@ class EnterOtp extends StatelessWidget {
           ),
           const SizedBox(height: 25),
           Container(
-            height: 20,
+            height: 50,
             child: DefaultTextStyle(
               style: Theme.of(context).textTheme.button,
               child: Row(

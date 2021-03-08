@@ -6,6 +6,7 @@ import './forgotPassword.dart';
 import '../providers/auth.dart';
 import '../widgets/loginLogoCode.dart';
 import '../widgets/alertBox.dart';
+import '../widgets/textFormBorder.dart';
 
 class User {
   final String username;
@@ -92,18 +93,11 @@ class _LoginState extends State<Login> {
           children: [
             TextFormField(
               style: const TextStyle(color: Colors.white),
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                 labelText: 'Email Id',
                 labelStyle: const TextStyle(color: Colors.white),
-                border: const UnderlineInputBorder(
-                  borderSide: const BorderSide(color: Colors.white),
-                ),
-                enabledBorder: const UnderlineInputBorder(
-                  borderSide: const BorderSide(color: Colors.white),
-                ),
-                focusedBorder: const UnderlineInputBorder(
-                  borderSide: const BorderSide(color: Colors.white),
-                ),
+                border: textFormBorder(context),
+                enabledBorder: textFormBorder(context),
               ),
               enableSuggestions: false,
               autocorrect: false,
@@ -135,18 +129,11 @@ class _LoginState extends State<Login> {
             const SizedBox(height: 15),
             TextFormField(
               style: const TextStyle(color: Colors.white),
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                 labelText: 'Password',
                 labelStyle: const TextStyle(color: Colors.white),
-                border: const UnderlineInputBorder(
-                  borderSide: const BorderSide(color: Colors.white),
-                ),
-                enabledBorder: const UnderlineInputBorder(
-                  borderSide: const BorderSide(color: Colors.white),
-                ),
-                focusedBorder: const UnderlineInputBorder(
-                  borderSide: const BorderSide(color: Colors.white),
-                ),
+                border: textFormBorder(context),
+                enabledBorder: textFormBorder(context),
               ),
               focusNode: _passwordFocusNode,
               obscureText: true,
@@ -189,44 +176,43 @@ class _LoginState extends State<Login> {
             ),
             const SizedBox(height: 25),
             Container(
-              height: 20,
-              child: DefaultTextStyle(
-                style: Theme.of(context).textTheme.button,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    TextButton(
-                      onPressed: () {
-                        Navigator.pushReplacement(
-                          context,
-                          PageRouteBuilder(
-                            pageBuilder: (context, animation1, animation2) =>
-                                Register(),
-                            transitionDuration: const Duration(seconds: 0),
-                          ),
-                        );
-                      },
-                      child: const Text('Register'),
+              height: 50,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  TextButton(style: TextButton.styleFrom(),
+                    onPressed: () {
+                      Navigator.pushReplacement(
+                        context,
+                        PageRouteBuilder(
+                          pageBuilder: (context, animation1, animation2) =>
+                              Register(),
+                          transitionDuration: const Duration(seconds: 0),
+                        ),
+                      );
+                    },
+                    child: const Text('Register'),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child: Text('|',
+                      style: Theme.of(context).textTheme.button,
                     ),
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: const Text('|'),
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        Navigator.pushReplacement(
-                          context,
-                          PageRouteBuilder(
-                            pageBuilder: (context, animation1, animation2) =>
-                                ForgotPassword(),
-                            transitionDuration: const Duration(seconds: 0),
-                          ),
-                        );
-                      },
-                      child: const Text('Forgot password'),
-                    ),
-                  ],
-                ),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pushReplacement(
+                        context,
+                        PageRouteBuilder(
+                          pageBuilder: (context, animation1, animation2) =>
+                              ForgotPassword(),
+                          transitionDuration: const Duration(seconds: 0),
+                        ),
+                      );
+                    },
+                    child: const Text('Forgot password'),
+                  ),
+                ],
               ),
             ),
             const SizedBox(height: 15),

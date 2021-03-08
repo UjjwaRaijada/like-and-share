@@ -5,6 +5,7 @@ import './login.dart';
 import '../providers/otp.dart';
 import '../widgets/loginLogoCode.dart';
 import '../widgets/alertBox.dart';
+import '../widgets/textFormBorder.dart';
 
 class ResetPassword extends StatefulWidget {
   static const String id = 'ResetPassword';
@@ -55,18 +56,11 @@ class _ResetPasswordState extends State<ResetPassword> {
         children: [
           TextFormField(
             style: const TextStyle(color: Colors.white),
-            decoration: const InputDecoration(
+            decoration: InputDecoration(
               labelText: 'New Password',
               labelStyle: const TextStyle(color: Colors.white),
-              border: const UnderlineInputBorder(
-                borderSide: const BorderSide(color: Colors.white),
-              ),
-              enabledBorder: const UnderlineInputBorder(
-                borderSide: const BorderSide(color: Colors.white),
-              ),
-              focusedBorder: const UnderlineInputBorder(
-                borderSide: const BorderSide(color: Colors.white),
-              ),
+              border: textFormBorder(context),
+              enabledBorder: textFormBorder(context),
             ),
             validator: (val) {
               if (val.isEmpty) {
@@ -84,18 +78,11 @@ class _ResetPasswordState extends State<ResetPassword> {
           const SizedBox(height: 15),
           TextFormField(
             style: const TextStyle(color: Colors.white),
-            decoration: const InputDecoration(
+            decoration:  InputDecoration(
               labelText: 'Retype Password',
               labelStyle: const TextStyle(color: Colors.white),
-              border: const UnderlineInputBorder(
-                borderSide: const BorderSide(color: Colors.white),
-              ),
-              enabledBorder: const UnderlineInputBorder(
-                borderSide: const BorderSide(color: Colors.white),
-              ),
-              focusedBorder: const UnderlineInputBorder(
-                borderSide: const BorderSide(color: Colors.white),
-              ),
+              border: textFormBorder(context),
+              enabledBorder: textFormBorder(context),
             ),
             validator: (val) {
               if (val != password) {
@@ -125,7 +112,7 @@ class _ResetPasswordState extends State<ResetPassword> {
           ),
           const SizedBox(height: 25),
           Container(
-            height: 15,
+            height: 50,
             child: TextButton(
               onPressed: () {
                 Navigator.pushReplacement(
@@ -136,9 +123,8 @@ class _ResetPasswordState extends State<ResetPassword> {
                   ),
                 );
               },
-              child: Text(
+              child: const Text(
                 'Sign In',
-                style: TextStyle(color: Colors.white),
               ),
             ),
           ),

@@ -7,6 +7,7 @@ import './register.dart';
 import './enterOtp.dart';
 import '../providers/otp.dart';
 import '../widgets/loginLogoCode.dart';
+import '../widgets/textFormBorder.dart';
 
 class ForgotPassword extends StatefulWidget {
   static const String id = 'ForgotPassword';
@@ -68,18 +69,11 @@ class _ForgotPasswordState extends State<ForgotPassword> {
           children: [
             TextFormField(
               style: TextStyle(color: Colors.white),
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                 labelText: 'Please enter your Email Id',
                 labelStyle: const TextStyle(color: Colors.white),
-                border: const UnderlineInputBorder(
-                  borderSide: const BorderSide(color: Colors.white),
-                ),
-                enabledBorder: const UnderlineInputBorder(
-                  borderSide: const BorderSide(color: Colors.white),
-                ),
-                focusedBorder: const UnderlineInputBorder(
-                  borderSide: const BorderSide(color: Colors.white),
-                ),
+                border: textFormBorder(context),
+                enabledBorder: textFormBorder(context),
               ),
               validator: (val) {
                 var urlPattern =
@@ -100,6 +94,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
               onFieldSubmitted: (_) => _submit(),
               onSaved: (newValue) => email = newValue,
               controller: TextEditingController(text: email),
+              keyboardType: TextInputType.emailAddress,
             ),
             const SizedBox(height: 45),
             ElevatedButton(
@@ -116,7 +111,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
             ),
             const SizedBox(height: 25),
             Container(
-              height: 20,
+              height: 50,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -131,9 +126,8 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                         ),
                       );
                     },
-                    child: Text(
+                    child: const Text(
                       'Sign In',
-                      style: Theme.of(context).textTheme.button,
                     ),
                   ),
                   Container(
@@ -154,9 +148,8 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                         ),
                       );
                     },
-                    child: Text(
+                    child: const Text(
                       'Register',
-                      style: Theme.of(context).textTheme.button,
                     ),
                   ),
                 ],

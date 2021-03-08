@@ -5,6 +5,7 @@ import './login.dart';
 import '../providers/myProfile.dart';
 import '../widgets/loginLogoCode.dart';
 import '../widgets/alertBox.dart';
+import '../widgets/textFormBorder.dart';
 
 class Register extends StatefulWidget {
   static const String id = 'Register';
@@ -258,7 +259,7 @@ class _RegisterState extends State<Register> {
             ),
             const SizedBox(height: 15),
             Container(
-              height: 20,
+              height: 50,
               child: TextButton(
                 onPressed: () {
                   Navigator.pushReplacement(
@@ -271,7 +272,6 @@ class _RegisterState extends State<Register> {
                 },
                 child: Text(
                   'Sign In',
-                  style: Theme.of(context).textTheme.button,
                 ),
               ),
             ),
@@ -313,14 +313,8 @@ class CustomTextField extends StatelessWidget {
           decoration: InputDecoration(
             labelText: title,
             labelStyle: const TextStyle(color: Colors.white),
-            enabledBorder: const UnderlineInputBorder(
-              borderSide: const BorderSide(color: Colors.white),
-            ),
-            focusedBorder: UnderlineInputBorder(
-              borderSide: BorderSide(
-                color: Theme.of(context).primaryColor,
-              ),
-            ),
+            border: textFormBorder(context),
+            enabledBorder: textFormBorder(context),
           ),
           enableSuggestions: false,
           autocorrect: false,
