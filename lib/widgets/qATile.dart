@@ -64,6 +64,7 @@ class _QATileState extends State<QATile> {
                 child: Text(
                   widget.ans,
                   style: Theme.of(context).textTheme.bodyText1,
+                  textAlign: TextAlign.justify,
                 ),
               ),
         const SizedBox(height: 20),

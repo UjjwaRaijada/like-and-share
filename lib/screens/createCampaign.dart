@@ -1,9 +1,10 @@
 import 'dart:io';
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
-
+// import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 
 import '../providers/campaignData.dart';
 import '../providers/myProfile.dart';
@@ -20,6 +21,8 @@ class CreateCampaign extends StatefulWidget {
 }
 
 class _CreateCampaignState extends State<CreateCampaign> {
+  // StreamSubscription _intentDataStreamSubscription;
+  // String _sharedText;
   final _form = GlobalKey<FormState>();
   bool _spinner = false;
   int heart = 0;
@@ -54,6 +57,28 @@ class _CreateCampaignState extends State<CreateCampaign> {
     hearts: 0,
     holdOut: 0,
   );
+
+  // @override
+  // void initState() {
+  //   _intentDataStreamSubscription =
+  //       ReceiveSharingIntent.getTextStream().listen((String value) {
+  //         setState(() {
+  //           // _sharedText = value;
+  //           _urlWeb = value;
+  //         });
+  //       }, onError: (err) {
+  //         print("getLinkStream error: $err");
+  //       });
+  //
+  //   // For sharing or opening urls/text coming from outside the app while the app is closed
+  //   ReceiveSharingIntent.getInitialText().then((String value) {
+  //     setState(() {
+  //       // _sharedText = value;
+  //       _urlWeb = value;
+  //     });
+  //   });
+  //   super.initState();
+  // }
 
   @override
   void didChangeDependencies() {
@@ -149,6 +174,7 @@ class _CreateCampaignState extends State<CreateCampaign> {
     _urlFocus.dispose();
     _forCampName.dispose();
     _forPageUrl.dispose();
+    // _intentDataStreamSubscription.cancel();
     super.dispose();
   }
 

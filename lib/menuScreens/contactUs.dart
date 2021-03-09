@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../providers/misc.dart';
 import '../widgets/startingCode.dart';
 import '../widgets/alertBox.dart';
+import '../widgets/textFormBorder.dart';
 
 class ContactUs extends StatelessWidget {
   static const String id = 'ContactUs';
@@ -17,46 +18,39 @@ class ContactUs extends StatelessWidget {
       title: 'Contact Us',
       widget: Container(
         padding: EdgeInsets.all(18),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Text(
-                'We have a dedicated team to resolve your queries and consider your valuable suggestions. Do write to us below or email us at:'),
-            const SizedBox(height: 5),
-            const Text('hello@likeandshare.app'),
-            const SizedBox(height: 45),
-            Form(
-              key: _form,
-              child: TextFormField(
-                minLines: 5,
-                maxLines: 8,
-                maxLength: 250,
-                autocorrect: false,
-                enableSuggestions: false,
-                decoration: InputDecoration(
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(25.0),
-                    borderSide: BorderSide(
-                      color: Theme.of(context).primaryColor,
-                    ),
+        child: DefaultTextStyle(
+          style: Theme.of(context).textTheme.bodyText1,
+          textAlign: TextAlign.justify,          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text(
+                  'We have a dedicated team to resolve your queries and consider your valuable suggestions. Do write to us below or email us at:'),
+              const SizedBox(height: 5),
+              const Text('hello@likeandshare.app'),
+              const SizedBox(height: 45),
+              Form(
+                key: _form,
+                child: TextFormField(
+                  minLines: 5,
+                  maxLines: 8,
+                  maxLength: 250,
+                  autocorrect: false,
+                  enableSuggestions: false,
+                  decoration: InputDecoration(
+                    border: textFormBorder(context),
+                    enabledBorder: textFormBorder(context),
                   ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(25.0),
-                    borderSide: BorderSide(
-                      color: Theme.of(context).primaryColor,
-                    ),
-                  ),
+                  validator: (val) {
+                    if (val.length < 50) {
+                      return 'Message too short. Please write at least 50 letters.';
+                    }
+                    return null;
+                  },
+                  onSaved: (newValue) => suggestion = newValue,
                 ),
-                validator: (val) {
-                  if (val.length < 50) {
-                    return 'Message too short. Please write at least 50 letters.';
-                  }
-                  return null;
-                },
-                onSaved: (newValue) => suggestion = newValue,
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
       bottomS: RawMaterialButton(

@@ -197,9 +197,11 @@ class _MyCampaignDetailsState extends State<MyCampaignDetails> {
   @override
   Widget build(BuildContext context) {
     _dataCompleted =
-        Provider.of<CompletedData>(context, listen: false).data.toList();
+        Provider.of<CompletedData>(context).data.toList();
 
     actionIcon = _campaignData.action;
+
+    double pending = _campaignData.heartPending / _campaignData.cost < 0 ? 0 : _campaignData.heartPending / _campaignData.cost;
 
     return StartingCode(
       title: 'Facebook',
@@ -210,7 +212,7 @@ class _MyCampaignDetailsState extends State<MyCampaignDetails> {
               HalfRow(
                   title:
                       'Approved: ${(_campaignData.heartGiven / _campaignData.cost).round()}'),
-              HalfRow(title: 'Pending: ${(_campaignData.heartPending / _campaignData.cost).round()}'),
+              HalfRow(title: 'Pending: ${pending.round()}'),
             ],
           ),
           ShadowBox(

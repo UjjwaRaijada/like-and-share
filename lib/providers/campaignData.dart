@@ -95,25 +95,25 @@ Media get stringToMedia {
 }
 
 Media mediaImage;
-String get mediaToImage {
+IconData get mediaToImage {
   switch (mediaImage) {
     case Media.Facebook:
-      return 'assets/images/facebook.png';
+      return FontAwesomeIcons.facebookF;
       break;
     case Media.Instagram:
-      return 'assets/images/instagram.png';
+      return FontAwesomeIcons.instagramSquare;
       break;
     case Media.Twitter:
-      return 'assets/images/twitter.png';
+      return FontAwesomeIcons.twitter;
       break;
     case Media.YouTube:
-      return 'assets/images/youtube.png';
+      return FontAwesomeIcons.youtube;
       break;
     case Media.GoogleReview:
-      return 'assets/images/google.png';
+      return FontAwesomeIcons.google;
       break;
     default:
-      return 'assets/images/unknown.png';
+      return FontAwesomeIcons.question;
   }
 }
 

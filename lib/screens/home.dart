@@ -221,7 +221,7 @@ class _HomeState extends State<Home> {
                                         ? () => Navigator.pushNamed(
                                             context, SocialMediaPremium.id,
                                             arguments: _premium[0].id)
-                                        : () => Share.share('$_message \n Referral Code : ${_myProfile.mobile}'),
+                                        : () => Share.share('https://play.google.com/apps/internaltest/4700879170550887889 \n \n $_message \n Referral Code : ${_myProfile.mobile}'),
                                     child: Container(
                                       margin: const EdgeInsets.symmetric(
                                         horizontal: 30,
@@ -245,7 +245,7 @@ class _HomeState extends State<Home> {
                                                   padding: EdgeInsets.all(20),
                                                   width: 150,
                                                   height: 150,
-                                                  child: Image.asset(mediaToImage),
+                                                  child: FaIcon(mediaToImage),
                                                 ),
                                                 Text(
                                                   _premium[0].authorName,

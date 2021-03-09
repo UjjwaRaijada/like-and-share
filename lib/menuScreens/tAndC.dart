@@ -17,7 +17,10 @@ class TAndC extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text('Welcome to Like & Share!'),
+                const Text(
+                  'Welcome to Like & Share!',
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
                 const SizedBox(height: 15),
                 const Text(
                     'At Like & Share, we build technologies & services to help people/businesses promote themselves on social media pages.The following Terms & Conditions govern your use of the Like & Share application. This Product is provided to you by LikeAndShare.app'),
@@ -26,7 +29,7 @@ class TAndC extends StatelessWidget {
                 const SizedBox(height: 15),
                 const Text(
                   'Our Services',
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                  style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
                 const Text(
                     'In this digital era, social media plays a very important role in promoting oneself as well as various small and large businesses. Generic promotion takes a lot of time. Big companies/individuals with good spending capacities, take the help of marketers to promote their pages and posts. However, not necessarily everyone has deep pockets.'),
@@ -37,7 +40,7 @@ class TAndC extends StatelessWidget {
                 const SizedBox(height: 15),
                 const Text(
                   'Restrictions',
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                  style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
                 const Text(
                     'Below is the list of type of promotions which should not be promoted using Like & Share platform. If anyone is found to defy these conditions, they shall be reported to the appropriate authority of Indian Government and shall be blocked from Like & Share'),
@@ -57,7 +60,7 @@ class TAndC extends StatelessWidget {
                 const SizedBox(height: 15),
                 const Text(
                   'Content Privacy',
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                  style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
                 const Text('Like & Share does not sell any content to anyone.'),
                 const Text(
@@ -65,7 +68,7 @@ class TAndC extends StatelessWidget {
                 const SizedBox(height: 15),
                 const Text(
                   'Disclaimer',
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                  style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
                 const Text(
                     'Like & Share is not liable for any kind of loss incurred due to the use of this application. The user should take all the necessary precautions.'),

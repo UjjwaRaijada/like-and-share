@@ -25,8 +25,9 @@ class FTE extends StatelessWidget {
           child: Column(
             children: [
               Text(
-                'Freedom Through Education is an initiative by Round Table India. ',
+                'Freedom Through Education is an initiative by Round Table India. Like & Share proudly supports this initiative.',
                 style: Theme.of(context).textTheme.bodyText1,
+                textAlign: TextAlign.justify,
               ),
               Container(
                 width: double.infinity,
@@ -38,6 +39,7 @@ class FTE extends StatelessWidget {
               Text(
                 'To be part of this initiative, visit Round Table India website by clicking the link below.',
                 style: Theme.of(context).textTheme.bodyText1,
+                textAlign: TextAlign.justify,
               ),
               ElevatedButton(
                 onPressed: () => _launchURL(),
