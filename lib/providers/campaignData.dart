@@ -390,10 +390,8 @@ class CampaignData with ChangeNotifier {
         "cost": newData.cost,
       }),
     ).catchError((error) {
-      print('campaignData.dart :: createCampaign :: error :::::::::::::::::::::::::: $error');
       throw error;
     });
-    print('campaignData.dart :: createCampaign :: result :::::::::::::::::::::::::: ${result.body}');
     if (result.statusCode == 401) {
       Auth().logout();
     }
@@ -462,7 +460,6 @@ class CampaignData with ChangeNotifier {
       _premiumData.removeWhere((ele) => ele.id == newData.id);
       notifyListeners();
     }
-    // print('completed.dart :: screenshot :::::::::::: ${newData.screenshot}');
     const _url = '$_halfUrl/completed/create.php';
     const _urlImage = '$_halfUrl/completed/create_image.php';
 
@@ -475,7 +472,6 @@ class CampaignData with ChangeNotifier {
     //Get the response from the server
     var responseData = await response.stream.toBytes();
     var responseString = String.fromCharCodes(responseData);
-    print('campaignData.dart :: createCompleted :: responseString ::::::::::::::::::::::: $responseString');
 
     final result = await http
         .post(
@@ -488,16 +484,13 @@ class CampaignData with ChangeNotifier {
         'screenshot': responseString,
       }),
     ).catchError((error) {
-      print('campaignData.dart :: createCompleted :: error ::::::::::::::::::::::: $error');
     });
-    print('campaignData.dart :: createCompleted :: response ::::::::::::::::::::::: ${result.body}');
     ///
     if (result.statusCode == 401) {
       Auth().logout();
     }
     ///
     if (result.statusCode == 201) {
-      print('201');
         final _extractedData = json.decode(result.body) as Map<String, dynamic>;
         if (_extractedData['data'] == null) {
           _data.clear();
@@ -524,7 +517,6 @@ class CampaignData with ChangeNotifier {
         }
         return true;
       } else {
-      print('false');
       return false;
     }
   }
@@ -540,7 +532,6 @@ class CampaignData with ChangeNotifier {
     });
     if (result.statusCode == 200) {
       final _extractedData = json.decode(result.body) as Map<String, dynamic>;
-      print('campaignData.dart :: fetchAvailableCampaign :: _extractedData :::::::::::::::::: $_extractedData');
       if (_extractedData['data'] == null) {
         _data.clear();
       } else {
@@ -577,7 +568,6 @@ class CampaignData with ChangeNotifier {
     final _url = '$_halfUrl/campaign/read_single.php?id=$id';
 
     final result = await http.get(_url).catchError((error) {
-      print('campaignData.dart :: fetchSingleCampaign :: error ::::::::::: $error');
       throw error;
     });
 
@@ -659,7 +649,6 @@ class CampaignData with ChangeNotifier {
       }
       notifyListeners();
     }).catchError((error) {
-      print('error is :::::: $error');
       throw error;
     });
   }
@@ -673,9 +662,8 @@ class CampaignData with ChangeNotifier {
       _premiumData.removeWhere((ele) => ele.id == newData.id);
       notifyListeners();
     }
-    print('completed.dart :: next :::::::::::::::::::::::: next called');
     const _url = '$_halfUrl/completed/next.php';
-    final result = await http.post(
+    await http.post(
         _url,
         headers: {'content-type': 'application/json', 'authorization': '$_auth'},
         body: jsonEncode({
@@ -684,10 +672,8 @@ class CampaignData with ChangeNotifier {
           'user': _user,
         })
     ).catchError((error) {
-      print('completed.dart :: next :: error :::::::::::::::::::::: $error');
       throw error;
     });
-    print('completed.dart :: next :: response :::::::::::::::::::::: ${jsonDecode(result.body)}');
   }
 
   void removeData(int id) {

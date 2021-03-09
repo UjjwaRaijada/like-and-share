@@ -77,7 +77,6 @@ class Misc extends ChangeNotifier {
       }),
     )
         .catchError((error) {
-      print('misc :: sendSuggestion :: error ::::::::::::::::::: $error');
       throw error;
     });
     if (result.statusCode == 201) {
@@ -97,7 +96,6 @@ class Misc extends ChangeNotifier {
     final _url = '$_halfUrl/misc/faq.php';
     final result = await http
         .get(_url, headers: {'authorization': '$_auth'}).catchError((error) {
-      print('misc :: faqs :: error ::::::::::::::::::: $error');
       throw error;
     });
 
@@ -127,19 +125,14 @@ class Misc extends ChangeNotifier {
   }
 
   Future<void> getBadge(int score) async {
-    print('misc.dart :: getBadge :::::::::::::::::::: getBadge() called');
-
     final _url = '$_halfUrl/misc/badges.php?score=$score';
     final result = await http.get(
         _url, headers: {'authorization': '$_auth'}).catchError((error) {
-      print('misc :: faqs :: error ::::::::::::::::::: $error');
       throw error;
     });
-    print('misc.dart :: getBadge :: result :::::::::::::::::: ${jsonDecode(result.body)}');
 
     if (result.statusCode == 200) {
       final _extractedData = jsonDecode(result.body) as Map<String, dynamic>;
-      print('misc.dart :: getBadge :: _extractedData :::::::::::::::::: $_extractedData');
 
       _badgeData = Badges(
         level: int.parse(_extractedData['data']['badge']['level']),

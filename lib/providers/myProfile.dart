@@ -92,62 +92,55 @@ class MyProfileData with ChangeNotifier {
       'refBy': newData.refBy,
     };
 
-    return await http
+    final result =  await http
         .post(
       _url,
       headers: _header,
       body: jsonEncode(_body),
-    )
-        .then((val) {
-      final _extractedData = jsonDecode(val.body) as Map<String, dynamic>;
-      if (val.statusCode == 201) {
-        final _registerData = _extractedData['data'] as Map<String, dynamic>;
-        final _userData = _registerData['campaign'] as Map<String, dynamic>;
-
-        _data = MyProfile(
-          id: int.parse(_userData['id']),
-          name: _userData['name'],
-          mobile: int.parse(_userData['mobile']),
-          hearts: int.parse(_userData['hearts']),
-          status: _userData['status'],
-          email: _userData['email'],
-          city: '',
-          facebook: '',
-          instagram: '',
-          twitter: '',
-          youtube: '',
-          google: '',
-          holdIn: 0,
-          holdOut: 0,
-        );
-        notifyListeners();
-        msg = _extractedData['messages'][0];
-        return 201;
-      } else if (val.statusCode == 400) {
-        msg = _extractedData['messages'][0];
-
-        return 400;
-      } else {
-        return 500;
-      }
-    }).catchError((error) {
+    ).catchError((error) {
       throw error;
     });
+
+    final _extractedData = jsonDecode(result.body) as Map<String, dynamic>;
+    if (result.statusCode == 201) {
+      final _registerData = _extractedData['data'] as Map<String, dynamic>;
+      final _userData = _registerData['campaign'] as Map<String, dynamic>;
+      _data = MyProfile(
+        id: int.parse(_userData['id']),
+        name: _userData['name'],
+        mobile: int.parse(_userData['mobile']),
+        hearts: int.parse(_userData['hearts']),
+        status: _userData['status'],
+        email: _userData['email'],
+        city: '',
+        facebook: '',
+        instagram: '',
+        twitter: '',
+        youtube: '',
+        google: '',
+        holdIn: 0,
+        holdOut: 0,
+      );
+      notifyListeners();
+      msg = _extractedData['messages'][0];
+      return 201;
+    } else if (result.statusCode == 400) {
+      msg = _extractedData['messages'][0];
+      return 400;
+    } else {
+      return 500;
+    }
   }
 
   Future<bool> refreshData() async {
-    bool status;
     final String _url = '$_halfUrl/user/read_single.php?id=$_userId';
-    await http
-        .get(_url, headers: {'authorization': '$_auth'}).then((value) async {
-      ///
-      if (value.statusCode == 401) {
-        Auth().logout();
-      }
+    final result = await http
+        .get(_url, headers: {'authorization': '$_auth'}).catchError((error) {
+      throw error;
+    });
 
-      ///
-      if (value.statusCode == 200) {
-        final _extractedData = jsonDecode(value.body) as Map<String, dynamic>;
+      if (result.statusCode == 200) {
+        final _extractedData = jsonDecode(result.body) as Map<String, dynamic>;
         _data = MyProfile(
           id: int.parse(_extractedData['data']['campaign']['id']),
           name: _extractedData['data']['campaign']['name'],
@@ -167,19 +160,13 @@ class MyProfileData with ChangeNotifier {
           score: int.parse(_extractedData['data']['campaign']['score']),
         );
         notifyListeners();
-        status = true;
-        // return true;
+        return true;
+      } else if (result.statusCode == 401) {
+        Auth().logout();
+        return false;
       } else {
-        status = false;
-        // return false;
+        return false;
       }
-    }).catchError((error) {
-      print('myProfile.dart :: error ::::::::::: $error');
-
-      status = false;
-      // throw error;
-    });
-    return status;
   }
 
   Future<bool> updateMyProfile(MyProfile newData) async {

@@ -76,15 +76,15 @@ class _RegisterState extends State<Register> {
           builder: (ctx) => AlertBox(
             title: 'Congratulations!!',
             body: _msg,
-            onPress: () => Navigator.pop(context),
-          ),
-        ).then((_) => Navigator.pushReplacement(
+            onPress: () => Navigator.pushReplacement(
               context,
               PageRouteBuilder(
                 pageBuilder: (context, animation1, animation2) => Login(),
                 transitionDuration: const Duration(seconds: 0),
               ),
-            ));
+            ),
+          ),
+        );
       } else if (value == 400) {
         setState(() {
           _spinner = false;

@@ -37,17 +37,16 @@ class CampComplainData with ChangeNotifier {
         'complain': newData.complain,
       }),
     ).catchError((error) {
-      print('campComplain.dart :: createComplain :: error ::::::::::::::::: $error');
+      throw error;
     });
-    print('campComplain.dart :: createComplain :: result ::::::::::::::::: ${jsonDecode(result.body)}');
-    ///
-    if (result.statusCode == 401) {
-      Auth().logout();
-    }
-    ///
+
     if (result.statusCode == 201) {
       return true;
-    } else {
+    } else if (result.statusCode == 401) {
+      Auth().logout();
+      return false;
+    }
+    else {
       return false;
     }
   }

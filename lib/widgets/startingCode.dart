@@ -5,13 +5,11 @@ import '../providers/myProfile.dart';
 
 class StartingCode extends StatelessWidget {
   final Widget widget;
-  final bool backButton;
   final String title;
   final Widget bottomS;
   final Widget floatingButton;
   StartingCode({
     this.widget,
-    this.backButton = true,
     this.title,
     this.bottomS = const SizedBox(height: 0),
     this.floatingButton,
@@ -36,25 +34,26 @@ class StartingCode extends StatelessWidget {
             bottom: false,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              // crossAxisAlignment: CrossAxisAlignment.baseline,
+              // textBaseline: TextBaseline.alphabetic,
               children: [
                 Container(
-                  height: 40,
-                  width: 40,
-                  child: backButton == true
-                      ? RawMaterialButton(
-                          child: const Icon(
-                            Icons.arrow_left,
-                            color: Colors.pink,
-                            size: 40,
-                          ),
-                          onPressed: () => Navigator.pop(context),
-                        )
-                      : const SizedBox(),
+                  height: 35,
+                  width: 35,
+                  child: RawMaterialButton(
+                    constraints: BoxConstraints.expand(),
+                    child: const Icon(
+                      Icons.arrow_left,
+                      color: Colors.pink,
+                      size: 40,
+                    ),
+                    onPressed: () => Navigator.pop(context),
+                  )
                 ),
                 Text(
                   title,
                   style: const TextStyle(
-                      fontSize: 25,
+                      fontSize: 22,
                       fontWeight: FontWeight.bold,
                       color: Colors.white),
                 ),
