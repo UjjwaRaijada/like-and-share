@@ -333,9 +333,9 @@ class _RestartCampaignState extends State<RestartCampaign> {
                   ? Container(
                 height: 700,
                 child: InAppWebView(
-                  initialUrl: _urlWeb,
+                  initialUrlRequest: URLRequest(url: Uri.parse(_urlWeb)),
                   initialOptions: InAppWebViewGroupOptions(
-                    crossPlatform: InAppWebViewOptions(debuggingEnabled: true),
+                    crossPlatform: InAppWebViewOptions(),
                   ),
                 ),
               )

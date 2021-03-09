@@ -161,19 +161,19 @@ int get actionInt {
     case ActionType.Follow:
       return 3;
       break;
-    case ActionType.Love:
+    case ActionType.Retweet:
       return 4;
       break;
-    case ActionType.Retweet:
+    case ActionType.Rate:
       return 5;
       break;
-    case ActionType.Review:
+    case ActionType.Love:
       return 6;
       break;
     case ActionType.Subscribe:
       return 7;
       break;
-    case ActionType.Rate:
+    case ActionType.Review:
       return 8;
       break;
     default:
