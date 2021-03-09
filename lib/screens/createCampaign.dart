@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
@@ -106,12 +105,12 @@ class _CreateCampaignState extends State<CreateCampaign> {
     super.didChangeDependencies();
   }
 
-  void _getUrl() async {
-    await Future.delayed(Duration(seconds: 5));
-    setState(() {
-      _spinner = false;
-    });
-  }
+  // void _getUrl() async {
+  //   await Future.delayed(Duration(seconds: 5));
+  //   setState(() {
+  //     _spinner = false;
+  //   });
+  // }
 
   void _saveForm() {
     /// form validation
@@ -243,9 +242,10 @@ class _CreateCampaignState extends State<CreateCampaign> {
                         onPressed: _spinner == false
                           ? () {
                           setState(() {
-                            _spinner = true;
+                            FocusScope.of(context).unfocus();
+                            // _spinner = true;
                             _urlWeb = _url;
-                            _getUrl();
+                            // _getUrl();
                           });
                         }
                         : () {}
