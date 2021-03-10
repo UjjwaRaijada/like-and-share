@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "724680854723",
+    "project_id": "like-and-share-104b6",
+    "storage_bucket": "like-and-share-104b6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:724680854723:android:8f44ca5ed7ef24e41aa676",
+        "android_client_info": {
+          "package_name": "app.likeandshare"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "724680854723-855lgt115bcgmkuvnn27cmlrbv3ajmqd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCEyLYjYkiBgh0qY6yUHL7G1_B2f4GxlEI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "724680854723-855lgt115bcgmkuvnn27cmlrbv3ajmqd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

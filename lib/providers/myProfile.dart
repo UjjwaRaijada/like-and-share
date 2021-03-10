@@ -132,6 +132,58 @@ class MyProfileData with ChangeNotifier {
     }
   }
 
+  Future<int> googleRegister(MyProfile newData) async {
+    const _url = '$_halfUrl/user/create_google.php';
+    Map<String, String> _header = {
+      'content-type': 'application/json',
+    };
+    Map _body = {
+      'name': newData.name,
+      'email': newData.email,
+      'password': newData.password,
+      'mobile': 0,
+    };
+
+    final result =  await http
+        .post(
+      _url,
+      headers: _header,
+      body: jsonEncode(_body),
+    ).catchError((error) {
+      throw error;
+    });
+
+    final _extractedData = jsonDecode(result.body) as Map<String, dynamic>;
+    if (result.statusCode == 201) {
+      final _registerData = _extractedData['data'] as Map<String, dynamic>;
+      final _userData = _registerData['campaign'] as Map<String, dynamic>;
+      _data = MyProfile(
+        id: int.parse(_userData['id']),
+        name: _userData['name'],
+        mobile: 0,
+        hearts: int.parse(_userData['hearts']),
+        status: _userData['status'],
+        email: _userData['email'],
+        city: '',
+        facebook: '',
+        instagram: '',
+        twitter: '',
+        youtube: '',
+        google: '',
+        holdIn: 0,
+        holdOut: 0,
+      );
+      notifyListeners();
+      msg = _extractedData['messages'][0];
+      return 201;
+    } else if (result.statusCode == 400) {
+      msg = _extractedData['messages'][0];
+      return 400;
+    } else {
+      return 500;
+    }
+  }
+
   Future<bool> refreshData() async {
     final String _url = '$_halfUrl/user/read_single.php?id=$_userId';
     final result = await http

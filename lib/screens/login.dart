@@ -1,22 +1,33 @@
+import 'dart:io' show Platform;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 import './register.dart';
 import './forgotPassword.dart';
 import '../providers/auth.dart';
+import '../providers/myProfile.dart';
 import '../widgets/loginLogoCode.dart';
 import '../widgets/alertBox.dart';
 import '../widgets/textFormBorder.dart';
 
 class User {
+  final String name;
   final String username;
   final String password;
 
   User({
+    this.name,
     this.username,
     this.password,
   });
 }
+
+GoogleSignIn _googleSignIn = GoogleSignIn(
+  scopes: <String>[
+    'profile',
+  ],
+);
 
 class Login extends StatefulWidget {
   static const String id = 'Login';
@@ -28,8 +39,112 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   bool _spinner = false;
   final _passwordFocusNode = FocusNode();
-  User signingUser = User(username: '', password: '');
+  User signingUser = User(name: '', username: '', password: '');
   final _form = GlobalKey<FormState>();
+
+  /// ANDROID GOOGLE LOGIN
+  Future<void> _handleSignIn() async {
+    setState(() {
+      _spinner = true;
+    });
+    try {
+      final result = await _googleSignIn.signIn();
+      if(result.id.isEmpty || result.email.isEmpty) {
+        return showDialog(
+          context: context,
+          builder: (context) => AlertBox(
+            onPress: () => Navigator.of(context),
+          ),
+        );
+      } else {
+        signingUser = User(
+          name: result.displayName,
+          username: result.email,
+          password: result.id,
+        );
+        Provider.of<Auth>(context, listen: false)
+          .googleAuthenticate(signingUser.username)
+          .then((value) async {
+            if (value == true) {
+              setState(() {
+                _spinner = false;
+              });
+              Navigator.pushReplacementNamed(context, '/');
+            } else {
+              MyProfile newProfile = MyProfile(
+                name: result.displayName,
+                email: result.email,
+                password: result.id,
+              );
+              Provider.of<MyProfileData>(context, listen: false)
+                .googleRegister(newProfile)
+                .then((value) {
+                  String _msg = Provider.of<MyProfileData>(context, listen: false).msg;
+                  if (value == 201) {
+                    Provider.of<Auth>(context, listen: false)
+                        .authenticate(signingUser.username, signingUser.password)
+                        .then((value) async {
+                      if (value == true) {
+                        setState(() {
+                          _spinner = false;
+                        });
+                        Navigator.pushReplacementNamed(context, '/');
+                      } else {
+                        setState(() {
+                          _spinner = false;
+                        });
+                        return showDialog(
+                          context: context,
+                          builder: (ctx) => AlertBox(
+                            onPress: () => Navigator.pop(context),
+                          ),
+                        );
+                      }
+                    });
+                  } else if (value == 400) {
+                    setState(() {
+                      _spinner = false;
+                    });
+                    return showDialog(
+                      context: context,
+                      builder: (ctx) => AlertBox(
+                        title: 'Please check!',
+                        body: _msg,
+                        onPress: () => Navigator.pop(context),
+                      ),
+                    );
+                  } else {
+                    setState(() {
+                      _spinner = false;
+                    });
+                    return showDialog(
+                      context: context,
+                      builder: (ctx) => AlertBox(
+                        onPress: () => Navigator.pop(context),
+                      ),
+                    );
+                  }
+              });
+            }
+        }).catchError((error) {
+          setState(() {
+            _spinner = false;
+          });
+          return showDialog(
+            context: context,
+            builder: (ctx) => AlertBox(
+              onPress: () => Navigator.pop(context),
+            ),
+          );
+        });
+      }
+      print('People API $result');
+    } catch (error) {
+      print(error);
+    }
+  }
+
+
 
   @override
   void dispose() {
@@ -163,9 +278,7 @@ class _LoginState extends State<Login> {
                   )
                 : const SizedBox(height: 0),
             ElevatedButton(
-              onPressed: () {
-                _submit();
-              },
+              onPressed: _submit,
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all<Color>(Theme.of(context).primaryColor),
               ),
@@ -174,6 +287,32 @@ class _LoginState extends State<Login> {
                 style: Theme.of(context).textTheme.button,
               ),
             ),
+            const SizedBox(height: 10),
+            Platform.isAndroid
+              ? ElevatedButton(
+                  onPressed: _handleSignIn,
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all<Color>(Theme.of(context).accentColor),
+                  ),
+                  child: Container(
+                    width: 180,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Login with Google',
+                          style: Theme.of(context).textTheme.button.copyWith(color: Colors.black),
+                        ),
+                        Container(
+                          height: 20,
+                          width: 20,
+                          child: Image.asset('assets/images/google.png', fit: BoxFit.cover,),
+                        ),
+                      ],
+                    ),
+                  ),
+                )
+              : SizedBox(height: 0),
             const SizedBox(height: 25),
             Container(
               height: 50,

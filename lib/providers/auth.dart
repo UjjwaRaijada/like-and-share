@@ -66,6 +66,38 @@ class Auth extends ChangeNotifier {
     });
   }
 
+  Future<bool> googleAuthenticate(String email) async {
+    final _url = '$_halfUrl/user/login_google.php';
+    Map _body = {
+      'email': email,
+    };
+
+    return await http
+        .post(
+      _url,
+      headers: {'Content-type': 'application/json'},
+      body: jsonEncode(_body),
+    )
+        .then((value) async {
+      if (value.statusCode == 200) {
+        final _extractedData = jsonDecode(value.body);
+        _auth = _extractedData['data']['user']['auth'];
+        _userId = int.parse(_extractedData['data']['user']['id']);
+
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        final userData = jsonEncode({'token': _auth, 'userId': _userId});
+        prefs.setString('userData', userData);
+
+        notifyListeners();
+        return true;
+      } else {
+        return false;
+      }
+    }).catchError((error) {
+      throw error;
+    });
+  }
+
   Future<bool> autoLogin() async {
     final prefs = await SharedPreferences.getInstance();
     if (!prefs.containsKey('userData')) {
