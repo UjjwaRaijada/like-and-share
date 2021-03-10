@@ -429,9 +429,9 @@ class _CreateCampaignState extends State<CreateCampaign> {
                   ? Container(
                 height: 700,
                 child: InAppWebView(
-                  initialUrlRequest: URLRequest(url: Uri.parse(_urlWeb)),
+                  initialUrl: _urlWeb,
                   initialOptions: InAppWebViewGroupOptions(
-                    crossPlatform: InAppWebViewOptions(),
+                    crossPlatform: InAppWebViewOptions(debuggingEnabled: true),
                   ),
                 ),
               )

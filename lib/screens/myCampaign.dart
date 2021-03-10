@@ -48,72 +48,77 @@ class _MyCampaignState extends State<MyCampaign> {
     return StartingCode(
       title: 'My Campaign',
       widget: _spinner == true
-          ? Center(child: CircularProgressIndicator())
-          : _data.isEmpty
-              ? Padding(
-                padding: const EdgeInsets.all(18.0),
-                child: DefaultTextStyle(
-                  style: Theme.of(context).textTheme.bodyText1,
-                  textAlign: TextAlign.center,
-                  child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [
-                        const Text(
-                          'Support a campaign and get rewarded.',
-                        ),
-                        const SizedBox(height: 10),
-                        const Text(
-                          'To support a campaign, click on any social media icon on the home page.',
-                        ),
-                        const SizedBox(height: 5),
-                        const Text(
-                            'Do Like or Share or other action as per requested and click Done.'),
-                        const SizedBox(height: 10),
-                        const Text(
-                            'You can use these heart points to promote your social media pages.'),
-                      ],
+        ? Center(child: CircularProgressIndicator())
+        : _data.isEmpty
+          ? Padding(
+            padding: const EdgeInsets.all(18.0),
+            child: DefaultTextStyle(
+              style: Theme.of(context).textTheme.bodyText1,
+              textAlign: TextAlign.center,
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: const [
+                    const Text(
+                      'Support a campaign and get rewarded.',
                     ),
+                    const SizedBox(height: 10),
+                    const Text(
+                      'To support a campaign, click on any social media icon on the home page.',
+                    ),
+                    const SizedBox(height: 5),
+                    const Text(
+                        'Do Like or Share or other action as per requested and click Done.'),
+                    const SizedBox(height: 10),
+                    const Text(
+                        'You can use these heart points to promote your social media pages.'),
+                  ],
                 ),
-              )
-              : Column(
+            ),
+          )
+          : Column(
+              children: [
+                Row(
                   children: [
-                    Row(
-                      children: [
-                        HalfRow(
-                          title: 'Running: ${_data.where((ele) => ele.qty * ele.cost != ele.heartPending + ele.heartGiven + ele.heartReturned).length}',
-                        ),
-                        HalfRow(
-                          title: 'Total: ${_data.length}',
-                        ),
-                      ],
+                    HalfRow(
+                      title: 'Total: ${_data.length}',
                     ),
-                    CustomDivider(),
-                    Expanded(
-                      child: ListView.builder(
-                        padding: EdgeInsets.zero,
-                        itemBuilder: (context, index) {
-                          actionIcon = _data[index].action;
-                          media = _data[index].media;
-                          return SocialMediaTile(
-                            campaignId: _data[index].id,
-                            name: _data[index].name,
-                            imageUrl: _data[index].urlImage,
-                            action: _data[index].action,
-                            actionQty: _data[index].qty,
-                            costPerAction: _data[index].cost * _data[index].qty,
-                            date: _data[index].createdOn,
-                          );
-                        },
-                        itemCount: _data.length,
-                      ),
+                    HalfRow(
+                      title: 'Running: ${_data.where((ele) => ele.qty * ele.cost != ele.heartPending + ele.heartGiven + ele.heartReturned).length}',
                     ),
                   ],
                 ),
+                CustomDivider(),
+                Expanded(
+                  child: ListView.builder(
+                    padding: EdgeInsets.zero,
+                    itemBuilder: (context, index) {
+                      actionIcon = _data[index].action;
+                      media = _data[index].media;
+
+                      return SocialMediaTile(
+                        backColor: _data[index].heartPending > 0
+                          ? Colors.red.withOpacity(0.2)
+                          : Colors.transparent,
+                        campaignId: _data[index].id,
+                        name: _data[index].name,
+                        imageUrl: _data[index].urlImage,
+                        action: _data[index].action,
+                        actionQty: _data[index].qty,
+                        costPerAction: _data[index].cost * _data[index].qty,
+                        date: _data[index].createdOn,
+                      );
+                    },
+                    itemCount: _data.length,
+                  ),
+                ),
+              ],
+            ),
     );
   }
 }
 
 class SocialMediaTile extends StatelessWidget {
+  final Color backColor;
   final int campaignId;
   final String imageUrl;
   final Media media;
@@ -124,6 +129,7 @@ class SocialMediaTile extends StatelessWidget {
   final DateTime date;
 
   SocialMediaTile({
+    this.backColor,
     this.campaignId,
     this.imageUrl,
     this.media,
@@ -144,6 +150,7 @@ class SocialMediaTile extends StatelessWidget {
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 15),
             height: 110,
+            color: backColor,
             child: ShadowBox(
               widget: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
