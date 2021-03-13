@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 
 class LoginLogoCode extends StatelessWidget {
+  final String title;
   final Widget widget;
   final Widget bottomSheet;
 
-  LoginLogoCode({this.widget, this.bottomSheet});
+  LoginLogoCode({
+    @required this.title,
+    this.widget,
+    this.bottomSheet});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,13 +29,17 @@ class LoginLogoCode extends StatelessWidget {
               const SizedBox(height: 120),
               Container(
                 constraints: const BoxConstraints(minWidth: 100, maxWidth: 500),
-                padding: const EdgeInsets.symmetric(horizontal: 100),
+                padding: const EdgeInsets.symmetric(horizontal: 120),
                 child: Image.asset(
                   'assets/images/logo.png',
                   fit: BoxFit.contain,
                 ),
               ),
-              const SizedBox(height: 50),
+              const SizedBox(height: 10),
+              Text(
+                title,
+                style: Theme.of(context).textTheme.headline4,),
+              const SizedBox(height: 40),
               widget,
             ],
           ),

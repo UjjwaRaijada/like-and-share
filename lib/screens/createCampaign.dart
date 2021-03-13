@@ -4,7 +4,9 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 // import 'package:receive_sharing_intent/receive_sharing_intent.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+import '../providers/auth.dart';
 import '../providers/campaignData.dart';
 import '../providers/myProfile.dart';
 import '../providers/misc.dart';
@@ -143,7 +145,6 @@ class _CreateCampaignState extends State<CreateCampaign> {
             ),
           );
         } else {
-          print('createCampaign.dart :: _saveForm() :: value inside true :::::::::::::::: $value');
           setState(() {
             _spinner = false;
           });
@@ -153,7 +154,11 @@ class _CreateCampaignState extends State<CreateCampaign> {
               title: 'Superrrrb!!',
               body: 'Your campaign was created successfully!',
               onPress: () {
-                Provider.of<MyProfileData>(context, listen: false).refreshData();
+                Provider.of<MyProfileData>(context, listen: false).refreshData().then((value) {
+                   if (value == 401) {
+                     _logoutUser(context);
+                   }
+                });
                 Navigator.pushReplacementNamed(context, '/');
               },
             )
@@ -166,6 +171,13 @@ class _CreateCampaignState extends State<CreateCampaign> {
         _spinner = false;
       });
     }
+  }
+
+  void _logoutUser(BuildContext context) async {
+    Navigator.pop(context);
+    Provider.of<Auth>(context, listen: false).logout();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs?.clear();
   }
 
   @override
@@ -204,7 +216,7 @@ class _CreateCampaignState extends State<CreateCampaign> {
                       enabledBorder: textFormBorder(context),
                       border: textFormBorder(context),
                     ),
-                    maxLength: 100,
+                    maxLength: 30,
                     onFieldSubmitted: (_) => FocusScope.of(context).requestFocus(_urlFocus),
                     controller: _forCampName,
                     enableSuggestions: false,
@@ -236,7 +248,7 @@ class _CreateCampaignState extends State<CreateCampaign> {
                       border: textFormBorder(context),
                       suffixIcon: IconButton(
                         icon: FaIcon(
-                          FontAwesomeIcons.search,
+                          _urlWeb == null ? FontAwesomeIcons.search : FontAwesomeIcons.times,
                           color: Theme.of(context).primaryColor,
                         ),
                         onPressed: _spinner == false
@@ -244,7 +256,12 @@ class _CreateCampaignState extends State<CreateCampaign> {
                           setState(() {
                             FocusScope.of(context).unfocus();
                             // _spinner = true;
+                            if(_urlWeb == null) {
                             _urlWeb = _url;
+                            } else {
+                              _urlWeb = null;
+                            }
+                            print("_urlWeb ::::::::::::::; $_urlWeb");
                             // _getUrl();
                           });
                         }
@@ -252,7 +269,11 @@ class _CreateCampaignState extends State<CreateCampaign> {
                       ),
                     ),
                     focusNode: _urlFocus,
-                    onChanged: (val) => _url = val,
+                    onChanged: (val) {
+                      _url = val;
+                      print("url ::::::::::::::; $_url");
+                    },
+                  readOnly: _urlWeb == null ? false : true,
                     controller: _forPageUrl,
                     enableSuggestions: false,
                     autocorrect: false,
@@ -421,20 +442,20 @@ class _CreateCampaignState extends State<CreateCampaign> {
                 ),
               ),
               const SizedBox(height: 25),
-              _spinner == true ?
-                  CircularProgressIndicator(
+              _spinner == true
+                ? CircularProgressIndicator(
                     backgroundColor: Theme.of(context).primaryColor,
                   )
-              : _urlWeb != null
+                : _urlWeb != null
                   ? Container(
-                height: 700,
-                child: InAppWebView(
-                  initialUrl: _urlWeb,
-                  initialOptions: InAppWebViewGroupOptions(
-                    crossPlatform: InAppWebViewOptions(debuggingEnabled: true),
-                  ),
-                ),
-              )
+                    height: 700,
+                    child: InAppWebView(
+                      initialUrl: _urlWeb,
+                      initialOptions: InAppWebViewGroupOptions(
+                        crossPlatform: InAppWebViewOptions(debuggingEnabled: true),
+                      ),
+                    ),
+                  )
                   : SizedBox(height: 0),
 
               const SizedBox(height: 45),

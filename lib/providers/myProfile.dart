@@ -100,7 +100,7 @@ class MyProfileData with ChangeNotifier {
     ).catchError((error) {
       throw error;
     });
-
+print('myProfile.dart :: register :: status :::::::::::::::::::::::::::::: ${result.statusCode}');
     final _extractedData = jsonDecode(result.body) as Map<String, dynamic>;
     if (result.statusCode == 201) {
       final _registerData = _extractedData['data'] as Map<String, dynamic>;
@@ -184,7 +184,7 @@ class MyProfileData with ChangeNotifier {
     }
   }
 
-  Future<bool> refreshData() async {
+  Future<int> refreshData() async {
     final String _url = '$_halfUrl/user/read_single.php?id=$_userId';
     final result = await http
         .get(_url, headers: {'authorization': '$_auth'}).catchError((error) {
@@ -212,13 +212,16 @@ class MyProfileData with ChangeNotifier {
           score: int.parse(_extractedData['data']['campaign']['score']),
         );
         notifyListeners();
-        return true;
-      } else if (result.statusCode == 401) {
-        Auth().logout();
-        return false;
-      } else {
-        return false;
+      //   return true;
+      // } else if (result.statusCode == 401) {
+      //   Auth().logout();
+      //   SharedPreferences prefs = await SharedPreferences.getInstance();
+      //   prefs?.clear();
+      //   return false;
+      // } else {
+      //   return false;
       }
+      return result.statusCode;
   }
 
   Future<bool> updateMyProfile(MyProfile newData) async {

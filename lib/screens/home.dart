@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:share/share.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import './myCampaign.dart';
 import './socialMediaNew.dart';
 import './socialMediaPremium.dart';
 import './badge.dart';
+import '../providers/auth.dart';
 import '../providers/campaignData.dart';
 import '../providers/myProfile.dart';
 import '../widgets/customDrawer.dart';
@@ -43,7 +45,11 @@ class _HomeState extends State<Home> {
   @override
   void didChangeDependencies() {
     if (_spinner == true) {
-      Provider.of<MyProfileData>(context, listen: false).refreshData();
+      Provider.of<MyProfileData>(context, listen: false).refreshData().then((value) {
+        if (value == 401) {
+          _logoutUser(context);
+        }
+      });
       Provider.of<CampaignData>(context, listen: false).premiumCamp().then((_) {
         setState(() {
           _spinner = false;
@@ -51,6 +57,13 @@ class _HomeState extends State<Home> {
       });
     }
     super.didChangeDependencies();
+  }
+
+  void _logoutUser(BuildContext context) async {
+    Navigator.pop(context);
+    Provider.of<Auth>(context, listen: false).logout();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs?.clear();
   }
 
   void _modalBottomSheetMenu(){
@@ -372,6 +385,8 @@ class _HomeState extends State<Home> {
             ),
             BottomButton(
               onPress: () {
+                media = Media.Facebook;
+                action = ActionType.Like;
                 _modalBottomSheetMenu();
               },
               icon: FontAwesomeIcons.plus,

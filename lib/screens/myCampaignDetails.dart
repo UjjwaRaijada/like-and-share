@@ -29,6 +29,9 @@ class _MyCampaignDetailsState extends State<MyCampaignDetails> {
   String _complain;
   CampaignClass _campaignData;
   List<Completed> _dataCompleted = [];
+  int _tempApprove = 0;
+  int _approved = 0;
+  int _pending = 0;
 
   @override
   void initState() {
@@ -190,6 +193,7 @@ class _MyCampaignDetailsState extends State<MyCampaignDetails> {
     Provider.of<CompletedData>(context, listen: false)
         .approve(compId);
     setState(() {
+      _tempApprove += 1;
       _done = true;
     });
   }
@@ -200,19 +204,21 @@ class _MyCampaignDetailsState extends State<MyCampaignDetails> {
         Provider.of<CompletedData>(context).data.toList();
 
     actionIcon = _campaignData.action;
-
-    double pending = _campaignData.heartPending / _campaignData.cost < 0 ? 0 : _campaignData.heartPending / _campaignData.cost;
+    media = _campaignData.media;
+    _approved = (_campaignData.heartGiven / _campaignData.cost).round() + _tempApprove;
+    _pending = ((_campaignData.heartPending / _campaignData.cost) - _tempApprove < 0 ? 0 : (_campaignData.heartPending / _campaignData.cost) - _tempApprove).round();
 
     return StartingCode(
-      title: 'Facebook',
+      title: mediaString,
       widget: Column(
         children: [
           Row(
             children: [
               HalfRow(
                   title:
-                      'Approved: ${(_campaignData.heartGiven / _campaignData.cost).round()}'),
-              HalfRow(title: 'Pending: ${pending.round()}'),
+                      'Approved: $_approved'
+              ),
+              HalfRow(title: 'Pending: $_pending'),
             ],
           ),
           ShadowBox(
@@ -313,15 +319,18 @@ class _MyCampaignDetailsState extends State<MyCampaignDetails> {
                         padding: const EdgeInsets.all(18.0),
                         child: DefaultTextStyle(
                           style: Theme.of(context).textTheme.bodyText1,
+                          textAlign: TextAlign.center,
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              const Text(
+                              _campaignData.qty * _campaignData.cost != _campaignData.heartPending + _campaignData.heartReturned + _campaignData.heartGiven
+                              ? const Text('Your Campaign is still active. Please wait for people to act on your Campaign')
+                              : const Text(
                                 'Great job! You have shared hearts with people who cared about you. Create a new campaign and enjoy.',
-                                textAlign: TextAlign.center,
                               ),
+                              const SizedBox(height: 3),
                               const Text('You can also try Refreshing the page!'),
-                              const SizedBox(height: 5),
+                              const SizedBox(height: 10),
                               ElevatedButton(
                                 onPressed: () => refreshPage(),
                                 style: ButtonStyle(
@@ -355,32 +364,34 @@ class _MyCampaignDetailsState extends State<MyCampaignDetails> {
           const SizedBox(height: 85),
         ],
       ),
-      bottomS: Container(
-        height: 80,
-        color: Colors.white70,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            BottomButtonPink(
-              onPress: _done == false ? (){}
-                  :() => _reportAlert(_dataCompleted[0].id),
-              icon: FontAwesomeIcons.solidFlag,
-              label: 'Report',
-            ),
-            BottomButtonPink(
-              onPress: _done == false ? (){}
-                  :() {
-                setState(() {
-                  _done = false;
-                });
-                _approve(_dataCompleted[0].id);
-              },
-              icon: FontAwesomeIcons.check,
-              label: 'Approve',
-            ),
-          ],
-        ),
-      ),
+      bottomS: _dataCompleted.isNotEmpty
+        ? Container(
+          height: 80,
+          color: Colors.white70,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              BottomButtonPink(
+                onPress: _done == false ? (){}
+                    :() => _reportAlert(_dataCompleted[0].id),
+                icon: FontAwesomeIcons.solidFlag,
+                label: 'Report',
+              ),
+              BottomButtonPink(
+                onPress: _done == false ? (){}
+                    :() {
+                  setState(() {
+                    _done = false;
+                  });
+                  _approve(_dataCompleted[0].id);
+                },
+                icon: FontAwesomeIcons.check,
+                label: 'Approve',
+              ),
+            ],
+          ),
+        )
+        : SizedBox(height: 0),
     );
   }
 }

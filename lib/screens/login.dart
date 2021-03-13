@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 
 import './register.dart';
 import './forgotPassword.dart';
+import './registerOtp.dart';
 import '../providers/auth.dart';
 // import '../providers/myProfile.dart';
 import '../widgets/loginLogoCode.dart';
@@ -167,12 +168,24 @@ class _LoginState extends State<Login> {
     Provider.of<Auth>(context, listen: false)
         .authenticate(signingUser.username, signingUser.password)
         .then((value) async {
-      if (value == true) {
+      if (value == 200) {
         setState(() {
           _spinner = false;
         });
         // Navigator.pushReplacementNamed(context, Home.id);
         Navigator.pushReplacementNamed(context, '/');
+      } else if (value == 403) {
+        int _myId = Provider.of<Auth>(context, listen: false).user;
+        return showDialog(
+          context: context,
+          builder: (ctx) => AlertBox(
+            title: 'Verify Email ID',
+            body: 'We have sent you OTP on your registered email address.',
+            onPress: () =>  Navigator.pushReplacementNamed(context, RegisterOtp.id, arguments: _myId),
+          ),
+        ).then((_) =>
+            Navigator.pushReplacementNamed(context, RegisterOtp.id, arguments: _myId),
+        );
       } else {
         setState(() {
           _spinner = false;
@@ -201,6 +214,7 @@ class _LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
     return LoginLogoCode(
+      title: 'LOGIN',
       widget: Form(
         key: _form,
         child: Column(
@@ -270,23 +284,21 @@ class _LoginState extends State<Login> {
             ),
             const SizedBox(height: 45),
             _spinner == true
-                ? Center(
-                    child: const CircularProgressIndicator(
-                      valueColor:
-                          AlwaysStoppedAnimation<Color>(Colors.pinkAccent),
-                    ),
-                  )
-                : const SizedBox(height: 0),
-            ElevatedButton(
-              onPressed: _submit,
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all<Color>(Theme.of(context).primaryColor),
+              ? CircularProgressIndicator(
+                // valueColor:
+                //     AlwaysStoppedAnimation<Color>(Colors.pinkAccent),
+                backgroundColor: Theme.of(context).primaryColor,
+              )
+              : ElevatedButton(
+                onPressed: _submit,
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all<Color>(Theme.of(context).primaryColor),
+                ),
+                child: Text(
+                  'Submit',
+                  style: Theme.of(context).textTheme.button,
+                ),
               ),
-              child: Text(
-                'Submit',
-                style: Theme.of(context).textTheme.button,
-              ),
-            ),
             const SizedBox(height: 10),
             /// GOOGLE LOGIN ANDROID
             // Platform.isAndroid

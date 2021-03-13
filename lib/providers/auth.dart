@@ -33,22 +33,25 @@ class Auth extends ChangeNotifier {
     return null;
   }
 
-  Future<bool> authenticate(String email, String password) async {
+  Future<int> authenticate(String email, String password) async {
     final _url = '$_halfUrl/user/login.php';
     Map _body = {
       'email': email,
       'password': password,
     };
 
-    return await http
+    final result =  await http
         .post(
       _url,
       headers: {'Content-type': 'application/json'},
       body: jsonEncode(_body),
-    )
-        .then((value) async {
-      if (value.statusCode == 200) {
-        final _extractedData = jsonDecode(value.body);
+    ).catchError((error) {
+      print('error ::::: $error');
+      throw error;
+    });
+    print('status code ::::::::::: ${result.statusCode}');
+      if (result.statusCode == 200) {
+        final _extractedData = jsonDecode(result.body) as Map<String, dynamic>;
         _auth = _extractedData['data']['user']['auth'];
         _userId = int.parse(_extractedData['data']['user']['id']);
 
@@ -57,13 +60,14 @@ class Auth extends ChangeNotifier {
         prefs.setString('userData', userData);
 
         notifyListeners();
-        return true;
-      } else {
-        return false;
+        return 200;
+      } else if(result.statusCode == 403) {
+        final _extractedData = jsonDecode(result.body) as Map<String, dynamic>;
+        _userId = int.parse(_extractedData['data']);
+        return result.statusCode;
+      } else{
+        return result.statusCode;
       }
-    }).catchError((error) {
-      throw error;
-    });
   }
 
   Future<bool> googleAuthenticate(String email) async {
@@ -96,6 +100,53 @@ class Auth extends ChangeNotifier {
     }).catchError((error) {
       throw error;
     });
+  }
+
+  Future<bool> registerOtp(int otp, int id) async {
+    final _url = '$_halfUrl/user/register_otp.php';
+
+    final result = await http.post(
+      _url,
+      headers: {'Content-type': 'application/json'},
+      body: jsonEncode({
+        'id': id,
+        'otp': otp
+      }),
+    ).catchError((error) {
+      throw error;
+    });
+
+    print('auth.dart :: status :::::::::::::::::: ${result.statusCode}');
+    print('auth.dart :: result.body :::::::::::::::::::;; ${jsonDecode(result.body)}');
+
+    if(result.statusCode == 200) {
+      final _extractedData = jsonDecode(result.body) as Map<String, dynamic>;
+      _auth = _extractedData['data']['user']['auth'];
+      _userId = _extractedData['data']['user']['id'];
+
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      final userData = jsonEncode({'token': _auth, 'userId': _userId});
+      prefs.setString('userData', userData);
+
+      notifyListeners();
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  Future<bool> resendOtp(int id) async {
+    final _url = '$_halfUrl/user/resend_otp.php?userId=$id';
+
+    final result =  await http.post(_url).catchError((error) {
+      throw error;
+    });
+
+    if(result.statusCode == 200) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   Future<bool> autoLogin() async {

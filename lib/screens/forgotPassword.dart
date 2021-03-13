@@ -29,27 +29,43 @@ class _ForgotPasswordState extends State<ForgotPassword> {
       return;
     }
     _form.currentState.save();
+
     setState(() {
       _spinner = true;
     });
-
     if (_spinner == true) {
       Provider.of<OtpData>(context, listen: false)
           .forgotPassword(email)
           .then((value) {
         if (value == false) {
+          setState(() {
+            _spinner = false;
+          });
           return showDialog(
             context: context,
             builder: (ctx) => AlertBox(
-              title: 'Oopsss!',
               body: 'This email id is not registered! Don\'t miss out on the opportunity to get free publicity and promotion of your social media pages!',
               onPress: () => Navigator.pop(context),
             ),
           );
         } else {
-          Navigator.pushReplacement(
-            context,
-            PageRouteBuilder(
+          setState(() {
+            _spinner = true;
+          });
+          return showDialog(
+            context: context,
+            builder: (context) => AlertBox(
+              title: 'OTP Sent!',
+              body: 'We have sent you an OTP on your registered email address.',
+              onPress: () => Navigator.pushReplacement(
+                context,
+                PageRouteBuilder(
+                  pageBuilder: (context, animation1, animation2) => EnterOtp(),
+                  transitionDuration: Duration(seconds: 0),
+                ),
+              ),
+            ),
+          ).then((value) => PageRouteBuilder(
               pageBuilder: (context, animation1, animation2) => EnterOtp(),
               transitionDuration: Duration(seconds: 0),
             ),
@@ -62,6 +78,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
   @override
   Widget build(BuildContext context) {
     return LoginLogoCode(
+      title: 'FORGOT PASSWORD',
       widget: Form(
         key: _form,
         child: Column(
@@ -97,64 +114,70 @@ class _ForgotPasswordState extends State<ForgotPassword> {
               keyboardType: TextInputType.emailAddress,
             ),
             const SizedBox(height: 45),
-            ElevatedButton(
-              onPressed: () {
-                _submit();
-              },
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all<Color>(Theme.of(context).primaryColor),
-              ),
-              child: Text(
-                'Submit',
-                style: Theme.of(context).textTheme.button,
-              ),
-            ),
-            const SizedBox(height: 25),
-            Container(
-              height: 50,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+            _spinner == true
+              ? CircularProgressIndicator(backgroundColor: Theme.of(context).primaryColor)
+              : Column(
                 children: [
-                  TextButton(
+                  ElevatedButton(
                     onPressed: () {
-                      Navigator.pushReplacement(
-                        context,
-                        PageRouteBuilder(
-                          pageBuilder: (context, animation1, animation2) =>
-                              Login(),
-                          transitionDuration: Duration(seconds: 0),
-                        ),
-                      );
+                      _submit();
                     },
-                    child: const Text(
-                      'Sign In',
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all<Color>(Theme.of(context).primaryColor),
                     ),
-                  ),
-                  Container(
-                    padding: EdgeInsets.symmetric(horizontal: 10),
                     child: Text(
-                      '|',
+                      'Submit',
                       style: Theme.of(context).textTheme.button,
                     ),
                   ),
-                  TextButton(
-                    onPressed: () {
-                      Navigator.pushReplacement(
-                        context,
-                        PageRouteBuilder(
-                          pageBuilder: (context, animation1, animation2) =>
-                              Register(),
-                          transitionDuration: Duration(seconds: 0),
+                  const SizedBox(height: 25),
+                  Container(
+                    height: 50,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        TextButton(
+                          onPressed: () {
+                            Navigator.pushReplacement(
+                              context,
+                              PageRouteBuilder(
+                                pageBuilder: (context, animation1, animation2) =>
+                                    Login(),
+                                transitionDuration: Duration(seconds: 0),
+                              ),
+                            );
+                          },
+                          child: const Text(
+                            'Sign In',
+                          ),
                         ),
-                      );
-                    },
-                    child: const Text(
-                      'Register',
+                        Container(
+                          padding: EdgeInsets.symmetric(horizontal: 10),
+                          child: Text(
+                            '|',
+                            style: Theme.of(context).textTheme.button,
+                          ),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            Navigator.pushReplacement(
+                              context,
+                              PageRouteBuilder(
+                                pageBuilder: (context, animation1, animation2) =>
+                                    Register(),
+                                transitionDuration: Duration(seconds: 0),
+                              ),
+                            );
+                          },
+                          child: const Text(
+                            'Register',
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ],
               ),
-            ),
             const SizedBox(height: 15),
           ],
         ),

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../providers/myProfile.dart';
+import '../providers/auth.dart';
 import '../widgets/startingCode.dart';
 import '../widgets/textFormBorder.dart';
 import '../widgets/alertBox.dart';
@@ -18,18 +20,18 @@ class _ProfileState extends State<Profile> {
   bool _onlyRead = true;
   FocusNode _nameFocus = FocusNode();
   FocusNode _cityFocus = FocusNode();
-  FocusNode _facebookFocus = FocusNode();
-  FocusNode _instagramFocus = FocusNode();
-  FocusNode _twitterFocus = FocusNode();
-  FocusNode _youtubeFocus = FocusNode();
-  FocusNode _googleFocus = FocusNode();
+  // FocusNode _facebookFocus = FocusNode();
+  // FocusNode _instagramFocus = FocusNode();
+  // FocusNode _twitterFocus = FocusNode();
+  // FocusNode _youtubeFocus = FocusNode();
+  // FocusNode _googleFocus = FocusNode();
   String _name;
   String _city;
-  String _facebook;
-  String _instagram;
-  String _twitter;
-  String _youtube;
-  String _google;
+  // String _facebook;
+  // String _instagram;
+  // String _twitter;
+  // String _youtube;
+  // String _google;
 
   MyProfile _myProfile = MyProfile(
     id: 0,
@@ -55,18 +57,20 @@ class _ProfileState extends State<Profile> {
       Provider.of<MyProfileData>(context, listen: false)
           .refreshData()
           .then((value) {
-        if (value == true) {
+        if (value == 200) {
           _myProfile = Provider.of<MyProfileData>(context, listen: false).data;
           _name = _myProfile.name;
           _city = _myProfile.city;
-          _facebook = _myProfile.facebook;
-          _instagram = _myProfile.instagram;
-          _twitter = _myProfile.twitter;
-          _youtube = _myProfile.youtube;
-          _google = _myProfile.google;
+          // _facebook = _myProfile.facebook;
+          // _instagram = _myProfile.instagram;
+          // _twitter = _myProfile.twitter;
+          // _youtube = _myProfile.youtube;
+          // _google = _myProfile.google;
           setState(() {
             _spinner = false;
           });
+        } else if (value == 401) {
+          _logoutUser(context);
         } else {
           return showDialog(
             context: context,
@@ -78,7 +82,6 @@ class _ProfileState extends State<Profile> {
           });
         }
       }).catchError((error) {
-        print('profile.dart :: error ::::::::::: $error');
         return showDialog(
           context: context,
           builder: (ctx) => AlertBox(
@@ -97,15 +100,22 @@ class _ProfileState extends State<Profile> {
     super.didChangeDependencies();
   }
 
+  void _logoutUser(BuildContext context) async {
+    Navigator.pop(context);
+    Provider.of<Auth>(context, listen: false).logout();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs?.clear();
+  }
+
   @override
   void dispose() {
     _nameFocus.dispose();
     _cityFocus.dispose();
-    _facebookFocus.dispose();
-    _instagramFocus.dispose();
-    _twitterFocus.dispose();
-    _youtubeFocus.dispose();
-    _googleFocus.dispose();
+    // _facebookFocus.dispose();
+    // _instagramFocus.dispose();
+    // _twitterFocus.dispose();
+    // _youtubeFocus.dispose();
+    // _googleFocus.dispose();
     super.dispose();
   }
 
@@ -114,37 +124,48 @@ class _ProfileState extends State<Profile> {
       id: _myProfile.id,
       name: _name,
       city: _city,
-      facebook: _facebook,
-      instagram: _instagram,
-      twitter: _twitter,
-      youtube: _youtube,
-      google: _google,
+      hearts: _myProfile.hearts,
+      // facebook: _facebook,
+      // instagram: _instagram,
+      // twitter: _twitter,
+      // youtube: _youtube,
+      // google: _google,
     );
 
-    Provider.of<MyProfileData>(context, listen: false)
-        .updateMyProfile(_myProfile)
-        .then((value) {
+    MyProfile _oldProfile = Provider.of<MyProfileData>(context, listen: false).data;
+
+    if(_oldProfile.name != _name || _oldProfile.city != _city) {
+      Provider.of<MyProfileData>(context, listen: false)
+          .updateMyProfile(_myProfile)
+          .then((value) {
+        setState(() {
+          _onlyRead = true;
+        });
+        if (value == true) {
+          return showDialog(
+            context: context,
+            builder: (ctx) =>
+              AlertBox(
+                title: 'Hurrayyy!',
+                body: 'Your profile data was successfully changed.',
+                onPress: () => Navigator.pushReplacementNamed(context, '/'),
+              ),
+          );
+        } else {
+          return showDialog(
+            context: context,
+            builder: (ctx) =>
+              AlertBox(
+                onPress: () => Navigator.pop(context),
+              ),
+          );
+        }
+      });
+    } else {
       setState(() {
         _onlyRead = true;
       });
-      if (value == true) {
-        return showDialog(
-          context: context,
-          builder: (ctx) => AlertBox(
-            title: 'Hurrayyy!',
-            body: 'Your profile data was successfully changed.',
-            onPress: () => Navigator.pushReplacementNamed(context, '/'),
-          ),
-        );
-      } else {
-        return showDialog(
-          context: context,
-          builder: (ctx) => AlertBox(
-            onPress: () => Navigator.pop(context),
-          ),
-        );
-      }
-    });
+    }
   }
 
   @override
@@ -229,7 +250,7 @@ class _ProfileState extends State<Profile> {
             maxHeight: 50,
           ),
           onPressed: () {
-            _myProfile.city.isEmpty
+            _myProfile.city == null
             ? FocusScope.of(context).requestFocus(_cityFocus)
             : FocusScope.of(context).requestFocus(_nameFocus);
             _onlyRead == false

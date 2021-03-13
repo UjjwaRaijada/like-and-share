@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+// import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -33,7 +33,6 @@ class _MyCampaignState extends State<MyCampaign> {
   void didChangeDependencies() {
     if (_spinner == true) {
       Provider.of<CampaignData>(context, listen: false).myCampaign().then((_) {
-        _data = Provider.of<CampaignData>(context, listen: false).data;
       }).then((_) {
         setState(() {
           _spinner = false;
@@ -45,6 +44,8 @@ class _MyCampaignState extends State<MyCampaign> {
 
   @override
   Widget build(BuildContext context) {
+    _data = Provider.of<CampaignData>(context, listen: false).data;
+
     return StartingCode(
       title: 'My Campaign',
       widget: _spinner == true
@@ -94,6 +95,7 @@ class _MyCampaignState extends State<MyCampaign> {
                     itemBuilder: (context, index) {
                       actionIcon = _data[index].action;
                       media = _data[index].media;
+                      action = _data[index].action;
 
                       return SocialMediaTile(
                         backColor: _data[index].heartPending > 0
@@ -101,11 +103,15 @@ class _MyCampaignState extends State<MyCampaign> {
                           : Colors.transparent,
                         campaignId: _data[index].id,
                         name: _data[index].name,
-                        imageUrl: _data[index].urlImage,
-                        action: _data[index].action,
-                        actionQty: _data[index].qty,
-                        costPerAction: _data[index].cost * _data[index].qty,
                         date: _data[index].createdOn,
+                        totalAction: _data[index].count,
+                        actionQty: _data[index].qty,
+                        actionPending: (_data[index].heartPending / _data[index].cost ) > 0
+                          ? (_data[index].heartPending / _data[index].cost).round()
+                          : 0
+                        // imageUrl: _data[index].urlImage,
+                        // action: _data[index].action,
+                        // costPerAction: _data[index].cost * _data[index].qty,
                       );
                     },
                     itemCount: _data.length,
@@ -120,23 +126,27 @@ class _MyCampaignState extends State<MyCampaign> {
 class SocialMediaTile extends StatelessWidget {
   final Color backColor;
   final int campaignId;
-  final String imageUrl;
-  final Media media;
+  // final String imageUrl;
+  // final Media media;
   final String name;
-  final ActionType action;
+  // final ActionType action;
   final int actionQty;
-  final int costPerAction;
+  final int totalAction;
+  // final int costPerAction;
+  final int actionPending;
   final DateTime date;
 
   SocialMediaTile({
     this.backColor,
     this.campaignId,
-    this.imageUrl,
-    this.media,
+    // this.imageUrl,
+    // this.media,
     this.name,
-    this.action,
+    // this.action,
     this.actionQty,
-    this.costPerAction,
+    this.totalAction,
+    // this.costPerAction,
+    this.actionPending,
     this.date,
   });
 
@@ -150,7 +160,12 @@ class SocialMediaTile extends StatelessWidget {
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 15),
             height: 110,
-            color: backColor,
+            color: totalAction == actionQty
+              ? Colors.green.withOpacity(0.2)
+              : actionPending > 0
+                ? Colors.red.withOpacity(0.2)
+                : Colors.transparent,
+            // backColor,
             child: ShadowBox(
               widget: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -169,63 +184,62 @@ class SocialMediaTile extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Text(mediaString),
-                      Container(
-                        child: Text(DateFormat.yMMMd().format(date).toString()),
+                      Expanded(
+                        child: Text(
+                          DateFormat.yMMMd().format(date).toString(),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                      Expanded(
+                        child: Text(
+                          mediaString,
+                          textAlign: TextAlign.center,
+                        ),
                       ),
                     ],
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Container(
-                            child: Text(
-                              'Target: $actionQty',
-                            ),
+                  totalAction == actionQty
+                    ? Expanded(
+                      child: Text(
+                        'Done',
+                        style: TextStyle(color: Theme.of(context).primaryColor),
+                      )
+                    )
+                    : Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Expanded(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                // 'Target: $actionQty',
+                                '$actionString: $totalAction / $actionQty',
+                              ),
+                              const SizedBox(width: 5),
+                              Icon(
+                                actionToIcon,
+                                size: 12,
+                              ),
+                            ],
                           ),
-                          const SizedBox(width: 5),
-                          Icon(
-                            actionToIcon,
-                            size: 12,
+                        ),
+                        Expanded(
+                          child: Text(
+                            // 'Expense: $costPerAction',
+                            'Pending: $actionPending',
+                            textAlign: TextAlign.center,
                           ),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          Container(
-                            child: Text(
-                              'Expense: $costPerAction',
-                            ),
-                          ),
-                          const SizedBox(width: 5),
-                          const Icon(
-                            FontAwesomeIcons.solidHeart,
-                            color: Colors.red,
-                            size: 12,
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
+                        ),
+                      ],
+                    ),
                 ],
               ),
             ),
           ),
         ),
-        Container(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 20,
-            vertical: 15,
-          ),
-          child: const Divider(
-            height: 3,
-            color: Colors.pinkAccent,
-          ),
-        ),
+       CustomDivider(),
       ],
     );
   }

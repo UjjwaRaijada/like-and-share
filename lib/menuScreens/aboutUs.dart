@@ -26,7 +26,7 @@ class AboutUs extends StatelessWidget {
                     'This platform is completely advertisement free (and we intend to keep it that way always). It is also free to promote your social media pages.'),
                 const SizedBox(height: 10),
                 const Text(
-                    'Other than this, we also offer an option for Paid promotion of campaigns. It is a minimal charge to enable us to keep running this application. This helps us reward the hard working members of our team@Like & Share family who work day & night to make ensure a seamless experience for its users.'),
+                    'Other than this, we also offer an option for Paid promotion of campaigns. It is a minimal charge to enable us to keep running this application. This helps us reward the hard working members of our team@Like & Share family who work day & night to ensure a seamless experience for its users.'),
               ],
             ),
           ),

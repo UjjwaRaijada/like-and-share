@@ -262,6 +262,7 @@ class CampaignClass {
   final int heartGiven;
   final int heartReturned;
   final int premium;
+  final int count;
 
   CampaignClass({
     this.id,
@@ -280,6 +281,7 @@ class CampaignClass {
     this.heartGiven,
     this.heartReturned,
     this.premium,
+    this.count,
   });
 }
 
@@ -339,6 +341,7 @@ class CampaignData with ChangeNotifier {
             heartPending: int.parse(value['heartPending']),
             heartReturned: int.parse(value['heartReturned']),
             heartGiven: int.parse(value['heartGiven']),
+            count: int.parse(value['count']),
           ));
         });
         _premiumData = _fetchedData;
@@ -643,6 +646,7 @@ class CampaignData with ChangeNotifier {
             heartPending: int.parse(value['heartPending']),
             heartReturned: int.parse(value['heartReturned']),
             heartGiven: int.parse(value['heartGiven']),
+            count: int.parse(value['count']),
           ));
         });
         _data = _fetchedData;

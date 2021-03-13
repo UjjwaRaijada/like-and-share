@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import './screens/splash.dart';
 import './screens/login.dart';
 import './screens/register.dart';
+import './screens/registerOtp.dart';
 import './screens/forgotPassword.dart';
 import './screens/enterOtp.dart';
 import './screens/resetPassword.dart';
@@ -136,6 +137,11 @@ class MyApp extends StatelessWidget {
                 fontSize: 15,
                 color: Colors.black,
               ),
+              headline4: const TextStyle(
+                fontSize: 22,
+                color: Colors.pinkAccent,
+                fontWeight: FontWeight.bold,
+              )
             ),
           ),
           // initialRoute: Splash.id,
@@ -153,6 +159,7 @@ class MyApp extends StatelessWidget {
             Splash.id: (context) => Splash(),
             Login.id: (context) => Login(),
             Register.id: (context) => Register(),
+            RegisterOtp.id: (context) => RegisterOtp(),
             ForgotPassword.id: (context) => ForgotPassword(),
             EnterOtp.id: (context) => EnterOtp(),
             ResetPassword.id: (context) => ResetPassword(),

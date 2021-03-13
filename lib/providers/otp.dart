@@ -40,21 +40,18 @@ class OtpData extends ChangeNotifier {
   Future<bool> resendOtp() async {
     final _url = '$_halfUrl/user/resend_otp.php?userId=$userId';
 
-    return await http.post(_url).then((value) {
-      ///
-      if (value.statusCode == 401) {
-        Auth().logout();
-      }
+    final result =  await http.post(_url).catchError((error) {
+      throw error;
+    });
 
-      ///
-      if (value.statusCode == 200) {
+      if (result.statusCode == 200) {
         return true;
+      } else if (result.statusCode == 401) {
+        Auth().logout();
+        return false;
       } else {
         return false;
       }
-    }).catchError((error) {
-      throw error;
-    });
   }
 
   Future<bool> enterOtp(int pass) async {

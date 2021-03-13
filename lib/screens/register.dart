@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import './login.dart';
+import './registerOtp.dart';
 import '../providers/myProfile.dart';
 import '../widgets/loginLogoCode.dart';
 import '../widgets/alertBox.dart';
@@ -66,6 +68,7 @@ class _RegisterState extends State<Register> {
         .register(_register)
         .then((value) {
       String _msg = Provider.of<MyProfileData>(context, listen: false).msg;
+      MyProfile _myProfile = Provider.of<MyProfileData>(context, listen: false).data;
 
       if (value == 201) {
         setState(() {
@@ -74,16 +77,12 @@ class _RegisterState extends State<Register> {
         return showDialog(
           context: context,
           builder: (ctx) => AlertBox(
-            title: 'Congratulations!!',
-            body: _msg,
-            onPress: () => Navigator.pushReplacement(
-              context,
-              PageRouteBuilder(
-                pageBuilder: (context, animation1, animation2) => Login(),
-                transitionDuration: const Duration(seconds: 0),
-              ),
-            ),
+            title: 'OTP Required!',
+            body: 'We have sent you OTP on your registered email address.',
+            onPress: () =>  Navigator.pushReplacementNamed(context, RegisterOtp.id, arguments: _myProfile.id),
           ),
+        ).then((_) =>
+            Navigator.pushReplacementNamed(context, RegisterOtp.id, arguments: _myProfile.id),
         );
       } else if (value == 400) {
         setState(() {
@@ -114,6 +113,7 @@ class _RegisterState extends State<Register> {
   @override
   Widget build(BuildContext context) {
     return LoginLogoCode(
+      title: 'REGISTER',
       widget: Form(
         key: _form,
         child: Column(
@@ -172,7 +172,10 @@ class _RegisterState extends State<Register> {
             ),
             CustomTextField(
               title: 'Mobile No.',
-              keyboard: TextInputType.number,
+              keyboard: TextInputType.numberWithOptions(
+                decimal: false,
+                signed: false,
+              ),
               teController: _mobileController,
               fNode: _mobileFocusNode,
               nextFocus: (_) =>
@@ -186,6 +189,7 @@ class _RegisterState extends State<Register> {
                   refBy: _register.refBy,
                 );
               },
+              inputFormat: FilteringTextInputFormatter.allow(RegExp("[0-9]")),
               onValidate: (val) {
                 if (val.isEmpty) {
                   return 'Please enter your Mobile No';
@@ -217,11 +221,12 @@ class _RegisterState extends State<Register> {
               },
             ),
             CustomTextField(
-              title: 'Referral Code',
+              title: 'Referral Code (if any)',
               keyboard: TextInputType.number,
               teController: _refByController,
               fNode: _refByFocusNode,
               nextFocus: (_) => _submit(),
+              inputFormat: FilteringTextInputFormatter.allow(RegExp("[0-9]")),
               onSave: (newValue) {
                 String val =
                     newValue == null || newValue == "" ? '0' : newValue;
@@ -236,27 +241,21 @@ class _RegisterState extends State<Register> {
             ),
             const SizedBox(height: 30),
             _spinner == true
-                ? Center(
-                    child: Column(
-                      children: [
-                        CircularProgressIndicator(),
-                        const SizedBox(height: 10),
-                      ],
-                    ),
-                  )
-                : const SizedBox(height: 0),
-            ElevatedButton(
-              onPressed: () {
-                _submit();
-              },
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all<Color>(Theme.of(context).primaryColor),
+              ? CircularProgressIndicator(
+                backgroundColor: Theme.of(context).primaryColor,
+              )
+              : ElevatedButton(
+                onPressed: () {
+                  _submit();
+                },
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all<Color>(Theme.of(context).primaryColor),
+                ),
+                child: Text(
+                  'Submit',
+                  style: Theme.of(context).textTheme.button,
+                ),
               ),
-              child: Text(
-                'Submit',
-                style: Theme.of(context).textTheme.button,
-              ),
-            ),
             const SizedBox(height: 15),
             Container(
               height: 50,
@@ -292,6 +291,7 @@ class CustomTextField extends StatelessWidget {
   final Function onValidate;
   final Function nextFocus;
   final bool password;
+  final TextInputFormatter inputFormat;
 
   CustomTextField({
     this.title,
@@ -302,6 +302,7 @@ class CustomTextField extends StatelessWidget {
     this.onValidate,
     this.nextFocus,
     this.password = false,
+    this.inputFormat,
   });
 
   @override
@@ -326,6 +327,7 @@ class CustomTextField extends StatelessWidget {
           keyboardType: keyboard,
           onSaved: onSave,
           onFieldSubmitted: nextFocus,
+          inputFormatters: [inputFormat],
         ),
         const SizedBox(height: 15),
       ],

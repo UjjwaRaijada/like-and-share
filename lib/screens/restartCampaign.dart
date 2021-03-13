@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-
+import '../providers/auth.dart';
 import '../providers/campaignData.dart';
 import '../providers/myProfile.dart';
 import '../widgets/startingCode.dart';
@@ -111,7 +112,11 @@ class _RestartCampaignState extends State<RestartCampaign> {
                 title: 'Superrrrb!!',
                 body: 'Your campaign was created successfully!',
                 onPress: () {
-                  Provider.of<MyProfileData>(context, listen: false).refreshData();
+                  Provider.of<MyProfileData>(context, listen: false).refreshData().then((value) {
+                    if (value == 401) {
+                      _logoutUser(context);
+                    }
+                  });
                   Navigator.pushReplacementNamed(context, '/');
                 },
               )
@@ -124,6 +129,13 @@ class _RestartCampaignState extends State<RestartCampaign> {
         _spinner = false;
       });
     }
+  }
+
+  void _logoutUser(BuildContext context) async {
+    Navigator.pop(context);
+    Provider.of<Auth>(context, listen: false).logout();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs?.clear();
   }
 
   @override

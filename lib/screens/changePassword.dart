@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+import '../providers/auth.dart';
 import '../providers/myProfile.dart';
 import '../widgets/startingCode.dart';
 import '../widgets/textFormBorder.dart';
@@ -40,15 +42,19 @@ class _ChangePasswordState extends State<ChangePassword> {
         setState(() {
           _spinner = false;
         });
-        if (value == true) {
+        if (value == 200) {
           id = Provider.of<MyProfileData>(context, listen: false).data.id;
+        } else if (value == 401) {
+          _logoutUser(context);
         } else {
           return showDialog(
-            context: context,
-            builder: (ctx) => AlertBox(
-              onPress: () => Navigator.pop(context),
-            ),
-          );
+              context: context,
+              builder: (ctx) => AlertBox(
+                onPress: () => Navigator.pop(context),
+              )
+          ).then((_) {
+            Navigator.pop(context);
+          });
         }
       }).catchError((error) {
         setState(() {
@@ -65,6 +71,13 @@ class _ChangePasswordState extends State<ChangePassword> {
     super.didChangeDependencies();
   }
 
+  void _logoutUser(BuildContext context) async {
+    Navigator.pop(context);
+    Provider.of<Auth>(context, listen: false).logout();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs?.clear();
+  }
+
   @override
   void dispose() {
     _oldPasswordFocus.dispose();
@@ -75,30 +88,56 @@ class _ChangePasswordState extends State<ChangePassword> {
 
   /// change password
   void _submit() {
-    Provider.of<MyProfileData>(context, listen: false)
-        .changePassword(_oldPassword, _newPassword)
-        .then((value) {
-      if (value == true) {
-        return showDialog(
-          context: context,
-          builder: (ctx) => AlertBox(
-            title: 'Superrrrb!',
-            body: 'Your password was changed successfully.',
-            onPress: () =>
-                    Navigator.pushReplacementNamed(context, '/'),
-          ),
-        );
-      } else {
-        return showDialog(
-          context: context,
-          builder: (ctx) => AlertBox(
-            title: 'Oopsss!',
-            body: 'You entered wrong password.',
-            onPress: () => Navigator.pushReplacementNamed(context, '/'),
-          ),
-        );
-      }
+    setState(() {
+      _spinner = true;
     });
+    print('old :::::::::::::: $_oldPassword');
+    print('new :::::::::::::: $_newPassword');
+    print('confirm ::::::::::::: $_confirmPassword');
+    if (_newPassword != _confirmPassword) {
+      setState(() {
+        _spinner = false;
+      });
+      showDialog(
+        context: context,
+        builder: (ctx) => AlertBox(
+          body: 'There is a mismatch in your new password.',
+          onPress: () => Navigator.pop(context),
+        ),
+      );
+    } else {
+      Provider.of<MyProfileData>(context, listen: false)
+          .changePassword(_oldPassword, _newPassword)
+          .then((value) {
+        if (value == true) {
+          setState(() {
+            _spinner = false;
+          });
+          return showDialog(
+            context: context,
+            builder: (ctx) =>
+              AlertBox(
+                title: 'Superrrrb!',
+                body: 'Your password was changed successfully.',
+                onPress: () =>
+                  Navigator.pushReplacementNamed(context, '/'),
+              ),
+          );
+        } else {
+          setState(() {
+            _spinner = false;
+          });
+          return showDialog(
+            context: context,
+            builder: (ctx) =>
+              AlertBox(
+                body: 'You entered wrong password.',
+                onPress: () => Navigator.pop(context),
+              ),
+          );
+        }
+      });
+    }
   }
 
   @override
@@ -132,24 +171,26 @@ class _ChangePasswordState extends State<ChangePassword> {
                   ),
                   ProfileTile(
                     title: 'Retype New Password',
-                    save: (val) => _confirmPassword,
+                    save: (val) => _confirmPassword = val,
                     focusName: _confirmPasswordFocus,
                     fieldSubmit: (_) => _submit(),
                   ),
                   const SizedBox(height: 30),
-                  ElevatedButton(
-                    onPressed: () {
-                      _submit();
-                    },
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all<Color>(Theme.of(context).primaryColor),
+                  _spinner == true
+                    ? CircularProgressIndicator(backgroundColor: Theme.of(context).primaryColor,)
+                    : ElevatedButton(
+                      onPressed: () {
+                        _submit();
+                      },
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all<Color>(Theme.of(context).primaryColor),
+                      ),
+                      child: const Text(
+                        'Submit',
+                        style: const TextStyle(
+                            color: Colors.white, fontWeight: FontWeight.bold),
+                      ),
                     ),
-                    child: const Text(
-                      'Submit',
-                      style: const TextStyle(
-                          color: Colors.white, fontWeight: FontWeight.bold),
-                    ),
-                  ),
                 ],
               ),
             ],
