@@ -136,13 +136,13 @@ class _MyCampaignDetailsState extends State<MyCampaignDetails> {
             .copyWith(color: Theme.of(context).primaryColor),
       ),
       content: Container(
-        height: 220,
+        height: 200,
         child: Column(
           children: [
-            Text(
-              'Please write your reason below and wait for Admin\'s decision.',
-              style: Theme.of(context).textTheme.headline2,
-            ),
+            // Text(
+            //   'Please write your reason below and wait for Admin\'s decision.',
+            //   style: Theme.of(context).textTheme.headline2,
+            // ),
             Form(
               child: TextFormField(
                 decoration: InputDecoration(
@@ -150,9 +150,9 @@ class _MyCampaignDetailsState extends State<MyCampaignDetails> {
                   border: textFormBorder(context),
                   enabledBorder: textFormBorder(context,)
                 ),
-                maxLength: 150,
+                maxLength: 100,
                 minLines: 1,
-                maxLines: 10,
+                maxLines: 4,
                 onChanged: (val) => _complain = val,
               ),
             ),
@@ -324,7 +324,7 @@ class _MyCampaignDetailsState extends State<MyCampaignDetails> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               _campaignData.qty * _campaignData.cost != _campaignData.heartPending + _campaignData.heartReturned + _campaignData.heartGiven
-                              ? const Text('Your Campaign is still active. Please wait for people to act on your Campaign')
+                              ? const Text('Your Campaign is still active. Please wait for people to act on your Campaign.')
                               : const Text(
                                 'Great job! You have shared hearts with people who cared about you. Create a new campaign and enjoy.',
                               ),
