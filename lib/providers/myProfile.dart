@@ -73,6 +73,7 @@ class MyProfileData with ChangeNotifier {
     google: '',
     refBy: 0,
     chosen: 0,
+    score: 0,
   );
 
   MyProfile get data {
