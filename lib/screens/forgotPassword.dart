@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app_like4like/widgets/alertBox.dart';
 import 'package:provider/provider.dart';
 
 import './login.dart';
@@ -7,6 +6,7 @@ import './register.dart';
 import './enterOtp.dart';
 import '../providers/otp.dart';
 import '../widgets/loginLogoCode.dart';
+import '../widgets/alertBox.dart';
 import '../widgets/textFormBorder.dart';
 
 class ForgotPassword extends StatefulWidget {
@@ -66,9 +66,9 @@ class _ForgotPasswordState extends State<ForgotPassword> {
               ),
             ),
           ).then((value) => PageRouteBuilder(
-              pageBuilder: (context, animation1, animation2) => EnterOtp(),
-              transitionDuration: Duration(seconds: 0),
-            ),
+            pageBuilder: (context, animation1, animation2) => EnterOtp(),
+            transitionDuration: Duration(seconds: 0),
+          ),
           );
         }
       });
@@ -87,7 +87,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
             TextFormField(
               style: TextStyle(color: Colors.white),
               decoration: InputDecoration(
-                labelText: 'Please enter your Email Id',
+                labelText: 'Email Id',
                 labelStyle: const TextStyle(color: Colors.white),
                 border: textFormBorder(context),
                 enabledBorder: textFormBorder(context),
@@ -96,7 +96,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                 var urlPattern =
                     r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+";
                 var result =
-                    RegExp(urlPattern, caseSensitive: false).hasMatch(val);
+                RegExp(urlPattern, caseSensitive: false).hasMatch(val);
                 if (val.isEmpty) {
                   return 'Please enter your Email Id';
                 }
@@ -115,69 +115,69 @@ class _ForgotPasswordState extends State<ForgotPassword> {
             ),
             const SizedBox(height: 45),
             _spinner == true
-              ? CircularProgressIndicator(backgroundColor: Theme.of(context).primaryColor)
-              : Column(
-                children: [
-                  ElevatedButton(
-                    onPressed: () {
-                      _submit();
-                    },
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all<Color>(Theme.of(context).primaryColor),
-                    ),
-                    child: Text(
-                      'Submit',
-                      style: Theme.of(context).textTheme.button,
-                    ),
+                ? CircularProgressIndicator(backgroundColor: Theme.of(context).primaryColor)
+                : Column(
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    _submit();
+                  },
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all<Color>(Theme.of(context).primaryColor),
                   ),
-                  const SizedBox(height: 25),
-                  Container(
-                    height: 50,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        TextButton(
-                          onPressed: () {
-                            Navigator.pushReplacement(
-                              context,
-                              PageRouteBuilder(
-                                pageBuilder: (context, animation1, animation2) =>
-                                    Login(),
-                                transitionDuration: Duration(seconds: 0),
-                              ),
-                            );
-                          },
-                          child: const Text(
-                            'Sign In',
-                          ),
-                        ),
-                        Container(
-                          padding: EdgeInsets.symmetric(horizontal: 10),
-                          child: Text(
-                            '|',
-                            style: Theme.of(context).textTheme.button,
-                          ),
-                        ),
-                        TextButton(
-                          onPressed: () {
-                            Navigator.pushReplacement(
-                              context,
-                              PageRouteBuilder(
-                                pageBuilder: (context, animation1, animation2) =>
-                                    Register(),
-                                transitionDuration: Duration(seconds: 0),
-                              ),
-                            );
-                          },
-                          child: const Text(
-                            'Register',
-                          ),
-                        ),
-                      ],
-                    ),
+                  child: Text(
+                    'Submit',
+                    style: Theme.of(context).textTheme.button,
                   ),
-                ],
-              ),
+                ),
+                const SizedBox(height: 25),
+                Container(
+                  height: 50,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pushReplacement(
+                            context,
+                            PageRouteBuilder(
+                              pageBuilder: (context, animation1, animation2) =>
+                                  Login(),
+                              transitionDuration: Duration(seconds: 0),
+                            ),
+                          );
+                        },
+                        child: const Text(
+                          'Sign In',
+                        ),
+                      ),
+                      Container(
+                        padding: EdgeInsets.symmetric(horizontal: 10),
+                        child: Text(
+                          '|',
+                          style: Theme.of(context).textTheme.button,
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pushReplacement(
+                            context,
+                            PageRouteBuilder(
+                              pageBuilder: (context, animation1, animation2) =>
+                                  Register(),
+                              transitionDuration: Duration(seconds: 0),
+                            ),
+                          );
+                        },
+                        child: const Text(
+                          'Register',
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
             const SizedBox(height: 15),
           ],
         ),

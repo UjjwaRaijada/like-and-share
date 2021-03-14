@@ -163,19 +163,15 @@ class _RegisterState extends State<Register> {
                   return 'Please enter your Email Id';
                 }
                 var result =
-                    RegExp(urlPattern, caseSensitive: false).hasMatch(val);
+                RegExp(urlPattern, caseSensitive: false).hasMatch(val);
                 if (!result) {
                   return 'Email Id entered is incorrect';
                 }
                 return null;
               },
             ),
-            CustomTextField(
+            NumberField(
               title: 'Mobile No.',
-              keyboard: TextInputType.numberWithOptions(
-                decimal: false,
-                signed: false,
-              ),
               teController: _mobileController,
               fNode: _mobileFocusNode,
               nextFocus: (_) =>
@@ -220,16 +216,15 @@ class _RegisterState extends State<Register> {
                 return null;
               },
             ),
-            CustomTextField(
+            NumberField(
               title: 'Referral Code (if any)',
-              keyboard: TextInputType.number,
               teController: _refByController,
               fNode: _refByFocusNode,
               nextFocus: (_) => _submit(),
               inputFormat: FilteringTextInputFormatter.allow(RegExp("[0-9]")),
               onSave: (newValue) {
                 String val =
-                    newValue == null || newValue == "" ? '0' : newValue;
+                newValue == null || newValue == "" ? '0' : newValue;
                 _register = MyProfile(
                   name: _register.name,
                   email: _register.email,
@@ -241,21 +236,21 @@ class _RegisterState extends State<Register> {
             ),
             const SizedBox(height: 30),
             _spinner == true
-              ? CircularProgressIndicator(
-                backgroundColor: Theme.of(context).primaryColor,
-              )
-              : ElevatedButton(
-                onPressed: () {
-                  _submit();
-                },
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all<Color>(Theme.of(context).primaryColor),
-                ),
-                child: Text(
-                  'Submit',
-                  style: Theme.of(context).textTheme.button,
-                ),
+                ? CircularProgressIndicator(
+              backgroundColor: Theme.of(context).primaryColor,
+            )
+                : ElevatedButton(
+              onPressed: () {
+                _submit();
+              },
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all<Color>(Theme.of(context).primaryColor),
               ),
+              child: Text(
+                'Submit',
+                style: Theme.of(context).textTheme.button,
+              ),
+            ),
             const SizedBox(height: 15),
             Container(
               height: 50,
@@ -291,7 +286,6 @@ class CustomTextField extends StatelessWidget {
   final Function onValidate;
   final Function nextFocus;
   final bool password;
-  final TextInputFormatter inputFormat;
 
   CustomTextField({
     this.title,
@@ -302,7 +296,6 @@ class CustomTextField extends StatelessWidget {
     this.onValidate,
     this.nextFocus,
     this.password = false,
-    this.inputFormat,
   });
 
   @override
@@ -325,6 +318,51 @@ class CustomTextField extends StatelessWidget {
           controller: teController,
           focusNode: fNode,
           keyboardType: keyboard,
+          onSaved: onSave,
+          onFieldSubmitted: nextFocus,
+        ),
+        const SizedBox(height: 15),
+      ],
+    );
+  }
+}
+
+class NumberField extends StatelessWidget {
+  final String title;
+  final TextEditingController teController;
+  final FocusNode fNode;
+  final Function onSave;
+  final Function onValidate;
+  final Function nextFocus;
+  final TextInputFormatter inputFormat;
+
+  NumberField({
+    this.title,
+    this.teController,
+    this.fNode,
+    this.onSave,
+    this.onValidate,
+    this.nextFocus,
+    this.inputFormat,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        TextFormField(
+          style: const TextStyle(color: Colors.white),
+          decoration: InputDecoration(
+            labelText: title,
+            labelStyle: const TextStyle(color: Colors.white),
+            border: textFormBorder(context),
+            enabledBorder: textFormBorder(context),
+          ),
+          cursorColor: Theme.of(context).primaryColor,
+          validator: onValidate,
+          controller: teController,
+          focusNode: fNode,
+          keyboardType: TextInputType.number,
           onSaved: onSave,
           onFieldSubmitted: nextFocus,
           inputFormatters: [inputFormat],
