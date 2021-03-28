@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 class BottomButtonPink extends StatelessWidget {
-  final Function onPress;
-  final IconData icon;
-  final String label;
+  final Function? onPress;
+  final IconData? icon;
+  final String? label;
   BottomButtonPink({
     this.onPress,
     this.icon,
@@ -17,7 +17,7 @@ class BottomButtonPink extends StatelessWidget {
         maxHeight: 45,
         minHeight: 45,
       ),
-      onPressed: onPress,
+      onPressed: onPress as void Function()?,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8.0),
         child: Column(
@@ -29,7 +29,7 @@ class BottomButtonPink extends StatelessWidget {
             ),
             const SizedBox(height: 3),
             Text(
-              label,
+              label!,
               style: TextStyle(
                 color: Theme.of(context).primaryColor,
                 fontSize: 12,

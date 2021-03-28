@@ -5,8 +5,8 @@ import 'package:http/http.dart' as http;
 import './campaignData.dart';
 
 class FAQs {
-  final String ques;
-  final String ans;
+  final String? ques;
+  final String? ans;
 
   FAQs({
     this.ques,
@@ -15,8 +15,8 @@ class FAQs {
 }
 
 class ActionCost {
-  final ActionType name;
-  final int cost;
+  final ActionType? name;
+  final int? cost;
 
   ActionCost({
     this.name,
@@ -25,12 +25,12 @@ class ActionCost {
 }
 
 class Badges {
-  final int score;
-  final int level;
-  final String name;
-  final String image;
-  final String nextName;
-  final int nextScore;
+  final int? score;
+  final int? level;
+  final String? name;
+  final String? image;
+  final String? nextName;
+  final int? nextScore;
 
   Badges ({
     this.score,
@@ -58,15 +58,14 @@ List<ActionCost> get actionCostData {
 }
 
 class Misc extends ChangeNotifier {
-  final String _auth;
-  final int _user;
+  final String? _auth;
+  final int? _user;
 
   Misc(this._auth, this._user);
 
-  static const String _halfUrl = 'https://www.likeandshare.app/admin/v1';
+  Future<bool> sendSuggestion(String? suggestion) async {
+    final _url = Uri.https('www.likeandshare.app', '/admin/v1/misc/suggestion.php');
 
-  Future<bool> sendSuggestion(String suggestion) async {
-    final _url = '$_halfUrl/misc/suggestion.php';
     final result = await http
         .post(
       _url,
@@ -93,7 +92,8 @@ class Misc extends ChangeNotifier {
   }
 
   Future<void> faqs() async {
-    final _url = '$_halfUrl/misc/faq.php';
+    final _url = Uri.https('www.likeandshare.app', '/admin/v1/misc/faq.php');
+
     final result = await http
         .get(_url, headers: {'authorization': '$_auth'}).catchError((error) {
       throw error;
@@ -124,8 +124,9 @@ class Misc extends ChangeNotifier {
     return _badgeData;
   }
 
-  Future<void> getBadge(int score) async {
-    final _url = '$_halfUrl/misc/badges.php?score=$score';
+  Future<void> getBadge(int? score) async {
+    final _url = Uri.https('www.likeandshare.app', '/admin/v1/misc/badges.php', {'score': '$score'});
+
     final result = await http.get(
         _url, headers: {'authorization': '$_auth'}).catchError((error) {
       throw error;

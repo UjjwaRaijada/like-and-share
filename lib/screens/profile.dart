@@ -25,8 +25,8 @@ class _ProfileState extends State<Profile> {
   // FocusNode _twitterFocus = FocusNode();
   // FocusNode _youtubeFocus = FocusNode();
   // FocusNode _googleFocus = FocusNode();
-  String _name;
-  String _city;
+  String? _name;
+  String? _city;
   // String _facebook;
   // String _instagram;
   // String _twitter;
@@ -82,6 +82,9 @@ class _ProfileState extends State<Profile> {
           });
         }
       }).catchError((error) {
+        setState(() {
+          _spinner = false;
+        });
         return showDialog(
           context: context,
           builder: (ctx) => AlertBox(
@@ -90,10 +93,7 @@ class _ProfileState extends State<Profile> {
         ).then((_) {
           Navigator.pop(context);
         });
-      }).then((_) {
-        setState(() {
-          _spinner = false;
-        });
+
       });
     }
 
@@ -104,7 +104,7 @@ class _ProfileState extends State<Profile> {
     Navigator.pop(context);
     Provider.of<Auth>(context, listen: false).logout();
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs?.clear();
+    prefs.clear();
   }
 
   @override
@@ -287,13 +287,13 @@ class _ProfileState extends State<Profile> {
 }
 
 class MediaTextField extends StatelessWidget {
-  final String url;
-  final String title;
-  final String initValue;
-  final FocusNode focus;
-  final Function fieldSubmit;
-  final bool onlyRead;
-  final Function save;
+  final String? url;
+  final String? title;
+  final String? initValue;
+  final FocusNode? focus;
+  final Function? fieldSubmit;
+  final bool? onlyRead;
+  final Function? save;
 
   MediaTextField({
     this.url,
@@ -317,7 +317,7 @@ class MediaTextField extends StatelessWidget {
             padding: const EdgeInsets.only(bottom: 8),
             height: 38,
             width: 30,
-            child: Image.asset(url),
+            child: Image.asset(url!),
           ),
           const SizedBox(width: 10),
           Expanded(
@@ -327,9 +327,9 @@ class MediaTextField extends StatelessWidget {
               focusNode: focus,
               enableSuggestions: false,
               autocorrect: false,
-              readOnly: onlyRead,
-              onChanged: save,
-              onFieldSubmitted: fieldSubmit,
+              readOnly: onlyRead!,
+              onChanged: save as void Function(String)?,
+              onFieldSubmitted: fieldSubmit as void Function(String)?,
             ),
           ),
         ],
@@ -339,13 +339,13 @@ class MediaTextField extends StatelessWidget {
 }
 
 class ProfileTile extends StatelessWidget {
-  final String title;
-  final FocusNode focusName;
-  final String initValue;
+  final String? title;
+  final FocusNode? focusName;
+  final String? initValue;
   final bool passwordField;
   final bool onlyRead;
-  final Function save;
-  final Function fieldSubmit;
+  final Function? save;
+  final Function? fieldSubmit;
 
   const ProfileTile({
     this.title,
@@ -373,9 +373,9 @@ class ProfileTile extends StatelessWidget {
         enableSuggestions: false,
         autocorrect: false,
         readOnly: onlyRead,
-        onChanged: save,
+        onChanged: save as void Function(String)?,
         focusNode: focusName,
-        onFieldSubmitted: fieldSubmit,
+        onFieldSubmitted: fieldSubmit as void Function(String)?,
       ),
     );
   }

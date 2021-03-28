@@ -25,9 +25,9 @@ class MyCampaignDetails extends StatefulWidget {
 class _MyCampaignDetailsState extends State<MyCampaignDetails> {
   bool _spinner = false;
   bool _done = true;
-  int _campaignId;
-  String _complain;
-  CampaignClass _campaignData;
+  int? _campaignId;
+  String? _complain;
+  late CampaignClass _campaignData;
   List<Completed> _dataCompleted = [];
   int _tempApprove = 0;
   int _approved = 0;
@@ -43,7 +43,7 @@ class _MyCampaignDetailsState extends State<MyCampaignDetails> {
 
   @override
   void didChangeDependencies() {
-    _campaignId = ModalRoute.of(context).settings.arguments;
+    _campaignId = ModalRoute.of(context)!.settings.arguments as int?;
     _campaignData = Provider.of<CampaignData>(context, listen: false)
         .data
         .firstWhere((val) => val.id == _campaignId);
@@ -92,7 +92,7 @@ class _MyCampaignDetailsState extends State<MyCampaignDetails> {
     }
   }
 
-  void _reportAlert(int compId) {
+  void _reportAlert(int? compId) {
     Widget backButton = RawMaterialButton(
       onPressed: () {
         Navigator.pop(context);
@@ -101,7 +101,7 @@ class _MyCampaignDetailsState extends State<MyCampaignDetails> {
         'Back',
         style: Theme.of(context)
             .textTheme
-            .headline2
+            .headline2!
             .copyWith(color: Theme.of(context).primaryColor),
       ),
     );
@@ -112,7 +112,7 @@ class _MyCampaignDetailsState extends State<MyCampaignDetails> {
         'Submit',
         style: Theme.of(context)
             .textTheme
-            .headline2
+            .headline2!
             .copyWith(color: Theme.of(context).primaryColor),
       ),
     );
@@ -132,7 +132,7 @@ class _MyCampaignDetailsState extends State<MyCampaignDetails> {
         "Cancellation Reason",
         style: Theme.of(context)
             .textTheme
-            .headline1
+            .headline1!
             .copyWith(color: Theme.of(context).primaryColor),
       ),
       content: Container(
@@ -170,7 +170,7 @@ class _MyCampaignDetailsState extends State<MyCampaignDetails> {
     );
   }
 
-  void _report(int id) {
+  void _report(int? id) {
     Provider.of<CompletedData>(context, listen: false)
         .cancel(id, _complain)
         .then((value) {
@@ -188,7 +188,7 @@ class _MyCampaignDetailsState extends State<MyCampaignDetails> {
     });
   }
 
-  void _approve(int compId) {
+  void _approve(int? compId) {
     // Provider.of<CampaignData>(context, listen: false).approveCompleted(campId);
     Provider.of<CompletedData>(context, listen: false)
         .approve(compId);
@@ -205,8 +205,8 @@ class _MyCampaignDetailsState extends State<MyCampaignDetails> {
 
     actionIcon = _campaignData.action;
     media = _campaignData.media;
-    _approved = (_campaignData.heartGiven / _campaignData.cost).round() + _tempApprove;
-    _pending = ((_campaignData.heartPending / _campaignData.cost) - _tempApprove < 0 ? 0 : (_campaignData.heartPending / _campaignData.cost) - _tempApprove).round();
+    _approved = (_campaignData.heartGiven! / _campaignData.cost!).round() + _tempApprove;
+    _pending = ((_campaignData.heartPending! / _campaignData.cost!) - _tempApprove < 0 ? 0 : (_campaignData.heartPending! / _campaignData.cost!) - _tempApprove).round();
 
     return StartingCode(
       title: mediaString,
@@ -228,16 +228,16 @@ class _MyCampaignDetailsState extends State<MyCampaignDetails> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    _campaignData.name,
+                    _campaignData.name!,
                     style: Theme.of(context).textTheme.headline1,
                   ),
                   const SizedBox(height: 5),
                   Container(
                     height: 18,
                     child: RawMaterialButton(
-                      onPressed: () => _launchURL(_campaignData.pageUrl),
+                      onPressed: () => _launchURL(_campaignData.pageUrl!),
                       child: Text(
-                        _campaignData.pageUrl,
+                        _campaignData.pageUrl!,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -246,7 +246,7 @@ class _MyCampaignDetailsState extends State<MyCampaignDetails> {
                   const SizedBox(height: 5),
                   Text(
                     DateFormat.yMMMd()
-                        .format(_campaignData.createdOn)
+                        .format(_campaignData.createdOn!)
                         .toString(),
                   ),
                   const SizedBox(height: 5),
@@ -272,7 +272,7 @@ class _MyCampaignDetailsState extends State<MyCampaignDetails> {
                         children: [
                           Container(
                             child: Text(
-                              'Expense: ${_campaignData.cost*_campaignData.qty} ',
+                              'Expense: ${_campaignData.cost!*_campaignData.qty!} ',
                             ),
                           ),
                           const Icon(
@@ -299,7 +299,7 @@ class _MyCampaignDetailsState extends State<MyCampaignDetails> {
                 ),
               )
             : Expanded(
-              child: _dataCompleted == null
+              child: _campaignData.qty! * _campaignData.cost! == _campaignData.heartPending! + _campaignData.heartGiven! + _campaignData.heartReturned!
                   ? Center(
                       child: ElevatedButton(
                         onPressed: () => Navigator.pushNamed(
@@ -318,12 +318,12 @@ class _MyCampaignDetailsState extends State<MyCampaignDetails> {
                       ? Padding(
                         padding: const EdgeInsets.all(18.0),
                         child: DefaultTextStyle(
-                          style: Theme.of(context).textTheme.bodyText1,
+                          style: Theme.of(context).textTheme.bodyText1!,
                           textAlign: TextAlign.center,
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              _campaignData.qty * _campaignData.cost != _campaignData.heartPending + _campaignData.heartReturned + _campaignData.heartGiven
+                              _campaignData.qty! * _campaignData.cost! != _campaignData.heartPending! + _campaignData.heartReturned! + _campaignData.heartGiven!
                               ? const Text('Your Campaign is still active. Please wait for people to act on your Campaign.')
                               : const Text(
                                 'Great job! You have shared hearts with people who cared about you. Create a new campaign and enjoy.',
@@ -352,10 +352,10 @@ class _MyCampaignDetailsState extends State<MyCampaignDetails> {
                         children: [
                           Padding(
                             padding: const EdgeInsets.all(3.0),
-                            child: Text(_dataCompleted[0].userName),
+                            child: Text(_dataCompleted[0].userName!),
                           ),
                           Image.network(
-                              _dataCompleted[0].screenshot,
+                              _dataCompleted[0].screenshot!,
                           ),
                         ],
                       ),

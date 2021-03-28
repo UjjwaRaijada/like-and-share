@@ -4,13 +4,13 @@ import './customDivider.dart';
 
 class AlertBox extends StatelessWidget {
   final String title;
-  final String body;
+  final String? body;
   final Function onPress;
 
   AlertBox({
     this.title = 'Ooops!',
     this.body = 'Something went wrong! Please try again.',
-    @ required this.onPress,
+    required this.onPress,
   });
 
   @override
@@ -32,7 +32,7 @@ class AlertBox extends StatelessWidget {
             title,
             style: Theme.of(context)
                 .textTheme
-                .headline1
+                .headline1!
                 .copyWith(color: Theme.of(context).primaryColor,
             ),
           ),
@@ -41,7 +41,7 @@ class AlertBox extends StatelessWidget {
       ),
       content: Container(
         child: Text(
-          body,
+          body!,
           style: Theme.of(context).textTheme.headline2,
         ),
       ),
@@ -49,12 +49,12 @@ class AlertBox extends StatelessWidget {
         Container(
           height: 50,
           child: TextButton(
-            onPressed: onPress,
+            onPressed: onPress as void Function()?,
             child: Text(
               'Ok',
               style: Theme.of(context)
                   .textTheme
-                  .headline2
+                  .headline2!
                   .copyWith(color: Theme.of(context).primaryColor,
               ),
             ),

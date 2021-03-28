@@ -13,13 +13,13 @@ class ContactUs extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String suggestion;
+    String? suggestion;
     return StartingCode(
       title: 'Contact Us',
       widget: Container(
         padding: EdgeInsets.all(18),
         child: DefaultTextStyle(
-          style: Theme.of(context).textTheme.bodyText1,
+          style: Theme.of(context).textTheme.bodyText1!,
           textAlign: TextAlign.justify,          child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -41,7 +41,7 @@ class ContactUs extends StatelessWidget {
                     enabledBorder: textFormBorder(context),
                   ),
                   validator: (val) {
-                    if (val.length < 50) {
+                    if (val!.length < 50) {
                       return 'Message too short. Please write at least 50 letters.';
                     }
                     return null;
@@ -55,11 +55,11 @@ class ContactUs extends StatelessWidget {
       ),
       bottomS: RawMaterialButton(
         onPressed: () {
-          final isValid = _form.currentState.validate();
+          final isValid = _form.currentState!.validate();
           if (!isValid) {
             return;
           }
-          _form.currentState.save();
+          _form.currentState!.save();
 
           Provider.of<Misc>(context, listen: false)
               .sendSuggestion(suggestion)
@@ -93,7 +93,7 @@ class ContactUs extends StatelessWidget {
           child: Center(
             child: Text(
               'Send',
-              style: Theme.of(context).textTheme.button.copyWith(fontSize: 18),
+              style: Theme.of(context).textTheme.button!.copyWith(fontSize: 18),
             ),
           ),
         ),

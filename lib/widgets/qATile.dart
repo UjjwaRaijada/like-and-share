@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 class QATile extends StatefulWidget {
-  final String ques;
-  final String ans;
+  final String? ques;
+  final String? ans;
   QATile({
     this.ques,
     this.ans,
@@ -33,7 +33,7 @@ class _QATileState extends State<QATile> {
               children: [
                 Expanded(
                   child: Text(
-                    widget.ques,
+                    widget.ques!,
                     style: Theme.of(context).textTheme.button,
                   ),
                 ),
@@ -62,7 +62,7 @@ class _QATileState extends State<QATile> {
                   ),
                 ),
                 child: Text(
-                  widget.ans,
+                  widget.ans!,
                   style: Theme.of(context).textTheme.bodyText1,
                   textAlign: TextAlign.justify,
                 ),
@@ -74,9 +74,9 @@ class _QATileState extends State<QATile> {
 }
 
 class QA {
-  final String ques;
-  final String ans;
-  final bool close;
+  final String? ques;
+  final String? ans;
+  final bool? close;
 
   QA({this.ques, this.ans, this.close});
 }

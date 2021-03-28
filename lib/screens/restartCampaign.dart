@@ -24,9 +24,9 @@ class _RestartCampaignState extends State<RestartCampaign> {
   bool _spinner = false;
   int heart = 0;
   String error = '';
-  String _url;
-  String _urlWeb;
-  File snippet;
+  String? _url;
+  String? _urlWeb;
+  File? snippet;
 
   CampaignClass _camp = CampaignClass(
     id: 0,
@@ -53,7 +53,7 @@ class _RestartCampaignState extends State<RestartCampaign> {
 
   @override
   void didChangeDependencies() {
-      int _campId = ModalRoute.of(context).settings.arguments;
+      int? _campId = ModalRoute.of(context)!.settings.arguments as int?;
       CampaignClass _campData = Provider.of<CampaignData>(context)
           .data
           .firstWhere((val) => val.id == _campId);
@@ -135,7 +135,7 @@ class _RestartCampaignState extends State<RestartCampaign> {
     Navigator.pop(context);
     Provider.of<Auth>(context, listen: false).logout();
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs?.clear();
+    prefs.clear();
   }
 
   @override
@@ -229,7 +229,7 @@ class _RestartCampaignState extends State<RestartCampaign> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            '${_camp.cost * _camp.qty} ',
+                            '${_camp.cost! * _camp.qty!} ',
                             style: const TextStyle(
                               fontSize: 22,
                               fontWeight: FontWeight.bold,
@@ -268,14 +268,14 @@ class _RestartCampaignState extends State<RestartCampaign> {
                             fillColor:
                             _camp.qty == 0 ? Colors.grey : Colors.pink,
                             onPressed: () {
-                              if (_camp.qty > 0) {
+                              if (_camp.qty! > 0) {
                                 setState(() {
                                   _camp = CampaignClass(
                                     name: _camp.name,
                                     media: _camp.media,
                                     action: _camp.action,
                                     pageUrl: _camp.pageUrl,
-                                    qty: _camp.qty - 1,
+                                    qty: _camp.qty! - 1,
                                     cost: _camp.cost,
                                   );
                                 });
@@ -292,7 +292,7 @@ class _RestartCampaignState extends State<RestartCampaign> {
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: 8),
                           child: Text(
-                            _camp.qty < 10
+                            _camp.qty! < 10
                                 ? '0${_camp.qty}'
                                 : _camp.qty.toString(),
                             style: const TextStyle(fontSize: 25),
@@ -303,21 +303,21 @@ class _RestartCampaignState extends State<RestartCampaign> {
                           width: 30,
                           child: RawMaterialButton(
                             fillColor:
-                            (heart - (_camp.qty * _camp.cost)) <
-                                _camp.cost
+                            (heart - (_camp.qty! * _camp.cost!)) <
+                                _camp.cost!
                                 ? Colors.grey
                                 : Colors.pink,
                             onPressed: () {
                               if ((heart -
-                                  (_camp.qty * _camp.cost)) >=
-                                  _camp.cost) {
+                                  (_camp.qty! * _camp.cost!)) >=
+                                  _camp.cost!) {
                                 setState(() {
                                   _camp = CampaignClass(
                                     name: _camp.name,
                                     media: _camp.media,
                                     action: _camp.action,
                                     pageUrl: _camp.pageUrl,
-                                    qty: _camp.qty + 1,
+                                    qty: _camp.qty! + 1,
                                     cost: _camp.cost,
                                   );
                                 });
@@ -345,9 +345,9 @@ class _RestartCampaignState extends State<RestartCampaign> {
                   ? Container(
                 height: 700,
                 child: InAppWebView(
-                  initialUrl: _urlWeb,
+                  initialUrlRequest: URLRequest(url: Uri.parse(_urlWeb!)),
                   initialOptions: InAppWebViewGroupOptions(
-                    crossPlatform: InAppWebViewOptions(debuggingEnabled: true),
+                    crossPlatform: InAppWebViewOptions(),
                   ),
                 ),
               )
@@ -397,7 +397,7 @@ class _RestartCampaignState extends State<RestartCampaign> {
               'Create Campaign',
               style: Theme.of(context)
                   .textTheme
-                  .button
+                  .button!
                   .copyWith(fontSize: 18),
             ),
           ),
@@ -409,8 +409,8 @@ class _RestartCampaignState extends State<RestartCampaign> {
 }
 
 class IconRowTile extends StatelessWidget {
-  final IconData icon;
-  final String title;
+  final IconData? icon;
+  final String? title;
 
   IconRowTile({
     this.icon,
@@ -427,7 +427,7 @@ class IconRowTile extends StatelessWidget {
         ),
         const SizedBox(width: 3),
         Text(
-          title,
+          title!,
           style: TextStyle(
               fontSize: 18,
               color: Colors.pinkAccent,

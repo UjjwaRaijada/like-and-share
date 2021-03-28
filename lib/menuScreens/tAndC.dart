@@ -12,7 +12,7 @@ class TAndC extends StatelessWidget {
         padding: const EdgeInsets.all(18),
         child: SingleChildScrollView(
           child: DefaultTextStyle(
-            style: Theme.of(context).textTheme.bodyText1,
+            style: Theme.of(context).textTheme.bodyText1!,
             textAlign: TextAlign.justify,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,

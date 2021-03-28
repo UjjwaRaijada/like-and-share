@@ -4,9 +4,8 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Auth extends ChangeNotifier {
-  static const String _halfUrl = 'https://www.likeandshare.app/admin/v1';
-  String _auth;
-  int _userId;
+  String? _auth;
+  int? _userId;
   // DateTime _expiryDate;
   // Timer _authTimer;
 
@@ -16,7 +15,7 @@ class Auth extends ChangeNotifier {
     return _auth != null;
   }
 
-  String get token {
+  String? get token {
     if (
         // _expiryDate != null &&
         //     _expiryDate.isAfter(DateTime.now()) &&
@@ -26,15 +25,15 @@ class Auth extends ChangeNotifier {
     return null;
   }
 
-  int get user {
+  int? get userId {
     if (_userId != null) {
       return _userId;
     }
     return null;
   }
 
-  Future<int> authenticate(String email, String password) async {
-    final _url = '$_halfUrl/user/login.php';
+  Future<int> authenticate(String? email, String? password) async {
+    final _url = Uri.https('www.likeandshare.app', '/admin/v1/user/login.php');
     Map _body = {
       'email': email,
       'password': password,
@@ -71,7 +70,7 @@ class Auth extends ChangeNotifier {
   }
 
   Future<bool> googleAuthenticate(String email) async {
-    final _url = '$_halfUrl/user/login_google.php';
+    final _url = Uri.https('www.likeandshare.app', '/admin/v1/user/login_google.php');
     Map _body = {
       'email': email,
     };
@@ -102,8 +101,8 @@ class Auth extends ChangeNotifier {
     });
   }
 
-  Future<bool> registerOtp(int otp, int id) async {
-    final _url = '$_halfUrl/user/register_otp.php';
+  Future<bool> registerOtp(int otp, int? id) async {
+    final _url = Uri.https('www.likeandshare.app', '/admin/v1/user/register_otp.php');
 
     final result = await http.post(
       _url,
@@ -135,8 +134,9 @@ class Auth extends ChangeNotifier {
     }
   }
 
-  Future<bool> resendOtp(int id) async {
-    final _url = '$_halfUrl/user/resend_otp.php?userId=$id';
+  Future<bool> resendOtp(int? id) async {
+    final _url = Uri.https('www.likeandshare.app', '/admin/v1/user/resend_otp.php', {'userId': '$id'});
+
 
     final result =  await http.post(_url).catchError((error) {
       throw error;
@@ -154,7 +154,7 @@ class Auth extends ChangeNotifier {
     if (!prefs.containsKey('userData')) {
       return false;
     } else {
-      final _extractedUserData = jsonDecode(prefs.getString('userData'));
+      final _extractedUserData = jsonDecode(prefs.getString('userData')!);
       _auth = _extractedUserData['token'];
       _userId = _extractedUserData['userId'];
       notifyListeners();
@@ -167,7 +167,7 @@ class Auth extends ChangeNotifier {
     // _expiryDate = null;
     _userId = null;
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs?.clear();
+    prefs.clear();
     notifyListeners();
 
     // if (_authTimer != null) {

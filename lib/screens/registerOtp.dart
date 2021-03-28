@@ -15,15 +15,15 @@ class RegisterOtp extends StatefulWidget {
 
 class _RegisterOtpState extends State<RegisterOtp> {
   final _form = GlobalKey<FormState>();
-  bool _spinner;
+  bool? _spinner;
 
   @override
   Widget build(BuildContext context) {
-    int _id = ModalRoute.of(context).settings.arguments;
-    String _firstInt;
-    String _secondInt;
-    String _thirdInt;
-    String _forthInt;
+    int? _id = ModalRoute.of(context)!.settings.arguments as int?;
+    String? _firstInt;
+    String? _secondInt;
+    String? _thirdInt;
+    late String _forthInt;
     int otp;
     final _secondFocus = FocusNode();
     final _thirdFocus = FocusNode();
@@ -65,17 +65,17 @@ class _RegisterOtpState extends State<RegisterOtp> {
 
 
     void _submit() {
-      final isValid = _form.currentState.validate();
+      final isValid = _form.currentState!.validate();
       if (!isValid) {
         return;
       }
-      _form.currentState.save();
+      _form.currentState!.save();
 
       setState(() {
         _spinner = true;
       });
 
-      otp = int.parse(_firstInt+_secondInt+_thirdInt+_forthInt);
+      otp = int.parse(_firstInt!+_secondInt!+_thirdInt!+_forthInt);
 
       Provider.of<Auth>(context, listen: false).registerOtp(otp, _id).then((value) {
         if (value == true) {

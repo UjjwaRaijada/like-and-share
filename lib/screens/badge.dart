@@ -10,7 +10,7 @@ class Badge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    int _score = Provider.of<MyProfileData>(context).data.score;
+    int? _score = Provider.of<MyProfileData>(context).data.score;
     Badges _data = Provider.of<Misc>(context).badgeData;
     if(_data.level == 0) {
       Provider.of<Misc>(context, listen: false).getBadge(_score);
@@ -19,7 +19,7 @@ class Badge extends StatelessWidget {
     return StartingCode(
       title: 'Badge',
       widget: DefaultTextStyle(
-        style: Theme.of(context).textTheme.headline3,
+        style: Theme.of(context).textTheme.headline3!,
         child: Padding(
           padding: const EdgeInsets.all(18.0),
           child: SingleChildScrollView(
@@ -29,14 +29,14 @@ class Badge extends StatelessWidget {
                   constraints: const BoxConstraints(
                     maxHeight: 200
                   ),
-                  child: _data == null
+                  child: _data.name == null || _data.name == ''
                     ? Image.asset('assets/images/NOVICE.png')
-                    : Image.network(_data.image),
+                    : Image.network(_data.image!),
                 ),
                 const SizedBox(height: 15),
                 Text(
                   'LEVEL ${_data.level}',
-                  style: Theme.of(context).textTheme.headline1.copyWith(
+                  style: Theme.of(context).textTheme.headline1!.copyWith(
                     fontSize: 22,
                     color: Theme.of(context).primaryColor
                   ),

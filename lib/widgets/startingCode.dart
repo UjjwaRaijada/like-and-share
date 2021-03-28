@@ -4,10 +4,10 @@ import 'package:provider/provider.dart';
 import '../providers/myProfile.dart';
 
 class StartingCode extends StatelessWidget {
-  final Widget widget;
-  final String title;
+  final Widget? widget;
+  final String? title;
   final Widget bottomS;
-  final Widget floatingButton;
+  final Widget? floatingButton;
   StartingCode({
     this.widget,
     this.title,
@@ -17,7 +17,7 @@ class StartingCode extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    int _userHearts = Provider.of<MyProfileData>(context).data.hearts;
+    int _userHearts = Provider.of<MyProfileData>(context).data.hearts!;
 
     return Scaffold(
       body: Container(
@@ -51,7 +51,7 @@ class StartingCode extends StatelessWidget {
                   )
                 ),
                 Text(
-                  title,
+                  title!,
                   style: const TextStyle(
                       fontSize: 22,
                       fontWeight: FontWeight.bold,

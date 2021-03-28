@@ -25,7 +25,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   bool _spinner = false;
-  MyProfile _myProfile;
+  late MyProfile _myProfile;
   List<CampaignClass> _premium = [];
   final String _message =
       'Hey! I am promoting my Social Media page for FREE!  Use my referral code and get extra Heart points!!!';
@@ -63,7 +63,7 @@ class _HomeState extends State<Home> {
     Navigator.pop(context);
     Provider.of<Auth>(context, listen: false).logout();
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs?.clear();
+    prefs.clear();
   }
 
   void _modalBottomSheetMenu(){
@@ -261,13 +261,13 @@ class _HomeState extends State<Home> {
                                                   child: FaIcon(mediaToImage),
                                                 ),
                                                 Text(
-                                                  _premium[0].authorName,
+                                                  _premium[0].authorName!,
                                                   style: Theme.of(context)
                                                       .textTheme
                                                       .headline1,
                                                 ),
                                                 Text(
-                                                  _premium[0].pageUrl,
+                                                  _premium[0].pageUrl!,
                                                   overflow: TextOverflow.fade,
                                                   maxLines: 2,
                                                   textAlign: TextAlign.center,
@@ -291,7 +291,7 @@ class _HomeState extends State<Home> {
                                                   child: DefaultTextStyle(
                                                     style: Theme.of(context)
                                                         .textTheme
-                                                        .headline2,
+                                                        .headline2!,
                                                     child: Row(
                                                       mainAxisAlignment:
                                                           MainAxisAlignment
@@ -334,7 +334,7 @@ class _HomeState extends State<Home> {
                                                 textAlign: TextAlign.center,
                                                 style: Theme.of(context)
                                                     .textTheme
-                                                    .headline2,
+                                                    .headline2!,
                                                 child: Column(
                                                   mainAxisAlignment: MainAxisAlignment.center,
                                                   children: [
@@ -370,7 +370,7 @@ class _HomeState extends State<Home> {
           children: [
             BottomButton(
               onPress: () {
-                _scaffoldKey.currentState.openDrawer();
+                _scaffoldKey.currentState!.openDrawer();
               },
               icon: FontAwesomeIcons.bars,
               label: 'Menu',
@@ -407,9 +407,9 @@ class _HomeState extends State<Home> {
 }
 
 class BottomButton extends StatelessWidget {
-  final Function onPress;
-  final IconData icon;
-  final String label;
+  final Function? onPress;
+  final IconData? icon;
+  final String? label;
   BottomButton({
     this.onPress,
     this.icon,
@@ -423,7 +423,7 @@ class BottomButton extends StatelessWidget {
         maxHeight: 45,
         minHeight: 45,
       ),
-      onPressed: onPress,
+      onPressed: onPress as void Function()?,
       child: Column(
         children: [
           Icon(
@@ -433,7 +433,7 @@ class BottomButton extends StatelessWidget {
           ),
           const SizedBox(height: 3),
           Text(
-            label,
+            label!,
             style: TextStyle(
               color: Theme.of(context).accentColor,
               fontSize: 12,

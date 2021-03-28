@@ -5,22 +5,22 @@ import 'package:http/http.dart' as http;
 import './auth.dart';
 
 class Completed {
-  final int id;
-  final int authorId;
-  final int campaignId;
-  final int userId;
-  final String userName;
-  final String screenshot;
-  final DateTime submitDate;
-  final String complain;
-  final DateTime complainDate;
-  final String status;
-  final String approveBy;
-  final DateTime approveDate;
-  final int media;
-  final int action;
-  final int cost;
-  final String pageUrl;
+  final int? id;
+  final int? authorId;
+  final int? campaignId;
+  final int? userId;
+  final String? userName;
+  final String? screenshot;
+  final DateTime? submitDate;
+  final String? complain;
+  final DateTime? complainDate;
+  final String? status;
+  final String? approveBy;
+  final DateTime? approveDate;
+  final int? media;
+  final int? action;
+  final int? cost;
+  final String? pageUrl;
 
   Completed({
     this.id,
@@ -43,13 +43,12 @@ class Completed {
 }
 
 class CompletedData with ChangeNotifier {
-  final String _auth;
-  final int _user;
+  final String? _auth;
+  final int? _userId;
 
-  CompletedData(this._auth, this._user);
+  CompletedData(this._auth, this._userId);
 
-  bool status;
-  static const String _halfUrl = 'https://www.likeandshare.app/admin/v1';
+  bool? status;
 
   List<Completed> _data = [];
 
@@ -57,60 +56,16 @@ class CompletedData with ChangeNotifier {
     return [..._data];
   }
 
-  Future<bool> createCompleted(Completed newData) async {
-    // print('completed.dart :: screenshot :::::::::::: ${newData.screenshot}');
-    const _url = '$_halfUrl/completed/create.php';
-    const _urlImage = '$_halfUrl/completed/create_image.php';
-
-    var request = http.MultipartRequest("POST", Uri.parse(_urlImage));
-    var pic =
-        await http.MultipartFile.fromPath('imagefile', newData.screenshot);
-    request.files.add(pic);
-    var response = await request.send();
-
-    //Get the response from the server
-    var responseData = await response.stream.toBytes();
-    var responseString = String.fromCharCodes(responseData);
-    print('completed.dart :: createCompleted :: responseString ::::::::::::::::::::::: $responseString');
-
-    final result = await http
-        .post(
-      _url,
-      headers: {'content-type': 'application/json', 'authorization': '$_auth'},
-      body: json.encode({
-        'campaign': newData.campaignId,
-        'author': newData.authorId,
-        'user': _user,
-        'screenshot': responseString,
-      }),
-    ).catchError((error) {
-      print('completed.dart :: createCompleted :: error ::::::::::::::::::::::: $error');
-    });
-    print('completed.dart :: createCompleted :: response ::::::::::::::::::::::: ${result.body}');
-    ///
-    if (result.statusCode == 401) {
-      Auth().logout();
-    }
-    ///
-    if (result.statusCode == 201) {
-      print('201');
-      return true;
-    } else {
-      print('false');
-      return false;
-    }
-  }
-
   Future<void> next(Completed newData) async {
-    print('completed.dart :: next :::::::::::::::::::::::: next called');
-    const _url = '$_halfUrl/completed/next.php';
+    final _url = Uri.https('www.likeandshare.app', '/admin/v1/completed/next.php');
+
     final result = await http.post(
         _url,
         headers: {'content-type': 'application/json', 'authorization': '$_auth'},
         body: jsonEncode({
           'campaign': newData.campaignId,
           'author': newData.authorId,
-          'user': _user,
+          'user': _userId,
         })
     ).catchError((error) {
       print('completed.dart :: next :: error :::::::::::::::::::::: $error');
@@ -119,8 +74,9 @@ class CompletedData with ChangeNotifier {
     print('completed.dart :: next :: response :::::::::::::::::::::: ${jsonDecode(result.body)}');
   }
 
-  Future<void> read(int campId) async {
-    final _url = '$_halfUrl/completed/read.php?camp=$campId&author=$_user';
+  Future<void> read(int? campId) async {
+    final _url = Uri.https('www.likeandshare.app', '/admin/v1/completed/read.php',
+        {'camp': campId, 'author': _userId});
 
     return await http
         .get(_url, headers: {'authorization': '$_auth'}).then((value) {
@@ -155,11 +111,12 @@ class CompletedData with ChangeNotifier {
     });
   }
 
-  Future<bool> approve(int compId) async {
+  Future<bool> approve(int? compId) async {
     _data.removeWhere((ele) => ele.id == compId);
     notifyListeners();
 
-    final _url = '$_halfUrl/completed/approve.php?id=$compId';
+    final _url = Uri.https('www.likeandshare.app', '/admin/v1/completed/approve.php', {'id': compId});
+
     final result = await http
         .patch(_url, headers: {'authorization': '$_auth'}).catchError((error) {
       throw error;
@@ -176,8 +133,8 @@ class CompletedData with ChangeNotifier {
     }
   }
 
-  Future<bool> cancel(int compId, String complain) async {
-    final _url = '$_halfUrl/completed/complain.php';
+  Future<bool> cancel(int? compId, String? complain) async {
+    final _url = Uri.https('www.likeandshare.app', '/admin/v1/completed/complain.php');
 
     return await http
         .patch(_url,

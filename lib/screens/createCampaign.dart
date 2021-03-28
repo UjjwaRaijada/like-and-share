@@ -26,12 +26,12 @@ class _CreateCampaignState extends State<CreateCampaign> {
   // String _sharedText;
   final _form = GlobalKey<FormState>();
   bool _spinner = false;
-  int heart = 0;
+  int? heart = 0;
   String error = '';
-  String _url;
-  String _urlWeb;
-  File snippet;
-  int cost;
+  String? _url;
+  String? _urlWeb;
+  File? snippet;
+  int? cost;
 
   FocusNode _urlFocus = FocusNode();
   TextEditingController _forCampName = TextEditingController();
@@ -83,7 +83,7 @@ class _CreateCampaignState extends State<CreateCampaign> {
 
   @override
   void didChangeDependencies() {
-    CampaignClass _fromModalRoute = ModalRoute.of(context).settings.arguments;
+    CampaignClass _fromModalRoute = ModalRoute.of(context)!.settings.arguments as CampaignClass;
     media = _fromModalRoute.media;
     action = _fromModalRoute.action;
     cost = actionCostData.firstWhere((ele) => ele.name == action).cost;
@@ -116,11 +116,11 @@ class _CreateCampaignState extends State<CreateCampaign> {
 
   void _saveForm() {
     /// form validation
-    final isValid = _form.currentState.validate();
+    final isValid = _form.currentState!.validate();
     if (!isValid) {
       return;
     }
-    _form.currentState.save();
+    _form.currentState!.save();
 
     setState(() {
       print('spinner true');
@@ -128,7 +128,7 @@ class _CreateCampaignState extends State<CreateCampaign> {
     });
 
     /// add new campaign
-    if (_newCampaign.pageUrl.isNotEmpty &&
+    if (_newCampaign.pageUrl!.isNotEmpty &&
         _newCampaign.qty != 0 && _newCampaign.qty != null) {
         Provider.of<CampaignData>(context, listen: false)
           .addCampaign(_newCampaign)
@@ -177,7 +177,7 @@ class _CreateCampaignState extends State<CreateCampaign> {
     Navigator.pop(context);
     Provider.of<Auth>(context, listen: false).logout();
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs?.clear();
+    prefs.clear();
   }
 
   @override
@@ -222,7 +222,7 @@ class _CreateCampaignState extends State<CreateCampaign> {
                     enableSuggestions: false,
                     autocorrect: false,
                     validator: (value) {
-                      if (value.isEmpty) {
+                      if (value!.isEmpty) {
                         return 'Please enter some text';
                       }
                       return null;
@@ -281,7 +281,7 @@ class _CreateCampaignState extends State<CreateCampaign> {
                       var urlPattern =
                           r"(https?|ftp)://([-A-Z0-9.]+)(/[-A-Z0-9+&@#/%=~_|!:,.;]*)?(\?[A-Z0-9+&@#/%=~_|!:‌​,.;]*)?";
                       var result = RegExp(urlPattern, caseSensitive: false)
-                          .firstMatch(value);
+                          .firstMatch(value!);
                       if (value.isEmpty) {
                         return 'Please enter some text';
                       }
@@ -334,7 +334,7 @@ class _CreateCampaignState extends State<CreateCampaign> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            '${cost * _newCampaign.qty} ',
+                            '${cost! * _newCampaign.qty!} ',
                             style: const TextStyle(
                               fontSize: 22,
                               fontWeight: FontWeight.bold,
@@ -373,14 +373,14 @@ class _CreateCampaignState extends State<CreateCampaign> {
                             fillColor:
                                 _newCampaign.qty == 0 ? Colors.grey : Colors.pink,
                             onPressed: () {
-                              if (_newCampaign.qty > 0) {
+                              if (_newCampaign.qty! > 0) {
                                 setState(() {
                                   _newCampaign = CampaignClass(
                                     name: _newCampaign.name,
                                     media: _newCampaign.media,
                                     action: _newCampaign.action,
                                     pageUrl: _newCampaign.pageUrl,
-                                    qty: _newCampaign.qty - 1,
+                                    qty: _newCampaign.qty! - 1,
                                     cost: cost,
                                   );
                                 });
@@ -397,7 +397,7 @@ class _CreateCampaignState extends State<CreateCampaign> {
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: 8),
                           child: Text(
-                            _newCampaign.qty < 10
+                            _newCampaign.qty! < 10
                                 ? '0${_newCampaign.qty}'
                                 : _newCampaign.qty.toString(),
                             style: const TextStyle(fontSize: 25),
@@ -408,21 +408,21 @@ class _CreateCampaignState extends State<CreateCampaign> {
                           width: 30,
                           child: RawMaterialButton(
                             fillColor:
-                                (heart - (_newCampaign.qty * cost)) <
-                                        cost
+                                (heart! - (_newCampaign.qty! * cost!)) <
+                                        cost!
                                     ? Colors.grey
                                     : Colors.pink,
                             onPressed: () {
-                              if ((heart -
-                                      (_newCampaign.qty * cost)) >=
-                                  cost) {
+                              if ((heart! -
+                                      (_newCampaign.qty! * cost!)) >=
+                                  cost!) {
                                 setState(() {
                                   _newCampaign = CampaignClass(
                                     name: _newCampaign.name,
                                     media: _newCampaign.media,
                                     action: _newCampaign.action,
                                     pageUrl: _newCampaign.pageUrl,
-                                    qty: _newCampaign.qty + 1,
+                                    qty: _newCampaign.qty! + 1,
                                     cost: cost,
                                   );
                                 });
@@ -450,9 +450,9 @@ class _CreateCampaignState extends State<CreateCampaign> {
                   ? Container(
                     height: 700,
                     child: InAppWebView(
-                      initialUrl: _urlWeb,
+                      initialUrlRequest: URLRequest(url: Uri.parse(_urlWeb!)),
                       initialOptions: InAppWebViewGroupOptions(
-                        crossPlatform: InAppWebViewOptions(debuggingEnabled: true),
+                        crossPlatform: InAppWebViewOptions(),
                       ),
                     ),
                   )
@@ -502,7 +502,7 @@ class _CreateCampaignState extends State<CreateCampaign> {
               'Create Campaign',
               style: Theme.of(context)
                   .textTheme
-                  .button
+                  .button!
                   .copyWith(fontSize: 18),
             ),
           ),
@@ -514,8 +514,8 @@ class _CreateCampaignState extends State<CreateCampaign> {
 }
 
 class IconRowTile extends StatelessWidget {
-  final IconData icon;
-  final String title;
+  final IconData? icon;
+  final String? title;
 
   IconRowTile({
     this.icon,
@@ -532,7 +532,7 @@ class IconRowTile extends StatelessWidget {
         ),
         const SizedBox(width: 3),
         Text(
-          title,
+          title!,
           style: TextStyle(
               fontSize: 18,
               color: Colors.pinkAccent,

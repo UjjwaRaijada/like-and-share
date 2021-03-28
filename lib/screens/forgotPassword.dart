@@ -19,16 +19,16 @@ class ForgotPassword extends StatefulWidget {
 class _ForgotPasswordState extends State<ForgotPassword> {
   final _form = GlobalKey<FormState>();
   bool _spinner = false;
-  String email;
-  String msg;
+  String? email;
+  String? msg;
 
   void _submit() async {
     ///necessary code for saving the form
-    final isValid = _form.currentState.validate();
+    final isValid = _form.currentState!.validate();
     if (!isValid) {
       return;
     }
-    _form.currentState.save();
+    _form.currentState!.save();
 
     setState(() {
       _spinner = true;
@@ -96,7 +96,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                 var urlPattern =
                     r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+";
                 var result =
-                RegExp(urlPattern, caseSensitive: false).hasMatch(val);
+                RegExp(urlPattern, caseSensitive: false).hasMatch(val!);
                 if (val.isEmpty) {
                   return 'Please enter your Email Id';
                 }

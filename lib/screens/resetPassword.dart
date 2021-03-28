@@ -17,8 +17,8 @@ class ResetPassword extends StatefulWidget {
 class _ResetPasswordState extends State<ResetPassword> {
   final _form = GlobalKey<FormState>();
   final _retypeFocusNode = FocusNode();
-  String password;
-  bool _spinner;
+  String? password;
+  bool? _spinner;
 
   @override
   void dispose() {
@@ -27,11 +27,11 @@ class _ResetPasswordState extends State<ResetPassword> {
   }
 
   void _submit() async {
-    final isValid = _form.currentState.validate();
+    final isValid = _form.currentState!.validate();
     if (!isValid) {
       return;
     }
-    _form.currentState.save();
+    _form.currentState!.save();
 
     setState(() {
       _spinner = true;
@@ -83,7 +83,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                 enabledBorder: textFormBorder(context),
               ),
               validator: (val) {
-                if (val.isEmpty) {
+                if (val!.isEmpty) {
                   return 'Please enter a password';
                 }
                 return null;

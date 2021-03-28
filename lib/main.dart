@@ -60,7 +60,7 @@ class MyApp extends StatelessWidget {
           create: (_) => CampaignData('', '', []),
           update: (ctx, auth, prevCampaignData) => CampaignData(
             auth.token,
-            auth.user,
+            auth.userId,
             prevCampaignData == null ? [] : prevCampaignData.data,
           ),
         ),
@@ -68,7 +68,7 @@ class MyApp extends StatelessWidget {
           create: (_) => MyProfileData('', 0),
           update: (ctx, auth, _) => MyProfileData(
             auth.token,
-            auth.user,
+            auth.userId,
           ),
         ),
         ChangeNotifierProvider(
@@ -78,7 +78,7 @@ class MyApp extends StatelessWidget {
           create: (_) => CompletedData('', 0),
           update: (ctx, auth, _) => CompletedData(
             auth.token,
-            auth.user,
+            auth.userId,
           ),
         ),
         // ChangeNotifierProvider(
@@ -88,14 +88,14 @@ class MyApp extends StatelessWidget {
           create: (_) => CampComplainData('', 0),
           update: (ctx, auth, _) => CampComplainData(
             auth.token,
-            auth.user,
+            auth.userId,
           ),
         ),
         ChangeNotifierProxyProvider<Auth, Misc>(
           create: (_) => Misc('', 0),
           update: (ctx, auth, _) => Misc(
             auth.token,
-            auth.user,
+            auth.userId,
           ),
         ),
         ChangeNotifierProvider(

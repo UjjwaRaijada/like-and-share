@@ -18,12 +18,12 @@ class EnterOtp extends StatefulWidget {
 
 class _EnterOtpState extends State<EnterOtp> {
   final _form = GlobalKey<FormState>();
-  bool _spinner;
-  String _firstInt;
-  String _secondInt;
-  String _thirdInt;
-  String _forthInt;
-  int otp;
+  bool? _spinner;
+  String? _firstInt;
+  String? _secondInt;
+  String? _thirdInt;
+  late String _forthInt;
+  int? otp;
   final _secondFocus = FocusNode();
   final _thirdFocus = FocusNode();
   final _forthFocus = FocusNode();
@@ -56,7 +56,7 @@ class _EnterOtpState extends State<EnterOtp> {
     setState(() {
       _spinner = true;
     });
-    otp = int.parse(_firstInt+_secondInt+_thirdInt+_forthInt);
+    otp = int.parse(_firstInt!+_secondInt!+_thirdInt!+_forthInt);
 
     Provider.of<OtpData>(context, listen: false).enterOtp(otp).then((value) {
       if (value == true) {
@@ -88,7 +88,7 @@ class _EnterOtpState extends State<EnterOtp> {
 
   @override
   Widget build(BuildContext context) {
-    int pass;
+    int? pass;
 
     return LoginLogoCode(
       title: 'ENTER OTP',
@@ -161,7 +161,7 @@ class _EnterOtpState extends State<EnterOtp> {
                 Container(
                   height: 50,
                   child: DefaultTextStyle(
-                    style: Theme.of(context).textTheme.button,
+                    style: Theme.of(context).textTheme.button!,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [

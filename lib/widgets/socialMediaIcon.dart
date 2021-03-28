@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class SocialMediaIcon extends StatelessWidget {
-  final Function onPress;
-  final IconData icon;
+  final Function? onPress;
+  final IconData? icon;
   final Color iconColor;
 
   SocialMediaIcon({
@@ -18,7 +18,7 @@ class SocialMediaIcon extends StatelessWidget {
       height: 55,
       width: 55,
       child: RawMaterialButton(
-        onPressed: onPress,
+        onPressed: onPress as void Function()?,
         // splashColor: Colors.green,
         shape: const CircleBorder(),
         child: Container(

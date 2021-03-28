@@ -20,10 +20,10 @@ class _ChangePasswordState extends State<ChangePassword> {
   FocusNode _oldPasswordFocus = FocusNode();
   FocusNode _newPasswordFocus = FocusNode();
   FocusNode _confirmPasswordFocus = FocusNode();
-  String _oldPassword;
-  String _newPassword;
-  String _confirmPassword;
-  int id;
+  String? _oldPassword;
+  String? _newPassword;
+  String? _confirmPassword;
+  int? id;
 
   @override
   void initState() {
@@ -60,7 +60,7 @@ class _ChangePasswordState extends State<ChangePassword> {
         setState(() {
           _spinner = false;
         });
-        return showDialog(
+         showDialog(
           context: context,
           builder: (ctx) => AlertBox(
             onPress: () => Navigator.pop(context),
@@ -75,7 +75,7 @@ class _ChangePasswordState extends State<ChangePassword> {
     Navigator.pop(context);
     Provider.of<Auth>(context, listen: false).logout();
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs?.clear();
+    prefs.clear();
   }
 
   @override
@@ -202,10 +202,10 @@ class _ChangePasswordState extends State<ChangePassword> {
 }
 
 class ProfileTile extends StatelessWidget {
-  final String title;
-  final FocusNode focusName;
-  final Function save;
-  final Function fieldSubmit;
+  final String? title;
+  final FocusNode? focusName;
+  final Function? save;
+  final Function? fieldSubmit;
 
   const ProfileTile({
     this.title,
@@ -227,9 +227,9 @@ class ProfileTile extends StatelessWidget {
         obscureText: true,
         enableSuggestions: false,
         autocorrect: false,
-        onChanged: save,
+        onChanged: save as void Function(String)?,
         focusNode: focusName,
-        onFieldSubmitted: fieldSubmit,
+        onFieldSubmitted: fieldSubmit as void Function(String)?,
       ),
     );
   }

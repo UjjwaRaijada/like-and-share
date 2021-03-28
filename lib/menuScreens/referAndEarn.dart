@@ -45,7 +45,7 @@ class ReferAndEarn extends StatelessWidget {
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: DefaultTextStyle(
-                      style: Theme.of(context).textTheme.bodyText1,
+                      style: Theme.of(context).textTheme.bodyText1!,
                       child: Column(
                         children: [
                           const Text('Message:'),
@@ -90,7 +90,7 @@ class ReferAndEarn extends StatelessWidget {
           child: Center(
             child: Text(
               'Share',
-              style: Theme.of(context).textTheme.button.copyWith(fontSize: 18),
+              style: Theme.of(context).textTheme.button!.copyWith(fontSize: 18),
             ),
           ),
         ),

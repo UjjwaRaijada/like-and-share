@@ -5,24 +5,24 @@ import 'package:http/http.dart' as http;
 import './auth.dart';
 
 class MyProfile with ChangeNotifier {
-  final int id;
-  final String name;
-  final String city;
-  final String email;
-  final int mobile;
-  final String password;
-  final int hearts;
-  final int holdOut;
-  final int holdIn;
-  final String status;
-  final String facebook;
-  final String instagram;
-  final String twitter;
-  final String youtube;
-  final String google;
-  final int refBy;
-  final int chosen;
-  final int score;
+  final int? id;
+  final String? name;
+  final String? city;
+  final String? email;
+  final int? mobile;
+  final String? password;
+  final int? hearts;
+  final int? holdOut;
+  final int? holdIn;
+  final String? status;
+  final String? facebook;
+  final String? instagram;
+  final String? twitter;
+  final String? youtube;
+  final String? google;
+  final int? refBy;
+  final int? chosen;
+  final int? score;
 
   MyProfile({
     this.id,
@@ -47,14 +47,13 @@ class MyProfile with ChangeNotifier {
 }
 
 class MyProfileData with ChangeNotifier {
-  final String _auth;
-  final int _userId;
+  final String? _auth;
+  final int? _userId;
   MyProfileData(this._auth, this._userId);
 
-  static const String _halfUrl = 'https://www.likeandshare.app/admin/v1';
-  bool success;
-  String msg;
-  int chosenId;
+  bool? success;
+  String? msg;
+  int? chosenId;
 
   MyProfile _data = MyProfile(
     id: 0,
@@ -81,7 +80,8 @@ class MyProfileData with ChangeNotifier {
   }
 
   Future<int> register(MyProfile newData) async {
-    const _url = '$_halfUrl/user/create.php';
+    final _url = Uri.https('www.likeandshare.app', '/admin/v1/user/create.php');
+
     Map<String, String> _header = {
       'content-type': 'application/json',
     };
@@ -102,9 +102,9 @@ class MyProfileData with ChangeNotifier {
       throw error;
     });
 print('myProfile.dart :: register :: status :::::::::::::::::::::::::::::: ${result.statusCode}');
-    final _extractedData = jsonDecode(result.body) as Map<String, dynamic>;
+    final _extractedData = jsonDecode(result.body) as Map<String, dynamic>?;
     if (result.statusCode == 201) {
-      final _registerData = _extractedData['data'] as Map<String, dynamic>;
+      final _registerData = _extractedData!['data'] as Map<String, dynamic>;
       final _userData = _registerData['campaign'] as Map<String, dynamic>;
       _data = MyProfile(
         id: int.parse(_userData['id']),
@@ -126,7 +126,7 @@ print('myProfile.dart :: register :: status :::::::::::::::::::::::::::::: ${res
       msg = _extractedData['messages'][0];
       return 201;
     } else if (result.statusCode == 400) {
-      msg = _extractedData['messages'][0];
+      msg = _extractedData!['messages'][0];
       return 400;
     } else {
       return 500;
@@ -134,7 +134,8 @@ print('myProfile.dart :: register :: status :::::::::::::::::::::::::::::: ${res
   }
 
   Future<int> googleRegister(MyProfile newData) async {
-    const _url = '$_halfUrl/user/create_google.php';
+    final _url = Uri.https('www.likeandshare.app', '/admin/v1/user/create_google.php');
+
     Map<String, String> _header = {
       'content-type': 'application/json',
     };
@@ -154,9 +155,9 @@ print('myProfile.dart :: register :: status :::::::::::::::::::::::::::::: ${res
       throw error;
     });
 
-    final _extractedData = jsonDecode(result.body) as Map<String, dynamic>;
+    final _extractedData = jsonDecode(result.body) as Map<String, dynamic>?;
     if (result.statusCode == 201) {
-      final _registerData = _extractedData['data'] as Map<String, dynamic>;
+      final _registerData = _extractedData!['data'] as Map<String, dynamic>;
       final _userData = _registerData['campaign'] as Map<String, dynamic>;
       _data = MyProfile(
         id: int.parse(_userData['id']),
@@ -178,7 +179,7 @@ print('myProfile.dart :: register :: status :::::::::::::::::::::::::::::: ${res
       msg = _extractedData['messages'][0];
       return 201;
     } else if (result.statusCode == 400) {
-      msg = _extractedData['messages'][0];
+      msg = _extractedData!['messages'][0];
       return 400;
     } else {
       return 500;
@@ -186,7 +187,8 @@ print('myProfile.dart :: register :: status :::::::::::::::::::::::::::::: ${res
   }
 
   Future<int> refreshData() async {
-    final String _url = '$_halfUrl/user/read_single.php?id=$_userId';
+    final _url = Uri.https('www.likeandshare.app', '/admin/v1/user/read_single.php', {'id': '$_userId'});
+
     final result = await http
         .get(_url, headers: {'authorization': '$_auth'}).catchError((error) {
       throw error;
@@ -204,11 +206,11 @@ print('myProfile.dart :: register :: status :::::::::::::::::::::::::::::: ${res
           holdOut: int.parse(_extractedData['data']['campaign']['holdOut']),
           holdIn: int.parse(_extractedData['data']['campaign']['holdIn']),
           status: _extractedData['data']['campaign']['status'],
-          facebook: _extractedData['data']['campaign']['facebook'],
-          instagram: _extractedData['data']['campaign']['instagram'],
-          twitter: _extractedData['data']['campaign']['twitter'],
-          youtube: _extractedData['data']['campaign']['youtube'],
-          google: _extractedData['data']['campaign']['google'],
+          // facebook: _extractedData['data']['campaign']['facebook'],
+          // instagram: _extractedData['data']['campaign']['instagram'],
+          // twitter: _extractedData['data']['campaign']['twitter'],
+          // youtube: _extractedData['data']['campaign']['youtube'],
+          // google: _extractedData['data']['campaign']['google'],
           chosen: int.parse(_extractedData['data']['campaign']['chosen']),
           score: int.parse(_extractedData['data']['campaign']['score']),
         );
@@ -226,7 +228,8 @@ print('myProfile.dart :: register :: status :::::::::::::::::::::::::::::: ${res
   }
 
   Future<bool> updateMyProfile(MyProfile newData) async {
-    final String _url = '$_halfUrl/user/update.php?id=${_data.id}';
+    final _url = Uri.https('www.likeandshare.app', '/admin/v1/user/update.php', {'id': _data.id});
+
     return await http
         .patch(
       _url,
@@ -246,7 +249,7 @@ print('myProfile.dart :: register :: status :::::::::::::::::::::::::::::: ${res
       }),
     )
         .then((value) {
-      final _extractedData = json.decode(value.body) as Map<String, dynamic>;
+      final _extractedData = json.decode(value.body) as Map<String, dynamic>?;
 
       ///
       if (value.statusCode == 401) {
@@ -256,7 +259,7 @@ print('myProfile.dart :: register :: status :::::::::::::::::::::::::::::: ${res
       ///
       if (value.statusCode == 200) {
         _data = MyProfile(
-          id: int.parse(_extractedData['data']['campaign']['id']),
+          id: int.parse(_extractedData!['data']['campaign']['id']),
           name: _extractedData['data']['campaign']['name'],
           city: _extractedData['data']['campaign']['city'],
           mobile: int.parse(_extractedData['data']['campaign']['mobile']),
@@ -282,8 +285,9 @@ print('myProfile.dart :: register :: status :::::::::::::::::::::::::::::: ${res
     });
   }
 
-  Future<bool> changePassword(String oldPassword, String newPassword) async {
-    final String _url = '$_halfUrl/user/change_password.php?id=$_userId';
+  Future<bool> changePassword(String? oldPassword, String? newPassword) async {
+    final _url = Uri.https('www.likeandshare.app', '/admin/v1/user/change_password.php', {'id': '$_userId'});
+
     return await http
         .patch(
       _url,

@@ -20,7 +20,7 @@ class CustomDrawer extends StatelessWidget {
     Navigator.pop(context);
     Provider.of<Auth>(context, listen: false).logout();
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs?.clear();
+    prefs.clear();
   }
 
   @override
@@ -109,9 +109,9 @@ class CustomDrawer extends StatelessWidget {
 }
 
 class DrawerButton extends StatelessWidget {
-  final Function onPress;
-  final IconData icon;
-  final String title;
+  final Function? onPress;
+  final IconData? icon;
+  final String? title;
 
   DrawerButton({this.onPress, this.icon, this.title});
 
@@ -120,7 +120,7 @@ class DrawerButton extends StatelessWidget {
     return Container(
       // height: 38,
       child: RawMaterialButton(
-        onPressed: onPress,
+        onPressed: onPress as void Function()?,
         child: Row(
           children: [
             Container(
@@ -134,7 +134,7 @@ class DrawerButton extends StatelessWidget {
             const SizedBox(width: 10),
             Expanded(
               child: Text(
-                title,
+                title!,
                 style: const TextStyle(
                   color: Colors.white,
                   fontSize: 18,

@@ -31,7 +31,7 @@ class _RegisterState extends State<Register> {
     refBy: 0,
   );
 
-  String temp;
+  String? temp;
   TextEditingController _nameController = TextEditingController();
   TextEditingController _emailController = TextEditingController();
   TextEditingController _mobileController = TextEditingController();
@@ -54,11 +54,11 @@ class _RegisterState extends State<Register> {
 
   void _submit() async {
     ///necessary code for saving the form
-    final isValid = _form.currentState.validate();
+    final isValid = _form.currentState!.validate();
     if (!isValid) {
       return;
     }
-    _form.currentState.save();
+    _form.currentState!.save();
 
     setState(() {
       _spinner = true;
@@ -67,7 +67,7 @@ class _RegisterState extends State<Register> {
     Provider.of<MyProfileData>(context, listen: false)
         .register(_register)
         .then((value) {
-      String _msg = Provider.of<MyProfileData>(context, listen: false).msg;
+      String? _msg = Provider.of<MyProfileData>(context, listen: false).msg;
       MyProfile _myProfile = Provider.of<MyProfileData>(context, listen: false).data;
 
       if (value == 201) {
@@ -278,13 +278,13 @@ class _RegisterState extends State<Register> {
 }
 
 class CustomTextField extends StatelessWidget {
-  final String title;
+  final String? title;
   final TextInputType keyboard;
-  final TextEditingController teController;
-  final FocusNode fNode;
-  final Function onSave;
-  final Function onValidate;
-  final Function nextFocus;
+  final TextEditingController? teController;
+  final FocusNode? fNode;
+  final Function? onSave;
+  final Function? onValidate;
+  final Function? nextFocus;
   final bool password;
 
   CustomTextField({
@@ -314,12 +314,12 @@ class CustomTextField extends StatelessWidget {
           autocorrect: false,
           cursorColor: Theme.of(context).primaryColor,
           obscureText: password,
-          validator: onValidate,
+          validator: onValidate as String? Function(String?)?,
           controller: teController,
           focusNode: fNode,
           keyboardType: keyboard,
-          onSaved: onSave,
-          onFieldSubmitted: nextFocus,
+          onSaved: onSave as void Function(String?)?,
+          onFieldSubmitted: nextFocus as void Function(String)?,
         ),
         const SizedBox(height: 15),
       ],
@@ -328,13 +328,13 @@ class CustomTextField extends StatelessWidget {
 }
 
 class NumberField extends StatelessWidget {
-  final String title;
-  final TextEditingController teController;
-  final FocusNode fNode;
-  final Function onSave;
-  final Function onValidate;
-  final Function nextFocus;
-  final TextInputFormatter inputFormat;
+  final String? title;
+  final TextEditingController? teController;
+  final FocusNode? fNode;
+  final Function? onSave;
+  final Function? onValidate;
+  final Function? nextFocus;
+  final TextInputFormatter? inputFormat;
 
   NumberField({
     this.title,
@@ -359,13 +359,13 @@ class NumberField extends StatelessWidget {
             enabledBorder: textFormBorder(context),
           ),
           cursorColor: Theme.of(context).primaryColor,
-          validator: onValidate,
+          validator: onValidate as String? Function(String?)?,
           controller: teController,
           focusNode: fNode,
           keyboardType: TextInputType.number,
-          onSaved: onSave,
-          onFieldSubmitted: nextFocus,
-          inputFormatters: [inputFormat],
+          onSaved: onSave as void Function(String?)?,
+          onFieldSubmitted: nextFocus as void Function(String)?,
+          inputFormatters: [inputFormat!],
         ),
         const SizedBox(height: 15),
       ],

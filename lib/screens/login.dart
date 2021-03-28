@@ -13,9 +13,9 @@ import '../widgets/alertBox.dart';
 import '../widgets/textFormBorder.dart';
 
 class User {
-  final String name;
-  final String username;
-  final String password;
+  final String? name;
+  final String? username;
+  final String? password;
 
   User({
     this.name,
@@ -155,11 +155,11 @@ class _LoginState extends State<Login> {
 
   void _submit() async {
     ///necessary code for saving the form
-    final isValid = _form.currentState.validate();
+    final isValid = _form.currentState!.validate();
     if (!isValid) {
       return;
     }
-    _form.currentState.save();
+    _form.currentState!.save();
 
     setState(() {
       _spinner = true;
@@ -175,7 +175,7 @@ class _LoginState extends State<Login> {
         // Navigator.pushReplacementNamed(context, Home.id);
         Navigator.pushReplacementNamed(context, '/');
       } else if (value == 403) {
-        int _myId = Provider.of<Auth>(context, listen: false).user;
+        int? _myId = Provider.of<Auth>(context, listen: false).userId;
         return showDialog(
           context: context,
           builder: (ctx) => AlertBox(
@@ -235,7 +235,7 @@ class _LoginState extends State<Login> {
               validator: (val) {
                 var urlPattern =
                     r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+";
-                if (val.isEmpty) {
+                if (val!.isEmpty) {
                   return 'Please enter your Email Id';
                 }
                 var result =
@@ -269,7 +269,7 @@ class _LoginState extends State<Login> {
               enableSuggestions: false,
               autocorrect: false,
               validator: (value) {
-                if (value.isEmpty) {
+                if (value!.isEmpty) {
                   return 'Please enter your password';
                 }
                 return null;

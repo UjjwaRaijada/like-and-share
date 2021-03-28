@@ -5,24 +5,23 @@ import 'package:http/http.dart' as http;
 import './auth.dart';
 
 class CampComplain {
-  final String id;
-  final int campaign;
-  final int author;
-  final int user;
-  final String complain;
+  final String? id;
+  final int? campaign;
+  final int? author;
+  final int? user;
+  final String? complain;
 
   CampComplain({this.id, this.campaign, this.author, this.user, this.complain});
 }
 
 class CampComplainData with ChangeNotifier {
-  static const String _halfUrl = 'https://www.likeandshare.app/admin/v1';
-
-  final String _auth;
-  final int _user;
-  CampComplainData(this._auth, this._user);
+  final String? _auth;
+  final int? _userId;
+  CampComplainData(this._auth, this._userId);
 
   Future<bool> createComplain(CampComplain newData) async {
-    const _url = '$_halfUrl/campComplain/create.php';
+    final _url = Uri.https('www.likeandshare.app', '/admin/v1/campComplain/create.php');
+
     final result = await http
         .post(
       _url,
@@ -33,7 +32,7 @@ class CampComplainData with ChangeNotifier {
       body: json.encode({
         'campaign': newData.campaign,
         'author': newData.author,
-        'user': _user,
+        'user': _userId,
         'complain': newData.complain,
       }),
     ).catchError((error) {

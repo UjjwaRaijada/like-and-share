@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class ShadowBox extends StatelessWidget {
-  final Widget widget;
+  final Widget? widget;
 
   ShadowBox({this.widget});
   @override

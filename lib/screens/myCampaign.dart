@@ -33,7 +33,6 @@ class _MyCampaignState extends State<MyCampaign> {
   void didChangeDependencies() {
     if (_spinner == true) {
       Provider.of<CampaignData>(context, listen: false).myCampaign().then((_) {
-      }).then((_) {
         setState(() {
           _spinner = false;
         });
@@ -54,7 +53,7 @@ class _MyCampaignState extends State<MyCampaign> {
           ? Padding(
             padding: const EdgeInsets.all(18.0),
             child: DefaultTextStyle(
-              style: Theme.of(context).textTheme.bodyText1,
+              style: Theme.of(context).textTheme.bodyText1!,
               textAlign: TextAlign.center,
               child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -84,7 +83,7 @@ class _MyCampaignState extends State<MyCampaign> {
                       title: 'Total: ${_data.length}',
                     ),
                     HalfRow(
-                      title: 'Running: ${_data.where((ele) => ele.qty * ele.cost != ele.heartPending + ele.heartGiven + ele.heartReturned).length}',
+                      title: 'Running: ${_data.where((ele) => ele.qty! * ele.cost! != ele.heartPending! + ele.heartGiven! + ele.heartReturned!).length}',
                     ),
                   ],
                 ),
@@ -98,7 +97,7 @@ class _MyCampaignState extends State<MyCampaign> {
                       action = _data[index].action;
 
                       return SocialMediaTile(
-                        backColor: _data[index].heartPending > 0
+                        backColor: _data[index].heartPending! > 0
                           ? Colors.red.withOpacity(0.2)
                           : Colors.transparent,
                         campaignId: _data[index].id,
@@ -106,8 +105,8 @@ class _MyCampaignState extends State<MyCampaign> {
                         date: _data[index].createdOn,
                         totalAction: _data[index].count,
                         actionQty: _data[index].qty,
-                        actionPending: (_data[index].heartPending / _data[index].cost ) > 0
-                          ? (_data[index].heartPending / _data[index].cost).round()
+                        actionPending: (_data[index].heartPending! / _data[index].cost! ) > 0
+                          ? (_data[index].heartPending! / _data[index].cost!).round()
                           : 0
                         // imageUrl: _data[index].urlImage,
                         // action: _data[index].action,
@@ -124,17 +123,17 @@ class _MyCampaignState extends State<MyCampaign> {
 }
 
 class SocialMediaTile extends StatelessWidget {
-  final Color backColor;
-  final int campaignId;
+  final Color? backColor;
+  final int? campaignId;
   // final String imageUrl;
   // final Media media;
-  final String name;
+  final String? name;
   // final ActionType action;
-  final int actionQty;
-  final int totalAction;
+  final int? actionQty;
+  final int? totalAction;
   // final int costPerAction;
-  final int actionPending;
-  final DateTime date;
+  final int? actionPending;
+  final DateTime? date;
 
   SocialMediaTile({
     this.backColor,
@@ -162,7 +161,7 @@ class SocialMediaTile extends StatelessWidget {
             height: 110,
             color: totalAction == actionQty
               ? Colors.green.withOpacity(0.2)
-              : actionPending > 0
+              : actionPending! > 0
                 ? Colors.red.withOpacity(0.2)
                 : Colors.transparent,
             // backColor,
@@ -186,7 +185,7 @@ class SocialMediaTile extends StatelessWidget {
                     children: [
                       Expanded(
                         child: Text(
-                          DateFormat.yMMMd().format(date).toString(),
+                          DateFormat.yMMMd().format(date!).toString(),
                           textAlign: TextAlign.center,
                         ),
                       ),

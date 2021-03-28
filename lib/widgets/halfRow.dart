@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class HalfRow extends StatelessWidget {
-  final String title;
+  final String? title;
   HalfRow({
     this.title,
   });
@@ -11,7 +11,7 @@ class HalfRow extends StatelessWidget {
     return Expanded(
       child: Center(
         child: Text(
-          title,
+          title!,
         ),
       ),
     );

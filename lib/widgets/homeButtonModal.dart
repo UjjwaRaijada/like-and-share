@@ -366,10 +366,10 @@ class _HomeBottomModalState extends State<HomeBottomModal> {
 }
 
 class BottomButtonAny extends StatelessWidget {
-  final Function onPress;
-  final IconData icon;
-  final Color iconColor;
-  final String label;
+  final Function? onPress;
+  final IconData? icon;
+  final Color? iconColor;
+  final String? label;
   BottomButtonAny({
     this.onPress,
     this.icon,
@@ -384,7 +384,7 @@ class BottomButtonAny extends StatelessWidget {
         maxHeight: 45,
         minHeight: 45,
       ),
-      onPressed: onPress,
+      onPressed: onPress as void Function()?,
       child: Column(
         children: [
           Icon(
@@ -394,7 +394,7 @@ class BottomButtonAny extends StatelessWidget {
           ),
           const SizedBox(height: 3),
           Text(
-            label,
+            label!,
             style: TextStyle(
               color: Colors.black,
               fontSize: 12,

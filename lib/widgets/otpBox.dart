@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 Widget otpBox({
-  BuildContext context,
-  Function onChange,
-  FocusNode focus,
+  required BuildContext context,
+  Function? onChange,
+  FocusNode? focus,
 }) {
   return Container(
     height: 100,
@@ -25,9 +25,9 @@ Widget otpBox({
       textAlign: TextAlign.center,
       keyboardType: TextInputType.number,
       focusNode: focus,
-      onChanged: onChange,
+      onChanged: onChange as void Function(String)?,
       validator:  (value) {
-        if(value.isEmpty) {
+        if(value!.isEmpty) {
           return '?';
         }
         return null;

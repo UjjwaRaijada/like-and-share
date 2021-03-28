@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 
 class LoginLogoCode extends StatelessWidget {
   final String title;
-  final Widget widget;
-  final Widget bottomSheet;
+  final Widget? widget;
+  final Widget? bottomSheet;
 
   LoginLogoCode({
-    @required this.title,
+    required this.title,
     this.widget,
     this.bottomSheet});
   @override
@@ -40,7 +40,7 @@ class LoginLogoCode extends StatelessWidget {
                 title,
                 style: Theme.of(context).textTheme.headline4,),
               const SizedBox(height: 40),
-              widget,
+              widget!,
             ],
           ),
         ),
