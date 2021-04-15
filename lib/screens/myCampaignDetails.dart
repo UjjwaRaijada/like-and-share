@@ -25,7 +25,7 @@ class MyCampaignDetails extends StatefulWidget {
 class _MyCampaignDetailsState extends State<MyCampaignDetails> {
   bool _spinner = false;
   bool _done = true;
-  int? _campaignId;
+  late int _campaignId;
   String? _complain;
   late CampaignClass _campaignData;
   List<Completed> _dataCompleted = [];
@@ -43,7 +43,8 @@ class _MyCampaignDetailsState extends State<MyCampaignDetails> {
 
   @override
   void didChangeDependencies() {
-    _campaignId = ModalRoute.of(context)!.settings.arguments as int?;
+    _campaignId = ModalRoute.of(context)!.settings.arguments as int;
+
     _campaignData = Provider.of<CampaignData>(context, listen: false)
         .data
         .firstWhere((val) => val.id == _campaignId);
@@ -92,7 +93,7 @@ class _MyCampaignDetailsState extends State<MyCampaignDetails> {
     }
   }
 
-  void _reportAlert(int? compId) {
+  void _reportAlert(int compId) {
     Widget backButton = RawMaterialButton(
       onPressed: () {
         Navigator.pop(context);
@@ -170,7 +171,7 @@ class _MyCampaignDetailsState extends State<MyCampaignDetails> {
     );
   }
 
-  void _report(int? id) {
+  void _report(int id) {
     Provider.of<CompletedData>(context, listen: false)
         .cancel(id, _complain)
         .then((value) {
@@ -188,7 +189,7 @@ class _MyCampaignDetailsState extends State<MyCampaignDetails> {
     });
   }
 
-  void _approve(int? compId) {
+  void _approve(int compId, int campId) {
     // Provider.of<CampaignData>(context, listen: false).approveCompleted(campId);
     Provider.of<CompletedData>(context, listen: false)
         .approve(compId);
@@ -196,12 +197,14 @@ class _MyCampaignDetailsState extends State<MyCampaignDetails> {
       _tempApprove += 1;
       _done = true;
     });
+    Provider.of<CampaignData>(context, listen: false).approve(campId);
   }
 
   @override
   Widget build(BuildContext context) {
     _dataCompleted =
         Provider.of<CompletedData>(context).data.toList();
+// print(_dataCompleted.length);
 
     actionIcon = _campaignData.action;
     media = _campaignData.media;
@@ -292,75 +295,75 @@ class _MyCampaignDetailsState extends State<MyCampaignDetails> {
 
           _spinner == true
             ? Expanded(
-                child: Center(
-                  child: CircularProgressIndicator(
-                    backgroundColor: Theme.of(context).primaryColor,
-                  ),
+              child: Center(
+                child: CircularProgressIndicator(
+                  backgroundColor: Theme.of(context).primaryColor,
                 ),
-              )
+              ),
+            )
             : Expanded(
-              child: _campaignData.qty! * _campaignData.cost! == _campaignData.heartPending! + _campaignData.heartGiven! + _campaignData.heartReturned!
-                  ? Center(
-                      child: ElevatedButton(
-                        onPressed: () => Navigator.pushNamed(
-                            context, RestartCampaign.id,
-                            arguments: _campaignData.id),
-                        style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all<Color>(Theme.of(context).primaryColor),
+              child: _dataCompleted.isNotEmpty
+                ? SingleChildScrollView(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(3.0),
+                          child: Text(_dataCompleted[0].userName!),
                         ),
-                        child: Text(
-                          'Restart Campaign',
-                          style: Theme.of(context).textTheme.button,
+                        Image.network(
+                          _dataCompleted[0].screenshot!,
                         ),
-                      ),
-                    )
-                  : _dataCompleted.isEmpty
-                      ? Padding(
-                        padding: const EdgeInsets.all(18.0),
-                        child: DefaultTextStyle(
-                          style: Theme.of(context).textTheme.bodyText1!,
-                          textAlign: TextAlign.center,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              _campaignData.qty! * _campaignData.cost! != _campaignData.heartPending! + _campaignData.heartReturned! + _campaignData.heartGiven!
-                              ? const Text('Your Campaign is still active. Please wait for people to act on your Campaign.')
-                              : const Text(
-                                'Great job! You have shared hearts with people who cared about you. Create a new campaign and enjoy.',
-                              ),
-                              const SizedBox(height: 3),
-                              const Text('You can also try Refreshing the page!'),
-                              const SizedBox(height: 10),
-                              ElevatedButton(
-                                onPressed: () => refreshPage(),
-                                style: ButtonStyle(
-                                  backgroundColor: MaterialStateProperty.all<Color>(
-                                    Theme.of(context).primaryColor
-                                  ),
-                                ),
-                                child: Text('Refresh Page',
-                                  style: Theme.of(context).textTheme.button,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      )
-                    : SingleChildScrollView(
+                      ],
+                    ),
+                  )
+                : _campaignData.qty! * _campaignData.cost! > _campaignData.heartPending! + _campaignData.heartGiven! + _campaignData.heartReturned!
+                  ? Padding(
+                    padding: const EdgeInsets.all(18.0),
+                    child: DefaultTextStyle(
+                      style: Theme.of(context).textTheme.bodyText1!,
+                      textAlign: TextAlign.center,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Padding(
-                            padding: const EdgeInsets.all(3.0),
-                            child: Text(_dataCompleted[0].userName!),
+                          _campaignData.qty! * _campaignData.cost! != _campaignData.heartPending! + _campaignData.heartReturned! + _campaignData.heartGiven!
+                              ? const Text('Your Campaign is still active. Please wait for people to act on your Campaign.')
+                              : const Text(
+                            'Great job! You have shared hearts with people who cared about you. Create a new campaign and enjoy.',
                           ),
-                          Image.network(
-                              _dataCompleted[0].screenshot!,
+                          const SizedBox(height: 3),
+                          const Text('You can also try Refreshing the page!'),
+                          const SizedBox(height: 10),
+                          ElevatedButton(
+                            onPressed: () => refreshPage(),
+                            style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all<Color>(
+                                  Theme.of(context).primaryColor
+                              ),
+                            ),
+                            child: Text('Refresh Page',
+                              style: Theme.of(context).textTheme.button,
+                            ),
                           ),
                         ],
                       ),
                     ),
+                  )
+                  : Center(
+                    child: ElevatedButton(
+                      onPressed: () => Navigator.pushNamed(
+                          context, RestartCampaign.id,
+                          arguments: _campaignData.id),
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all<Color>(Theme.of(context).primaryColor),
+                      ),
+                      child: Text(
+                        'Restart Campaign',
+                        style: Theme.of(context).textTheme.button,
+                      ),
+                    ),
                   ),
+            ),
           const SizedBox(height: 85),
         ],
       ),
@@ -373,7 +376,7 @@ class _MyCampaignDetailsState extends State<MyCampaignDetails> {
             children: [
               BottomButtonPink(
                 onPress: _done == false ? (){}
-                    :() => _reportAlert(_dataCompleted[0].id),
+                    :() => _reportAlert(_dataCompleted[0].id!),
                 icon: FontAwesomeIcons.solidFlag,
                 label: 'Report',
               ),
@@ -383,7 +386,7 @@ class _MyCampaignDetailsState extends State<MyCampaignDetails> {
                   setState(() {
                     _done = false;
                   });
-                  _approve(_dataCompleted[0].id);
+                  _approve(_dataCompleted[0].id!, _dataCompleted[0].campaignId!);
                 },
                 icon: FontAwesomeIcons.check,
                 label: 'Approve',

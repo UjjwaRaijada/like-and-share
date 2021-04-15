@@ -206,8 +206,8 @@ class CampaignClass {
   final int? cost;
   final String? dateString;
   final DateTime? createdOn;
-  final int? heartPending;
-  final int? heartGiven;
+  int? heartPending;
+  int? heartGiven;
   final int? heartReturned;
   final int? premium;
   final int? count;
@@ -624,6 +624,16 @@ class CampaignData with ChangeNotifier {
     ).catchError((error) {
       throw error;
     });
+  }
+
+  void approve(int id) {
+
+    int _pending = _data.firstWhere((ele) => ele.id == id).heartPending!;
+    int _given = _data.firstWhere((ele) => ele.id == id).heartGiven!;
+
+    _data.firstWhere((ele) => ele.id == id).heartPending = _pending - 1;
+    _data.firstWhere((ele) => ele.id == id).heartGiven = _given + 1;
+    notifyListeners();
   }
 
   void removeData(int? id) {

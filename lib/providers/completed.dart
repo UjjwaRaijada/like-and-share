@@ -75,18 +75,22 @@ class CompletedData with ChangeNotifier {
   }
 
   Future<void> read(int? campId) async {
+    print('ok ok');
     final _url = Uri.https('www.likeandshare.app', '/admin/v1/completed/read.php',
-        {'camp': campId, 'author': _userId});
+        {'camp': '$campId', 'author': '$_userId'});
 
-    return await http
-        .get(_url, headers: {'authorization': '$_auth'}).then((value) {
-      final _extractedData = json.decode(value.body) as Map<String, dynamic>;
+    final result = await http
+      .get(_url, headers: {'authorization': '$_auth'}).catchError((error) {
+        throw error;
+      });
+print(json.decode(result.body));
+
+      final _extractedData = json.decode(result.body) as Map<String, dynamic>;
 
       ///
-      if (value.statusCode == 401) {
+      if (result.statusCode == 401) {
         Auth().logout();
       }
-
       ///
       if (_extractedData['success'] == false) {
         _data = [];
@@ -106,16 +110,13 @@ class CompletedData with ChangeNotifier {
         _data = _fetchedData;
       }
       notifyListeners();
-    }).catchError((error) {
-      throw error;
-    });
   }
 
   Future<bool> approve(int? compId) async {
     _data.removeWhere((ele) => ele.id == compId);
     notifyListeners();
 
-    final _url = Uri.https('www.likeandshare.app', '/admin/v1/completed/approve.php', {'id': compId});
+    final _url = Uri.https('www.likeandshare.app', '/admin/v1/completed/approve.php', {'id': '$compId'});
 
     final result = await http
         .patch(_url, headers: {'authorization': '$_auth'}).catchError((error) {

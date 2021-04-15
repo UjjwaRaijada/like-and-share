@@ -159,10 +159,10 @@ class SocialMediaTile extends StatelessWidget {
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 15),
             height: 110,
-            color: totalAction == actionQty
-              ? Colors.green.withOpacity(0.2)
-              : actionPending! > 0
-                ? Colors.red.withOpacity(0.2)
+            color: actionPending! > 0
+              ? Colors.red.withOpacity(0.2)
+              : totalAction == actionQty
+                ? Colors.green.withOpacity(0.2)
                 : Colors.transparent,
             // backColor,
             child: ShadowBox(
