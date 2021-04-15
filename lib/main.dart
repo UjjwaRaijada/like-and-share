@@ -146,13 +146,14 @@ class MyApp extends StatelessWidget {
           ),
           // initialRoute: Splash.id,
           home: auth.isAuth
-              ? Home()
-              : FutureBuilder(
-                  future: auth.autoLogin(),
-                  builder: (ctx, authResult) =>
-                      authResult.connectionState == ConnectionState.waiting
-                          ? Splash()
-                          : Login()),
+            ? Home()
+            : FutureBuilder(
+              future: auth.autoLogin(),
+              builder: (ctx, authResult) =>
+                authResult.connectionState == ConnectionState.waiting
+                  ? Splash()
+                  : Login(),
+            ),
 
           // auth.isAuth ? Login() : Home(),
           routes: {

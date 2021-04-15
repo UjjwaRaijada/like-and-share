@@ -72,30 +72,3 @@ class _QATileState extends State<QATile> {
     );
   }
 }
-
-class QA {
-  final String? ques;
-  final String? ans;
-  final bool? close;
-
-  QA({this.ques, this.ans, this.close});
-}
-
-class QAData {
-  List<QA> _data = [
-    QA(
-      ques: 'Q: Question will come here. Click to get answer',
-      ans: 'Answer will come here. Height will depend upon the answer.',
-      close: false,
-    ),
-    QA(
-      ques: 'Q: Question will come here. Click to get answer',
-      ans: 'Answer will come here. Height will depend upon the answer.',
-      close: true,
-    ),
-  ];
-
-  List<QA> get data {
-    return [..._data];
-  }
-}
