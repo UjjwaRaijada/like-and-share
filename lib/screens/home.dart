@@ -234,7 +234,7 @@ class _HomeState extends State<Home> {
                                         ? () => Navigator.pushNamed(
                                             context, SocialMediaPremium.id,
                                             arguments: _premium[0].id)
-                                        : () => Share.share('https://play.google.com/apps/internaltest/4700879170550887889 \n \n $_message \n Referral Code : ${_myProfile.mobile}'),
+                                        : () => Share.share('https://play.google.com/store/apps/details?id=app.likeandshare \n \n $_message \n Referral Code : ${_myProfile.mobile}'),
                                     child: Container(
                                       margin: const EdgeInsets.symmetric(
                                         horizontal: 30,

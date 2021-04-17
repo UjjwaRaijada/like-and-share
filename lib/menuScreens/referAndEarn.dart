@@ -71,7 +71,7 @@ class ReferAndEarn extends StatelessWidget {
       ),
       bottomS: RawMaterialButton(
         onPressed: () {
-          Share.share('https://play.google.com/apps/internaltest/4700879170550887889 \n \n $_message \n $_code');
+          Share.share('https://play.google.com/store/apps/details?id=app.likeandshare \n \n $_message \n $_code');
         },
         child: Container(
           width: double.infinity,
