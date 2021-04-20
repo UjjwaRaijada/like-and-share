@@ -91,9 +91,6 @@ class _ChangePasswordState extends State<ChangePassword> {
     setState(() {
       _spinner = true;
     });
-    print('old :::::::::::::: $_oldPassword');
-    print('new :::::::::::::: $_newPassword');
-    print('confirm ::::::::::::: $_confirmPassword');
     if (_newPassword != _confirmPassword) {
       setState(() {
         _spinner = false;

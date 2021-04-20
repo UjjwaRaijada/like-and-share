@@ -100,9 +100,11 @@ print(json.decode(result.body));
         List<Completed> _fetchedData = [];
 
         _extractedData['data']['completed'].forEach((value) {
+          print(value['campaign']);
           _fetchedData.add(Completed(
             id: int.parse(value['id']),
             userName: value['userName'],
+            campaignId: int.parse(value['campaign']),
             screenshot: value['screenshot'],
             submitDate: DateTime.parse(value['submitDate']),
           ));
@@ -122,7 +124,7 @@ print(json.decode(result.body));
         .patch(_url, headers: {'authorization': '$_auth'}).catchError((error) {
       throw error;
     });
-    ///
+
     if (result.statusCode == 401) {
       Auth().logout();
     }

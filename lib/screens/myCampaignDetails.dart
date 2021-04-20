@@ -217,10 +217,7 @@ class _MyCampaignDetailsState extends State<MyCampaignDetails> {
         children: [
           Row(
             children: [
-              HalfRow(
-                  title:
-                      'Approved: $_approved'
-              ),
+              HalfRow(title: 'Approved: $_approved'),
               HalfRow(title: 'Pending: $_pending'),
             ],
           ),

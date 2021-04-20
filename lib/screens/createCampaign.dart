@@ -152,7 +152,7 @@ class _CreateCampaignState extends State<CreateCampaign> {
               context: context,
               builder: (ctx) => AlertBox(
               title: 'Superrrrb!!',
-              body: 'Your campaign was created successfully!',
+              body: 'Your campaign has been created successfully!',
               onPress: () {
                 Provider.of<MyProfileData>(context, listen: false).refreshData().then((value) {
                    if (value == 401) {

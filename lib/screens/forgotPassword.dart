@@ -56,7 +56,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
             context: context,
             builder: (context) => AlertBox(
               title: 'OTP Sent!',
-              body: 'We have sent you an OTP on your registered email address.',
+              body: 'We have sent you an OTP at your registered email address.',
               onPress: () => Navigator.pushReplacement(
                 context,
                 PageRouteBuilder(

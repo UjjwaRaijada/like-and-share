@@ -78,7 +78,7 @@ class _EnterOtpState extends State<EnterOtp> {
         return showDialog(
           context: context,
           builder: (ctx) => AlertBox(
-            body: 'You have entered the wrong OTP. Please try again.',
+            body: 'You have entered wrong OTP. Please try again.',
             onPress: () => Navigator.pop(context),
           ),
         );

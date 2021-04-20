@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-// import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -97,6 +96,7 @@ class _MyCampaignState extends State<MyCampaign> {
                       action = _data[index].action;
 
                       return SocialMediaTile(
+                        id: _data[index].id!,
                         backColor: _data[index].heartPending! > 0
                           ? Colors.red.withOpacity(0.2)
                           : Colors.transparent,
@@ -123,34 +123,29 @@ class _MyCampaignState extends State<MyCampaign> {
 }
 
 class SocialMediaTile extends StatelessWidget {
+  final int id;
   final Color? backColor;
   final int? campaignId;
-  // final String imageUrl;
-  // final Media media;
   final String? name;
-  // final ActionType action;
   final int? actionQty;
   final int? totalAction;
-  // final int costPerAction;
   final int? actionPending;
   final DateTime? date;
 
   SocialMediaTile({
+    required this.id,
     this.backColor,
     this.campaignId,
-    // this.imageUrl,
-    // this.media,
     this.name,
-    // this.action,
     this.actionQty,
     this.totalAction,
-    // this.costPerAction,
     this.actionPending,
     this.date,
   });
 
   @override
   Widget build(BuildContext context) {
+    CampaignClass _data = Provider.of<CampaignData>(context).data.firstWhere((ele) => ele.id == id);
     return Column(
       children: [
         RawMaterialButton(
@@ -159,9 +154,9 @@ class SocialMediaTile extends StatelessWidget {
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 15),
             height: 110,
-            color: actionPending! > 0
+            color: _data.heartPending! > 0
               ? Colors.red.withOpacity(0.2)
-              : totalAction == actionQty
+              : _data.count == _data.qty
                 ? Colors.green.withOpacity(0.2)
                 : Colors.transparent,
             // backColor,
@@ -173,7 +168,6 @@ class SocialMediaTile extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(horizontal: 8),
                     child: Text(
                       '$name',
-                      // '$mediaString :  $name',
                       style: Theme.of(context).textTheme.headline1,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,

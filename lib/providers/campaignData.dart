@@ -630,9 +630,9 @@ class CampaignData with ChangeNotifier {
 
     int _pending = _data.firstWhere((ele) => ele.id == id).heartPending!;
     int _given = _data.firstWhere((ele) => ele.id == id).heartGiven!;
-
-    _data.firstWhere((ele) => ele.id == id).heartPending = _pending - 1;
-    _data.firstWhere((ele) => ele.id == id).heartGiven = _given + 1;
+print(_data.firstWhere((ele) => ele.id == id).heartPending);
+    _data.firstWhere((ele) => ele.id == id).heartPending = _pending - _data.firstWhere((ele) => ele.id == id).cost!;
+    _data.firstWhere((ele) => ele.id == id).heartGiven = _given + _data.firstWhere((ele) => ele.id == id).cost!;
     notifyListeners();
   }
 
