@@ -76,7 +76,7 @@ class CustomDrawer extends StatelessWidget {
               DrawerButton(
                 onPress: () => Navigator.popAndPushNamed(context, TAndC.id),
                 icon: FontAwesomeIcons.asterisk,
-                title: 'Terms & Conditions',
+                title: 'Terms Of Use',
               ),
               DrawerButton(
                 onPress: () => Navigator.popAndPushNamed(context, AboutUs.id),

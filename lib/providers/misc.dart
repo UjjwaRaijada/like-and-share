@@ -146,4 +146,19 @@ class Misc extends ChangeNotifier {
     }
   }
 
+  Future<String> getDisclaimer() async {
+    final _url = Uri.https('www.likeandshare.app', '/admin/v1/misc/disclaimer.php');
+
+    final result = await http.get(_url).catchError((error) {
+      throw error;
+    });
+    if (result.statusCode == 200) {
+      final _extractedData = jsonDecode(result.body) as Map<String, dynamic>;
+      final _disclaimerData = _extractedData['data']['disclaimer']['disclaimer'];
+    return _disclaimerData;
+    } else {
+      return '';
+    }
+  }
+
 }

@@ -42,3 +42,43 @@ class BottomButtonPink extends StatelessWidget {
     );
   }
 }
+
+class BottomButtonPinkInfo extends StatelessWidget {
+  final IconData? icon;
+  final String? label;
+  BottomButtonPinkInfo({
+    this.icon,
+    this.label,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      constraints: const BoxConstraints(
+        maxHeight: 45,
+        minHeight: 45,
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+        child: Column(
+          children: [
+            Icon(
+              icon,
+              color: Theme.of(context).primaryColor,
+              size: 25,
+            ),
+            const SizedBox(height: 3),
+            Text(
+              label!,
+              style: TextStyle(
+                color: Theme.of(context).primaryColor,
+                fontSize: 12,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

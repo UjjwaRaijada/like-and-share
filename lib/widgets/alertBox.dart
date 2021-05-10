@@ -43,6 +43,7 @@ class AlertBox extends StatelessWidget {
         child: Text(
           body!,
           style: Theme.of(context).textTheme.headline2,
+          textAlign: TextAlign.justify,
         ),
       ),
       actions: [

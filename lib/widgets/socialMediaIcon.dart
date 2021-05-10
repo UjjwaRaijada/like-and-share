@@ -57,3 +57,48 @@ class SocialMediaIcon extends StatelessWidget {
     );
   }
 }
+
+class SocialMediaInfo extends StatelessWidget {
+  final IconData? icon;
+  final Color iconColor;
+
+  SocialMediaInfo({
+    this.icon,
+    this.iconColor = Colors.black,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 55,
+      width: 55,
+      child: Container(
+        height: 50,
+        width: 50,
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+            color: Color(0xFFffe485),
+            borderRadius: const BorderRadius.all(
+              Radius.circular(50),
+            ),
+            boxShadow: const [
+              BoxShadow(
+                color: Colors.black12,
+                blurRadius: 4.0, // soften the shadow
+                spreadRadius: 2.0, //extend the shadow
+                offset: const Offset(
+                  0, // Move to right 10  horizontally
+                  2.0, // Move to bottom 5 Vertically
+                ),
+              ),
+            ]),
+        child: Center(
+          child: FaIcon(
+            icon,
+            color: iconColor,
+          ),
+        ),
+      ),
+    );
+  }
+}

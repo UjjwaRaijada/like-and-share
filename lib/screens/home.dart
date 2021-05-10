@@ -1,13 +1,17 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:share/share.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:feature_discovery/feature_discovery.dart';
 
 import './myCampaign.dart';
 import './socialMediaNew.dart';
 import './socialMediaPremium.dart';
 import './badge.dart';
+import './disclaimer.dart';
 import '../providers/auth.dart';
 import '../providers/campaignData.dart';
 import '../providers/myProfile.dart';
@@ -39,6 +43,15 @@ class _HomeState extends State<Home> {
     setState(() {
       _spinner = true;
     });
+    SchedulerBinding.instance!.addPostFrameCallback((Duration duration) {
+      FeatureDiscovery.discoverFeatures(
+        context,
+        const <String>{ // Feature ids for every feature that you want to showcase in order.
+          'social_media',
+          'add_camp',
+        },
+      );
+    });
     super.initState();
   }
 
@@ -47,7 +60,7 @@ class _HomeState extends State<Home> {
     if (_spinner == true) {
       Provider.of<MyProfileData>(context, listen: false).refreshData().then((value) {
         if (value == 401) {
-          _logoutUser(context);
+          _logoutUser();
         }
       });
       Provider.of<CampaignData>(context, listen: false).premiumCamp().then((_) {
@@ -59,7 +72,14 @@ class _HomeState extends State<Home> {
     super.didChangeDependencies();
   }
 
-  void _logoutUser(BuildContext context) async {
+  void _disclaimer() async {
+    final prefs = await SharedPreferences.getInstance();
+    if (!prefs.containsKey('disclaimer')) {
+      Navigator.pushReplacementNamed(context, Disclaimer.id);
+    }
+  }
+
+  void _logoutUser() async {
     Navigator.pop(context);
     Provider.of<Auth>(context, listen: false).logout();
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -77,6 +97,7 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    Future.delayed(Duration.zero, () => _disclaimer());
     _myProfile = Provider.of<MyProfileData>(context).data;
     _premium = Provider.of<CampaignData>(context).premiumData;
 
@@ -160,65 +181,86 @@ class _HomeState extends State<Home> {
                       )
                     : Column(
                         children: [
+                          // Text(
+                          //   'Categories: Opens in Inbuilt Browser',
+                          //   style: TextStyle(
+                          //     color: Colors.white,
+                          //   ),
+                          // ),
+                          SizedBox(height: 10),
                           Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              SocialMediaIcon(
-                                onPress: () {
-                                  Provider.of<CampaignData>(context, listen: false).clearData();
-                                  Navigator.pushNamed(
-                                      context, SocialMediaNew.id,
-                                      arguments: Media.Facebook);
-                                },
-                                icon: FontAwesomeIcons.facebookF,
-                              ),
-                              SocialMediaIcon(
-                                onPress: () {
-                                  Provider.of<CampaignData>(context, listen: false).clearData();
-                                  Navigator.pushNamed(
-                                      context, SocialMediaNew.id,
-                                      arguments: Media.Instagram);
-                                },
-                                icon: FontAwesomeIcons.instagramSquare,
-                              ),
-                              SocialMediaIcon(
-                                onPress: () {
-                                  Provider.of<CampaignData>(context, listen: false).clearData();
-                                  Navigator.pushNamed(
-                                      context, SocialMediaNew.id,
-                                      arguments: Media.Twitter);
-                                },
-                                icon: FontAwesomeIcons.twitter,
-                              ),
-                              SocialMediaIcon(
-                                onPress: () {
-                                  Provider.of<CampaignData>(context, listen: false).clearData();
-                                  Navigator.pushNamed(
-                                      context, SocialMediaNew.id,
-                                      arguments: Media.YouTube);
-                                },
-                                icon: FontAwesomeIcons.youtube,
-                              ),
-                              SocialMediaIcon(
-                                onPress: () {
-                                  Provider.of<CampaignData>(context, listen: false).clearData();
-                                  Navigator.pushNamed(
-                                      context, SocialMediaNew.id,
-                                      arguments: Media.GoogleReview);
-                                },
-                                icon: FontAwesomeIcons.google,
-                              ),
-                            ],
-                          ),
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                SocialMediaIcon(
+                                  onPress: () {
+                                    Provider.of<CampaignData>(context, listen: false).clearData();
+                                    Navigator.pushNamed(
+                                        context, SocialMediaNew.id,
+                                        arguments: Media.Facebook);
+                                  },
+                                  icon: FontAwesomeIcons.facebookF,
+                                ),
+                                SocialMediaIcon(
+                                  onPress: () {
+                                    Provider.of<CampaignData>(context, listen: false).clearData();
+                                    Navigator.pushNamed(
+                                        context, SocialMediaNew.id,
+                                        arguments: Media.Instagram);
+                                  },
+                                  icon: FontAwesomeIcons.instagramSquare,
+                                ),
+                                SocialMediaIcon(
+                                  onPress: () {
+                                    Provider.of<CampaignData>(context, listen: false).clearData();
+                                    Navigator.pushNamed(
+                                        context, SocialMediaNew.id,
+                                        arguments: Media.Twitter);
+                                  },
+                                  icon: FontAwesomeIcons.twitter,
+                                ),
+                                DescribedFeatureOverlay(
+                                  featureId: 'social_media',
+                                  title: Text('Categories'),
+                                  description: Text(
+                                    'You can earn hearts & points by taking required action on the campaigns created by other people. These Icons are purely for categorisation purpose. On clicking on any of these icons, it will open campaigns created by other people of chosen category in our inbuilt browser.',
+                                  ),
+                                  backgroundColor: Theme.of(context).primaryColor,
+                                  targetColor: Colors.white,
+                                  textColor: Colors.white,
+                                  contentLocation: ContentLocation.below,
+                                  tapTarget: SocialMediaInfo(
+                                    icon: FontAwesomeIcons.youtube,
+                                  ),
+                                  child: SocialMediaIcon(
+                                    onPress: () {
+                                      Provider.of<CampaignData>(context, listen: false).clearData();
+                                      Navigator.pushNamed(
+                                          context, SocialMediaNew.id,
+                                          arguments: Media.YouTube);
+                                    },
+                                    icon: FontAwesomeIcons.youtube,
+                                  ),
+                                ),
+                                SocialMediaIcon(
+                                  onPress: () {
+                                    Provider.of<CampaignData>(context, listen: false).clearData();
+                                    Navigator.pushNamed(
+                                        context, SocialMediaNew.id,
+                                        arguments: Media.GoogleReview);
+                                  },
+                                  icon: FontAwesomeIcons.google,
+                                ),
+                              ],
+                            ),
+                          // ),
                           CustomDivider(),
                           Expanded(
                             child: SingleChildScrollView(
                               child: Column(
                                 children: [
                                   SizedBox(
-                                      height:
-                                          MediaQuery.of(context).size.height /
-                                              25),
+                                    height: MediaQuery.of(context).size.height /
+                                              25,),
                                   Text(
                                     _premium.isNotEmpty
                                       ? 'Premium'
@@ -377,28 +419,59 @@ class _HomeState extends State<Home> {
             ),
             BottomButton(
               onPress: () {
-                // Navigator.pushNamed(context, History.id);
                 Navigator.pushNamed(context, Badge.id);
               },
               icon: FontAwesomeIcons.medal,
               label: 'Badge',
             ),
-            BottomButton(
-              onPress: () {
-                media = Media.Facebook;
-                action = ActionType.Like;
-                _modalBottomSheetMenu();
-              },
-              icon: FontAwesomeIcons.plus,
-              label: 'Add',
+            DescribedFeatureOverlay(
+              featureId: 'add_camp',
+              title: Text('Add Campaign'),
+              description: Text('Click here to create a campaign.'),
+              backgroundColor: Theme.of(context).primaryColor,
+              targetColor: Colors.white,
+              textColor: Colors.white,
+              tapTarget: Container(
+                constraints: const BoxConstraints(
+                  maxHeight: 45,
+                  minHeight: 45,
+                ),
+                child: Column(
+                  children: [
+                    Icon(
+                      FontAwesomeIcons.plus,
+                      color: Theme.of(context).accentColor,
+                      size: 25,
+                    ),
+                    const SizedBox(height: 3),
+                    Text(
+                      'Add',
+                      style: TextStyle(
+                        color: Theme.of(context).accentColor,
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              child: BottomButton(
+                onPress: () {
+                  media = Media.Facebook;
+                  action = ActionType.Like;
+                  _modalBottomSheetMenu();
+                },
+                icon: FontAwesomeIcons.plus,
+                label: 'Add',
+              ),
             ),
             BottomButton(
-              onPress: () {
-                Navigator.pushNamed(context, MyCampaign.id);
-              },
-              icon: FontAwesomeIcons.database,
-              label: 'Campaigns',
-            ),
+            onPress: () {
+              Navigator.pushNamed(context, MyCampaign.id);
+            },
+            icon: FontAwesomeIcons.database,
+            label: 'Campaigns',
+          ),
           ],
         ),
       ),
