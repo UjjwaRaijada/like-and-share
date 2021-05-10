@@ -74,6 +74,8 @@ class TAndC extends StatelessWidget {
                     'Like & Share is not liable for any kind of loss incurred due to the use of this application. The user should take all the necessary precautions.'),
                 const Text(
                     'In case of any discrepancy, decision taken by Like & Share will be final. Explanation for the decision taken by the admin might & might not be given to the user. Any loss of Heart points due to malfunction in the app will be reimbursed to the user on providing valid proof.'),
+                const Text(
+                    'Like & Share uses logos & icons of other Social Media Pages & Brands only for categorization purposes.\r\nWhen you click on either of the logos, Like & Share displays the respective web page on its embedded browser. \r\nLike & Share neither claims to own these logos & icons nor does it claim to provide any of the services / features associated with them. \r\nLike & Share is not affiliated or linked to any other company or brand other than those specifically mentioned in its documentations.\r\nLike & Share holds all the rights of use of its own logo i.e., Like & Share.\r\nFor more details please read our \"Terms of Use\".'),
               ],
             ),
           ),
