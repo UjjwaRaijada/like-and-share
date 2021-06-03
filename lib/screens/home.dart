@@ -40,9 +40,9 @@ class _HomeState extends State<Home> {
   void initState() {
     media = Media.Facebook;
     action = ActionType.Like;
-    setState(() {
-      _spinner = true;
-    });
+    // setState(() {
+    //   _spinner = true;
+    // });
     SchedulerBinding.instance!.addPostFrameCallback((Duration duration) {
       FeatureDiscovery.discoverFeatures(
         context,
@@ -57,18 +57,18 @@ class _HomeState extends State<Home> {
 
   @override
   void didChangeDependencies() {
-    if (_spinner == true) {
+    // if (_spinner == true) {
       Provider.of<MyProfileData>(context, listen: false).refreshData().then((value) {
         if (value == 401) {
           _logoutUser();
         }
       });
       Provider.of<CampaignData>(context, listen: false).premiumCamp().then((_) {
-        setState(() {
-          _spinner = false;
-        });
+        // setState(() {
+        //   _spinner = false;
+        // });
       });
-    }
+    // }
     super.didChangeDependencies();
   }
 

@@ -21,9 +21,8 @@ class CreateCampaign extends StatefulWidget {
   _CreateCampaignState createState() => _CreateCampaignState();
 }
 
-class _CreateCampaignState extends State<CreateCampaign> {
-  // StreamSubscription _intentDataStreamSubscription;
-  // String _sharedText;
+class _CreateCampaignState extends State<CreateCampaign> with WidgetsBindingObserver {
+  late InAppWebViewController webView;
   final _form = GlobalKey<FormState>();
   bool _spinner = false;
   int? heart = 0;
@@ -59,27 +58,11 @@ class _CreateCampaignState extends State<CreateCampaign> {
     holdOut: 0,
   );
 
-  // @override
-  // void initState() {
-  //   _intentDataStreamSubscription =
-  //       ReceiveSharingIntent.getTextStream().listen((String value) {
-  //         setState(() {
-  //           // _sharedText = value;
-  //           _urlWeb = value;
-  //         });
-  //       }, onError: (err) {
-  //         print("getLinkStream error: $err");
-  //       });
-  //
-  //   // For sharing or opening urls/text coming from outside the app while the app is closed
-  //   ReceiveSharingIntent.getInitialText().then((String value) {
-  //     setState(() {
-  //       // _sharedText = value;
-  //       _urlWeb = value;
-  //     });
-  //   });
-  //   super.initState();
-  // }
+  @override
+  void initState() {
+    WidgetsBinding.instance!.addObserver(this);
+    super.initState();
+  }
 
   @override
   void didChangeDependencies() {
@@ -106,13 +89,6 @@ class _CreateCampaignState extends State<CreateCampaign> {
     }
     super.didChangeDependencies();
   }
-
-  // void _getUrl() async {
-  //   await Future.delayed(Duration(seconds: 5));
-  //   setState(() {
-  //     _spinner = false;
-  //   });
-  // }
 
   void _saveForm() {
     /// form validation
@@ -182,12 +158,26 @@ class _CreateCampaignState extends State<CreateCampaign> {
 
   @override
   void dispose() {
+    WidgetsBinding.instance!.removeObserver(this);
     _urlFocus.dispose();
     _forCampName.dispose();
     _forPageUrl.dispose();
-    // _intentDataStreamSubscription.cancel();
     super.dispose();
   }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    print('state ::::::::::::::::::::::::::::::::: $state');
+    if (state == AppLifecycleState.paused) {
+      webView.pauseTimers();
+      webView.android.pause();
+    } else {
+      webView.resumeTimers();
+      webView.android.resume();
+    }
+    super.didChangeAppLifecycleState(state);
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -198,14 +188,28 @@ class _CreateCampaignState extends State<CreateCampaign> {
           key: _form,
           child: Column(
             children: [
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 5, vertical: 3),
-                color: Colors.black12,
-                child: Text(
-                  '$mediaString Campaign for $actionString',
-                  style:
-                      const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: 5, vertical: 3),
+                    color: Colors.black12,
+                    child: Text(
+                      'Category: $mediaString',
+                      style:
+                          const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: 5, vertical: 3),
+                    color: Colors.black12,
+                    child: Text(
+                      'Action: $actionString',
+                      style:
+                          const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ],
               ),
               Container(
                 padding:
@@ -454,6 +458,9 @@ class _CreateCampaignState extends State<CreateCampaign> {
                       initialOptions: InAppWebViewGroupOptions(
                         crossPlatform: InAppWebViewOptions(),
                       ),
+                      onWebViewCreated: (controller) {
+                        webView = controller;
+                      },
                     ),
                   )
                   : SizedBox(height: 0),

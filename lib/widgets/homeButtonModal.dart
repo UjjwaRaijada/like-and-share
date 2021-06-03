@@ -324,7 +324,7 @@ class _HomeBottomModalState extends State<HomeBottomModal> {
               ),
               const SizedBox(height: 20),
               Text(
-                'Create campaign for :  $mediaString',
+                'Campaign category :  $mediaString',
                 style: Theme.of(context).textTheme.headline2,
               ),
               Text(
