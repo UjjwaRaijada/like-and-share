@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+// import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../providers/auth.dart';
@@ -57,11 +58,11 @@ class _CreateCampaignState extends State<CreateCampaign> with WidgetsBindingObse
     holdOut: 0,
   );
 
-  @override
-  void initState() {
-    WidgetsBinding.instance!.addObserver(this);
-    super.initState();
-  }
+  // @override
+  // void initState() {
+  //   WidgetsBinding.instance!.addObserver(this);
+  //   super.initState();
+  // }
 
   @override
   void didChangeDependencies() {
@@ -80,7 +81,7 @@ class _CreateCampaignState extends State<CreateCampaign> with WidgetsBindingObse
       cost: 2,
       createdOn: DateTime.now(),
     );
-    _editedProfile = Provider.of<MyProfileData>(context, listen: false).data;
+    _editedProfile = Provider.of<MyProfileData>(context).data;
     if (_editedProfile.hearts == null) {
       heart = 0;
     } else {
@@ -105,10 +106,10 @@ class _CreateCampaignState extends State<CreateCampaign> with WidgetsBindingObse
     /// add new campaign
     if (_newCampaign.pageUrl!.isNotEmpty &&
         _newCampaign.qty != 0 && _newCampaign.qty != null) {
-        Provider.of<CampaignData>(context, listen: false)
+      Provider.of<CampaignData>(context, listen: false)
           .addCampaign(_newCampaign)
           .then((value) {
-            print('createCampaign.dart :: _saveForm() :: value :::::::::::::::: $value');
+        print('createCampaign.dart :: _saveForm() :: value :::::::::::::::: $value');
         if (value == false) {
           setState(() {
             _spinner = false;
@@ -126,17 +127,17 @@ class _CreateCampaignState extends State<CreateCampaign> with WidgetsBindingObse
           return showDialog(
               context: context,
               builder: (ctx) => AlertBox(
-              title: 'Superrrrb!!',
-              body: 'Your campaign has been created successfully!',
-              onPress: () {
-                Provider.of<MyProfileData>(context, listen: false).refreshData().then((value) {
-                   if (value == 401) {
-                     _logoutUser(context);
-                   }
-                });
-                Navigator.pushReplacementNamed(context, '/');
-              },
-            )
+                title: 'Superrrrb!!',
+                body: 'Your campaign has been created successfully!',
+                onPress: () {
+                  Provider.of<MyProfileData>(context, listen: false).refreshData().then((value) {
+                    if (value == 401) {
+                      _logoutUser(context);
+                    }
+                  });
+                  Navigator.pushReplacementNamed(context, '/');
+                },
+              )
           ).then((value) => Navigator.pushReplacementNamed(context, '/'));
         }
       });
@@ -157,29 +158,30 @@ class _CreateCampaignState extends State<CreateCampaign> with WidgetsBindingObse
 
   @override
   void dispose() {
-    WidgetsBinding.instance!.removeObserver(this);
+    // WidgetsBinding.instance!.removeObserver(this);
     _urlFocus.dispose();
     _forCampName.dispose();
     _forPageUrl.dispose();
     super.dispose();
   }
 
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    print('state ::::::::::::::::::::::::::::::::: $state');
-    if (state == AppLifecycleState.paused) {
-      webView.pauseTimers();
-      webView.android.pause();
-    } else {
-      webView.resumeTimers();
-      webView.android.resume();
-    }
-    super.didChangeAppLifecycleState(state);
-  }
+  // @override
+  // void didChangeAppLifecycleState(AppLifecycleState state) {
+  //   print('state ::::::::::::::::::::::::::::::::: $state');
+  //   if (state == AppLifecycleState.paused) {
+  //     webView.pauseTimers();
+  //     webView.android.pause();
+  //   } else {
+  //     webView.resumeTimers();
+  //     webView.android.resume();
+  //   }
+  //   super.didChangeAppLifecycleState(state);
+  // }
 
 
   @override
   Widget build(BuildContext context) {
+    print('createCampaign.dart :::::::::::::: automatically calling');
     return StartingCode(
       title: 'Add Campaign',
       widget: SingleChildScrollView(
@@ -196,7 +198,7 @@ class _CreateCampaignState extends State<CreateCampaign> with WidgetsBindingObse
                     child: Text(
                       'Category: $mediaString',
                       style:
-                          const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                      const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                     ),
                   ),
                   Container(
@@ -205,7 +207,7 @@ class _CreateCampaignState extends State<CreateCampaign> with WidgetsBindingObse
                     child: Text(
                       'Action: $actionString',
                       style:
-                          const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                      const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                     ),
                   ),
                 ],
@@ -243,24 +245,24 @@ class _CreateCampaignState extends State<CreateCampaign> with WidgetsBindingObse
               ),
               Container(
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 25, vertical: 0),
+                const EdgeInsets.symmetric(horizontal: 25, vertical: 0),
                 child: TextFormField(
-                    decoration: InputDecoration(
-                      labelText: 'Enter URL',
-                      enabledBorder: textFormBorder(context),
-                      border: textFormBorder(context),
-                      suffixIcon: IconButton(
+                  decoration: InputDecoration(
+                    labelText: 'Enter URL',
+                    enabledBorder: textFormBorder(context),
+                    border: textFormBorder(context),
+                    suffixIcon: IconButton(
                         icon: FaIcon(
                           _urlWeb == null ? FontAwesomeIcons.search : FontAwesomeIcons.times,
                           color: Theme.of(context).primaryColor,
                         ),
                         onPressed: _spinner == false
-                          ? () {
+                            ? () {
                           setState(() {
                             FocusScope.of(context).unfocus();
                             // _spinner = true;
                             if(_urlWeb == null) {
-                            _urlWeb = _url;
+                              _urlWeb = _url;
                             } else {
                               _urlWeb = null;
                             }
@@ -268,41 +270,41 @@ class _CreateCampaignState extends State<CreateCampaign> with WidgetsBindingObse
                             // _getUrl();
                           });
                         }
-                        : () {}
-                      ),
+                            : () {}
                     ),
-                    focusNode: _urlFocus,
-                    onChanged: (val) {
-                      _url = val;
-                      print("url ::::::::::::::; $_url");
-                    },
+                  ),
+                  focusNode: _urlFocus,
+                  onChanged: (val) {
+                    _url = val;
+                    print("url ::::::::::::::; $_url");
+                  },
                   readOnly: _urlWeb == null ? false : true,
-                    controller: _forPageUrl,
-                    enableSuggestions: false,
-                    autocorrect: false,
-                    validator: (value) {
-                      var urlPattern =
-                          r"(https?|ftp)://([-A-Z0-9.]+)(/[-A-Z0-9+&@#/%=~_|!:,.;]*)?(\?[A-Z0-9+&@#/%=~_|!:‌​,.;]*)?";
-                      var result = RegExp(urlPattern, caseSensitive: false)
-                          .firstMatch(value!);
-                      if (value.isEmpty) {
-                        return 'Please enter some text';
-                      }
-                      if (result == null) {
-                        return 'Enter full url';
-                      }
-                      return null;
-                    },
-                    onSaved: (newValue) {
-                      _newCampaign = CampaignClass(
-                        name: _newCampaign.name,
-                        media: _newCampaign.media,
-                        action: _newCampaign.action,
-                        pageUrl: newValue,
-                        qty: _newCampaign.qty,
-                        cost: cost,
-                      );
-                    },
+                  controller: _forPageUrl,
+                  enableSuggestions: false,
+                  autocorrect: false,
+                  validator: (value) {
+                    var urlPattern =
+                        r"(https?|ftp)://([-A-Z0-9.]+)(/[-A-Z0-9+&@#/%=~_|!:,.;]*)?(\?[A-Z0-9+&@#/%=~_|!:‌​,.;]*)?";
+                    var result = RegExp(urlPattern, caseSensitive: false)
+                        .firstMatch(value!);
+                    if (value.isEmpty) {
+                      return 'Please enter some text';
+                    }
+                    if (result == null) {
+                      return 'Enter full url';
+                    }
+                    return null;
+                  },
+                  onSaved: (newValue) {
+                    _newCampaign = CampaignClass(
+                      name: _newCampaign.name,
+                      media: _newCampaign.media,
+                      action: _newCampaign.action,
+                      pageUrl: newValue,
+                      qty: _newCampaign.qty,
+                      cost: cost,
+                    );
+                  },
                 ),
               ),
               const SizedBox(height: 20),
@@ -374,7 +376,7 @@ class _CreateCampaignState extends State<CreateCampaign> with WidgetsBindingObse
                           width: 30,
                           child: RawMaterialButton(
                             fillColor:
-                                _newCampaign.qty == 0 ? Colors.grey : Colors.pink,
+                            _newCampaign.qty == 0 ? Colors.grey : Colors.pink,
                             onPressed: () {
                               if (_newCampaign.qty! > 0) {
                                 setState(() {
@@ -411,13 +413,13 @@ class _CreateCampaignState extends State<CreateCampaign> with WidgetsBindingObse
                           width: 30,
                           child: RawMaterialButton(
                             fillColor:
-                                (heart! - (_newCampaign.qty! * cost!)) <
-                                        cost!
-                                    ? Colors.grey
-                                    : Colors.pink,
+                            (heart! - (_newCampaign.qty! * cost!)) <
+                                cost!
+                                ? Colors.grey
+                                : Colors.pink,
                             onPressed: () {
                               if ((heart! -
-                                      (_newCampaign.qty! * cost!)) >=
+                                  (_newCampaign.qty! * cost!)) >=
                                   cost!) {
                                 setState(() {
                                   _newCampaign = CampaignClass(
@@ -446,30 +448,30 @@ class _CreateCampaignState extends State<CreateCampaign> with WidgetsBindingObse
               ),
               const SizedBox(height: 25),
               _spinner == true
-                ? CircularProgressIndicator(
-                    backgroundColor: Theme.of(context).primaryColor,
-                  )
-                : _urlWeb != null
+                  ? CircularProgressIndicator(
+                backgroundColor: Theme.of(context).primaryColor,
+              )
+                  : _urlWeb != null
                   ? Container(
-                    height: 700,
-                    child: InAppWebView(
-                      initialUrlRequest: URLRequest(url: Uri.parse(_urlWeb!)),
-                      initialOptions: InAppWebViewGroupOptions(
-                        crossPlatform: InAppWebViewOptions(),
-                      ),
-                      onWebViewCreated: (controller) {
-                        webView = controller;
-                      },
-                    ),
-                  )
+                height: 700,
+                child: InAppWebView(
+                  initialUrlRequest: URLRequest(url: Uri.parse(_urlWeb!)),
+                  initialOptions: InAppWebViewGroupOptions(
+                    crossPlatform: InAppWebViewOptions(),
+                  ),
+                  onWebViewCreated: (controller) {
+                    webView = controller;
+                  },
+                ),
+              )
                   : SizedBox(height: 0),
 
               const SizedBox(height: 45),
               error != ''
                   ? Text(
-                      error,
-                      style: const TextStyle(color: Colors.red),
-                    )
+                error,
+                style: const TextStyle(color: Colors.red),
+              )
                   : const SizedBox(),
             ],
           ),

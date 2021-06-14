@@ -18,6 +18,10 @@ class MyCampaign extends StatefulWidget {
 
 class _MyCampaignState extends State<MyCampaign> {
   List<CampaignClass> _data = [];
+  List<CampaignClass> _pending = [];
+  List<CampaignClass> _completed = [];
+  List<CampaignClass> _running = [];
+
   bool _spinner = false;
 
   @override
@@ -43,6 +47,9 @@ class _MyCampaignState extends State<MyCampaign> {
   @override
   Widget build(BuildContext context) {
     _data = Provider.of<CampaignData>(context, listen: false).data;
+    _pending = _data.where((ele) => ele.heartPending! > 0).toList();
+    _completed = _data.where((ele) => ele.count == ele.qty).toList();
+    _running = _data.where((ele) => ele.count! < ele.qty!).toList();
 
     return StartingCode(
       title: 'My Campaign',
@@ -88,32 +95,93 @@ class _MyCampaignState extends State<MyCampaign> {
                 ),
                 CustomDivider(),
                 Expanded(
-                  child: ListView.builder(
-                    padding: EdgeInsets.zero,
-                    itemBuilder: (context, index) {
-                      actionIcon = _data[index].action;
-                      media = _data[index].media;
-                      action = _data[index].action;
+                  child: SingleChildScrollView(
+                    physics: AlwaysScrollableScrollPhysics(),
+                    child: Column(
+                      children: [
+                        ListView.builder(
+                          physics: NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          padding: EdgeInsets.zero,
+                          itemBuilder: (context, index) {
+                            actionIcon = _pending[index].action;
+                            media = _pending[index].media;
+                            action = _pending[index].action;
 
-                      return SocialMediaTile(
-                        id: _data[index].id!,
-                        backColor: _data[index].heartPending! > 0
-                          ? Colors.red.withOpacity(0.2)
-                          : Colors.transparent,
-                        campaignId: _data[index].id,
-                        name: _data[index].name,
-                        date: _data[index].createdOn,
-                        totalAction: _data[index].count,
-                        actionQty: _data[index].qty,
-                        actionPending: (_data[index].heartPending! / _data[index].cost! ) > 0
-                          ? (_data[index].heartPending! / _data[index].cost!).round()
-                          : 0
-                        // imageUrl: _data[index].urlImage,
-                        // action: _data[index].action,
-                        // costPerAction: _data[index].cost * _data[index].qty,
-                      );
-                    },
-                    itemCount: _data.length,
+                            return SocialMediaTile(
+                              id: _pending[index].id!,
+                              backColor: Colors.red.withOpacity(0.2),
+                              campaignId: _pending[index].id,
+                              name: _pending[index].name,
+                              date: _pending[index].createdOn,
+                              totalAction: _pending[index].count,
+                              actionQty: _pending[index].qty,
+                              actionPending: (_pending[index].heartPending! / _pending[index].cost! ) > 0
+                                ? (_pending[index].heartPending! / _pending[index].cost!).round()
+                                : 0
+                              // imageUrl: _pending[index].urlImage,
+                              // action: _pending[index].action,
+                              // costPerAction: _pending[index].cost * _pending[index].qty,
+                            );
+                          },
+                          itemCount: _pending.length,
+                        ),
+                        ListView.builder(
+                          physics: NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          padding: EdgeInsets.zero,
+                          itemBuilder: (context, index) {
+                            actionIcon = _running[index].action;
+                            media = _running[index].media;
+                            action = _running[index].action;
+
+                            return SocialMediaTile(
+                              id: _running[index].id!,
+                              backColor: Colors.transparent,
+                              campaignId: _running[index].id,
+                              name: _running[index].name,
+                              date: _running[index].createdOn,
+                              totalAction: _running[index].count,
+                              actionQty: _running[index].qty,
+                              actionPending: (_running[index].heartPending! / _running[index].cost! ) > 0
+                                ? (_running[index].heartPending! / _running[index].cost!).round()
+                                : 0
+                              // imageUrl: _running[index].urlImage,
+                              // action: _running[index].action,
+                              // costPerAction: _running[index].cost * _running[index].qty,
+                            );
+                          },
+                          itemCount: _running.length,
+                        ),
+                        ListView.builder(
+                          physics: NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          padding: EdgeInsets.zero,
+                          itemBuilder: (context, index) {
+                            actionIcon = _completed[index].action;
+                            media = _completed[index].media;
+                            action = _completed[index].action;
+
+                            return SocialMediaTile(
+                              id: _completed[index].id!,
+                              backColor: Colors.green.withOpacity(0.2),
+                              campaignId: _completed[index].id,
+                              name: _completed[index].name,
+                              date: _completed[index].createdOn,
+                              totalAction: _completed[index].count,
+                              actionQty: _completed[index].qty,
+                              actionPending: (_completed[index].heartPending! / _completed[index].cost! ) > 0
+                                ? (_completed[index].heartPending! / _completed[index].cost!).round()
+                                : 0
+                              // imageUrl: _completed[index].urlImage,
+                              // action: _completed[index].action,
+                              // costPerAction: _completed[index].cost * _completed[index].qty,
+                            );
+                          },
+                          itemCount: _completed.length,
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ],
@@ -145,7 +213,6 @@ class SocialMediaTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    CampaignClass _data = Provider.of<CampaignData>(context).data.firstWhere((ele) => ele.id == id);
     return Column(
       children: [
         RawMaterialButton(
@@ -154,11 +221,7 @@ class SocialMediaTile extends StatelessWidget {
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 15),
             height: 110,
-            color: _data.heartPending! > 0
-              ? Colors.red.withOpacity(0.2)
-              : _data.count == _data.qty
-                ? Colors.green.withOpacity(0.2)
-                : Colors.transparent,
+            color: backColor,
             // backColor,
             child: ShadowBox(
               widget: Column(
