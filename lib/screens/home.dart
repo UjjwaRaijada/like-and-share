@@ -14,6 +14,7 @@ import './badge.dart';
 import './disclaimer.dart';
 import '../providers/auth.dart';
 import '../providers/campaignData.dart';
+import '../providers/misc.dart';
 import '../providers/myProfile.dart';
 import '../widgets/customDrawer.dart';
 import '../widgets/customDivider.dart';
@@ -28,7 +29,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  bool _spinner = false;
+  bool _loadOnce = true;
   late MyProfile _myProfile;
   List<CampaignClass> _premium = [];
   final String _message =
@@ -40,9 +41,6 @@ class _HomeState extends State<Home> {
   void initState() {
     media = Media.Facebook;
     action = ActionType.Like;
-    // setState(() {
-    //   _spinner = true;
-    // });
     SchedulerBinding.instance!.addPostFrameCallback((Duration duration) {
       FeatureDiscovery.discoverFeatures(
         context,
@@ -57,18 +55,19 @@ class _HomeState extends State<Home> {
 
   @override
   void didChangeDependencies() {
-    // if (_spinner == true) {
+    if(_loadOnce == true) {
       Provider.of<MyProfileData>(context, listen: false).refreshData().then((value) {
+        int? _score = Provider.of<MyProfileData>(context, listen: false).data.score;
+        Badges _data = Provider.of<Misc>(context, listen: false).badgeData;
+        if(_data.level == 0) {
+          Provider.of<Misc>(context, listen: false).getBadge(_score);
+        }
         if (value == 401) {
           _logoutUser();
         }
       });
-      Provider.of<CampaignData>(context, listen: false).premiumCamp().then((_) {
-        // setState(() {
-        //   _spinner = false;
-        // });
-      });
-    // }
+      Provider.of<CampaignData>(context, listen: false).premiumCamp();
+    }
     super.didChangeDependencies();
   }
 
@@ -171,15 +170,7 @@ class _HomeState extends State<Home> {
                     topRight: const Radius.circular(20),
                   ),
                 ),
-                child: _spinner == true
-                    ? Center(
-                        child: CircularProgressIndicator(
-                          backgroundColor: Theme.of(context).primaryColor,
-                          // valueColor:
-                          //     AlwaysStoppedAnimation<Color>(Colors.pinkAccent),
-                        ),
-                      )
-                    : Column(
+                child: Column(
                         children: [
                           // Text(
                           //   'Categories: Opens in Inbuilt Browser',

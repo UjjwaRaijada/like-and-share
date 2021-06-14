@@ -16,22 +16,12 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
-  bool _spinner = false;
+  bool _loadOnce = false;
   bool _onlyRead = true;
   FocusNode _nameFocus = FocusNode();
   FocusNode _cityFocus = FocusNode();
-  // FocusNode _facebookFocus = FocusNode();
-  // FocusNode _instagramFocus = FocusNode();
-  // FocusNode _twitterFocus = FocusNode();
-  // FocusNode _youtubeFocus = FocusNode();
-  // FocusNode _googleFocus = FocusNode();
   String? _name;
   String? _city;
-  // String _facebook;
-  // String _instagram;
-  // String _twitter;
-  // String _youtube;
-  // String _google;
 
   MyProfile _myProfile = MyProfile(
     id: 0,
@@ -46,28 +36,23 @@ class _ProfileState extends State<Profile> {
   @override
   void initState() {
     setState(() {
-      _spinner = true;
+      _loadOnce = true;
     });
     super.initState();
   }
 
   @override
   void didChangeDependencies() {
-    if (_spinner == true) {
+    if (_loadOnce == true) {
       Provider.of<MyProfileData>(context, listen: false)
           .refreshData()
           .then((value) {
         if (value == 200) {
-          _myProfile = Provider.of<MyProfileData>(context, listen: false).data;
-          _name = _myProfile.name;
-          _city = _myProfile.city;
-          // _facebook = _myProfile.facebook;
-          // _instagram = _myProfile.instagram;
-          // _twitter = _myProfile.twitter;
-          // _youtube = _myProfile.youtube;
-          // _google = _myProfile.google;
+          // _myProfile = Provider.of<MyProfileData>(context, listen: false).data;
+          // _name = _myProfile.name;
+          // _city = _myProfile.city;
           setState(() {
-            _spinner = false;
+            _loadOnce = false;
           });
         } else if (value == 401) {
           _logoutUser(context);
@@ -83,7 +68,7 @@ class _ProfileState extends State<Profile> {
         }
       }).catchError((error) {
         setState(() {
-          _spinner = false;
+          _loadOnce = false;
         });
         return showDialog(
           context: context,
@@ -93,7 +78,6 @@ class _ProfileState extends State<Profile> {
         ).then((_) {
           Navigator.pop(context);
         });
-
       });
     }
 
@@ -111,11 +95,6 @@ class _ProfileState extends State<Profile> {
   void dispose() {
     _nameFocus.dispose();
     _cityFocus.dispose();
-    // _facebookFocus.dispose();
-    // _instagramFocus.dispose();
-    // _twitterFocus.dispose();
-    // _youtubeFocus.dispose();
-    // _googleFocus.dispose();
     super.dispose();
   }
 
@@ -125,11 +104,6 @@ class _ProfileState extends State<Profile> {
       name: _name,
       city: _city,
       hearts: _myProfile.hearts,
-      // facebook: _facebook,
-      // instagram: _instagram,
-      // twitter: _twitter,
-      // youtube: _youtube,
-      // google: _google,
     );
 
     MyProfile _oldProfile = Provider.of<MyProfileData>(context, listen: false).data;
@@ -170,67 +144,63 @@ class _ProfileState extends State<Profile> {
 
   @override
   Widget build(BuildContext context) {
+    _myProfile = Provider.of<MyProfileData>(context).data;
+
     return StartingCode(
       title: 'You are Awesome',
-      widget: _spinner
-          ? Center(
-              child: CircularProgressIndicator(
-                backgroundColor: Theme.of(context).primaryColor,
-              ),
-            )
-          : SingleChildScrollView(
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 35),
-                child: Column(
-                  children: [
-                    Container(
-                      height: 150,
-                      child: Center(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              '${_myProfile.hearts} ',
-                              style: TextStyle(
-                                color: Theme.of(context).primaryColor,
-                                fontSize: 40
-                              ),
-                            ),
-                            Icon(Icons.favorite, color: Theme.of(context).primaryColor, size: 40,)
-                          ],
+      widget: SingleChildScrollView(
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 35),
+          child: Column(
+            children: [
+              Container(
+                height: 150,
+                child: Center(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        '${_myProfile.hearts} ',
+                        style: TextStyle(
+                          color: Theme.of(context).primaryColor,
+                          fontSize: 40
                         ),
                       ),
-                    ),
-                    ProfileTile(
-                      title: 'Full Name',
-                      initValue: _myProfile.name,
-                      onlyRead: _onlyRead,
-                      save: (val) => _name = val,
-                      focusName: _nameFocus,
-                      fieldSubmit: (_) =>
-                          FocusScope.of(context).requestFocus(_cityFocus),
-                    ),
-                    ProfileTile(
-                      title: 'City',
-                      initValue: _myProfile.city,
-                      onlyRead: _onlyRead,
-                      save: (val) => _city = val,
-                      focusName: _cityFocus,
-                      fieldSubmit: (_) => _saveProfile(),
-                          // FocusScope.of(context).requestFocus(_facebookFocus),
-                    ),
-                    ProfileTile(
-                      title: 'Email Id',
-                      initValue: _myProfile.email,
-                    ),
-                    ProfileTile(
-                      title: 'Mobile',
-                      initValue: _myProfile.mobile.toString(),
-                    ),
-                  ],
+                      Icon(Icons.favorite, color: Theme.of(context).primaryColor, size: 40,)
+                    ],
+                  ),
                 ),
               ),
-            ),
+              ProfileTile(
+                title: 'Full Name',
+                initValue: _myProfile.name,
+                onlyRead: _onlyRead,
+                save: (val) => _name = val,
+                focusName: _nameFocus,
+                fieldSubmit: (_) =>
+                    FocusScope.of(context).requestFocus(_cityFocus),
+              ),
+              ProfileTile(
+                title: 'City',
+                initValue: _myProfile.city,
+                onlyRead: _onlyRead,
+                save: (val) => _city = val,
+                focusName: _cityFocus,
+                fieldSubmit: (_) => _saveProfile(),
+                    // FocusScope.of(context).requestFocus(_facebookFocus),
+              ),
+              ProfileTile(
+                title: 'Email Id',
+                initValue: _myProfile.email,
+              ),
+              ProfileTile(
+                title: 'Mobile',
+                initValue: _myProfile.mobile.toString(),
+              ),
+            ],
+          ),
+        ),
+      ),
       bottomS: Container(
         width: double.infinity,
         height: 50,

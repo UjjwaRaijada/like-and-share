@@ -67,10 +67,11 @@ class MyApp extends StatelessWidget {
           ),
         ),
         ChangeNotifierProxyProvider<Auth, MyProfileData>(
-          create: (_) => MyProfileData('', 0),
+          create: (_) => MyProfileData('', 0, MyProfile()),
           update: (ctx, auth, _) => MyProfileData(
             auth.token,
             auth.userId,
+            MyProfile()
           ),
         ),
         ChangeNotifierProvider(

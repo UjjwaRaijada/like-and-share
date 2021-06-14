@@ -11,7 +11,7 @@ import '../menuScreens/faq.dart';
 import '../menuScreens/tAndC.dart';
 import '../menuScreens/aboutUs.dart';
 import '../menuScreens/contactUs.dart';
-import '../menuScreens/fte.dart';
+// import '../menuScreens/fte.dart';
 import '../providers/auth.dart';
 import '../widgets/customDivider.dart';
 
@@ -89,12 +89,12 @@ class CustomDrawer extends StatelessWidget {
                 title: 'Contact Us',
               ),
               CustomDivider(),
-              DrawerButton(
-                onPress: () => Navigator.popAndPushNamed(context, FTE.id),
-                icon: FontAwesomeIcons.bookReader,
-                title: 'Freedom Through Education',
-              ),
-              CustomDivider(),
+              // DrawerButton(
+              //   onPress: () => Navigator.popAndPushNamed(context, FTE.id),
+              //   icon: FontAwesomeIcons.bookReader,
+              //   title: 'Freedom Through Education',
+              // ),
+              // CustomDivider(),
               DrawerButton(
                 onPress: () => _logoutUser(context),
                 icon: FontAwesomeIcons.signOutAlt,

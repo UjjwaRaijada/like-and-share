@@ -49,7 +49,7 @@ class MyProfile with ChangeNotifier {
 class MyProfileData with ChangeNotifier {
   final String? _auth;
   final int? _userId;
-  MyProfileData(this._auth, this._userId);
+  MyProfileData(this._auth, this._userId, this._data);
 
   bool? success;
   String? msg;

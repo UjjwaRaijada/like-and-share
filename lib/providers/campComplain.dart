@@ -11,7 +11,13 @@ class CampComplain {
   final int? user;
   final String? complain;
 
-  CampComplain({this.id, this.campaign, this.author, this.user, this.complain});
+  CampComplain({
+    this.id,
+    this.campaign,
+    this.author,
+    this.user,
+    this.complain,
+  });
 }
 
 class CampComplainData with ChangeNotifier {
