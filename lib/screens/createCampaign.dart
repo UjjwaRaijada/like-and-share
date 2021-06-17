@@ -29,7 +29,8 @@ class _CreateCampaignState extends State<CreateCampaign> with WidgetsBindingObse
   String? _url;
   String? _urlWeb;
   File? snippet;
-  int? cost;
+  late ActionCost _action;
+  late int _actionId;
 
   FocusNode _urlFocus = FocusNode();
   TextEditingController _forCampName = TextEditingController();
@@ -37,13 +38,13 @@ class _CreateCampaignState extends State<CreateCampaign> with WidgetsBindingObse
 
   var _newCampaign = CampaignClass(
     author: 0,
-    media: Media.Facebook,
-    action: ActionType.Like,
-    urlImage: '',
     pageUrl: '',
     qty: 0,
     cost: 2,
     createdOn: DateTime.now(),
+    authorName: '',
+    actionId: 0,
+    id: 0, actionName: '',
   );
 
   var _editedProfile = MyProfile(
@@ -65,21 +66,8 @@ class _CreateCampaignState extends State<CreateCampaign> with WidgetsBindingObse
 
   @override
   void didChangeDependencies() {
-    CampaignClass _fromModalRoute = ModalRoute.of(context)!.settings.arguments as CampaignClass;
-    media = _fromModalRoute.media;
-    action = _fromModalRoute.action;
-    cost = actionCostData.firstWhere((ele) => ele.name == action).cost;
-
-    _newCampaign = CampaignClass(
-      author: 0,
-      media: _fromModalRoute.media,
-      action: _fromModalRoute.action,
-      urlImage: '',
-      pageUrl: '',
-      qty: 0,
-      cost: 2,
-      createdOn: DateTime.now(),
-    );
+    _actionId = ModalRoute.of(context)!.settings.arguments as int;
+    _action = Provider.of<Misc>(context, listen: false).actionCostData.firstWhere((ele) => ele.id == _actionId);
     _editedProfile = Provider.of<MyProfileData>(context, listen: false).data;
     if (_editedProfile.hearts == null) {
       heart = 0;
@@ -103,8 +91,7 @@ class _CreateCampaignState extends State<CreateCampaign> with WidgetsBindingObse
     });
 
     /// add new campaign
-    if (_newCampaign.pageUrl!.isNotEmpty &&
-        _newCampaign.qty != 0 && _newCampaign.qty != null) {
+    if (_newCampaign.pageUrl.isNotEmpty && _newCampaign.qty > 0) {
         Provider.of<CampaignData>(context, listen: false)
           .addCampaign(_newCampaign)
           .then((value) {
@@ -187,29 +174,6 @@ class _CreateCampaignState extends State<CreateCampaign> with WidgetsBindingObse
           key: _form,
           child: Column(
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  Container(
-                    padding: EdgeInsets.symmetric(horizontal: 5, vertical: 3),
-                    color: Colors.black12,
-                    child: Text(
-                      'Category: $mediaString',
-                      style:
-                          const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                  Container(
-                    padding: EdgeInsets.symmetric(horizontal: 5, vertical: 3),
-                    color: Colors.black12,
-                    child: Text(
-                      'Action: $actionString',
-                      style:
-                          const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                ],
-              ),
               Container(
                 padding:
                 const EdgeInsets.symmetric(horizontal: 25, vertical: 20),
@@ -232,12 +196,15 @@ class _CreateCampaignState extends State<CreateCampaign> with WidgetsBindingObse
                     },
                     onSaved: (newValue) {
                       _newCampaign = CampaignClass(
+                        id: 0,
+                        author: 0,
+                        authorName: '',
                         name: newValue,
-                        media: _newCampaign.media,
-                        action: _newCampaign.action,
+                        actionId: _actionId,
                         pageUrl: _newCampaign.pageUrl,
                         qty: _newCampaign.qty,
-                        cost: cost,
+                        cost: _action.cost,
+                        createdOn: DateTime.now(),
                       );
                     }),
               ),
@@ -260,7 +227,7 @@ class _CreateCampaignState extends State<CreateCampaign> with WidgetsBindingObse
                             FocusScope.of(context).unfocus();
                             // _spinner = true;
                             if(_urlWeb == null) {
-                            _urlWeb = _url;
+                            _urlWeb = _url!.trim();
                             } else {
                               _urlWeb = null;
                             }
@@ -273,7 +240,7 @@ class _CreateCampaignState extends State<CreateCampaign> with WidgetsBindingObse
                     ),
                     focusNode: _urlFocus,
                     onChanged: (val) {
-                      _url = val;
+                      _url = val.trim();
                       print("url ::::::::::::::; $_url");
                     },
                   readOnly: _urlWeb == null ? false : true,
@@ -295,12 +262,15 @@ class _CreateCampaignState extends State<CreateCampaign> with WidgetsBindingObse
                     },
                     onSaved: (newValue) {
                       _newCampaign = CampaignClass(
+                        id: 0,
+                        author: 0,
+                        authorName: '',
                         name: _newCampaign.name,
-                        media: _newCampaign.media,
-                        action: _newCampaign.action,
-                        pageUrl: newValue,
+                        actionId: _actionId,
+                        pageUrl: newValue!.trim(),
                         qty: _newCampaign.qty,
-                        cost: cost,
+                        cost: _action.cost,
+                        createdOn: DateTime.now(),
                       );
                     },
                 ),
@@ -322,13 +292,14 @@ class _CreateCampaignState extends State<CreateCampaign> with WidgetsBindingObse
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        Text('($cost'),
+                        const SizedBox(width: 5),
+                        Text('(${_action.cost}'),
                         const FaIcon(
                           FontAwesomeIcons.solidHeart,
                           color: Colors.redAccent,
                           size: 14,
                         ),
-                        Text(' / $actionString)'),
+                        Text(' / ${_action.name})'),
                       ],
                     ),
                     Container(
@@ -337,7 +308,7 @@ class _CreateCampaignState extends State<CreateCampaign> with WidgetsBindingObse
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            '${cost! * _newCampaign.qty!} ',
+                            '${_action.cost * _newCampaign.qty} ',
                             style: const TextStyle(
                               fontSize: 22,
                               fontWeight: FontWeight.bold,
@@ -376,15 +347,18 @@ class _CreateCampaignState extends State<CreateCampaign> with WidgetsBindingObse
                             fillColor:
                                 _newCampaign.qty == 0 ? Colors.grey : Colors.pink,
                             onPressed: () {
-                              if (_newCampaign.qty! > 0) {
+                              if (_newCampaign.qty > 0) {
                                 setState(() {
                                   _newCampaign = CampaignClass(
+                                    id: 0,
+                                    author: 0,
+                                    authorName: '',
                                     name: _newCampaign.name,
-                                    media: _newCampaign.media,
-                                    action: _newCampaign.action,
+                                    actionId: _actionId,
                                     pageUrl: _newCampaign.pageUrl,
-                                    qty: _newCampaign.qty! - 1,
-                                    cost: cost,
+                                    qty: _newCampaign.qty - 1,
+                                    cost: _action.cost,
+                                    createdOn: DateTime.now(),
                                   );
                                 });
                               }
@@ -400,7 +374,7 @@ class _CreateCampaignState extends State<CreateCampaign> with WidgetsBindingObse
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: 8),
                           child: Text(
-                            _newCampaign.qty! < 10
+                            _newCampaign.qty < 10
                                 ? '0${_newCampaign.qty}'
                                 : _newCampaign.qty.toString(),
                             style: const TextStyle(fontSize: 25),
@@ -411,22 +385,25 @@ class _CreateCampaignState extends State<CreateCampaign> with WidgetsBindingObse
                           width: 30,
                           child: RawMaterialButton(
                             fillColor:
-                                (heart! - (_newCampaign.qty! * cost!)) <
-                                        cost!
+                                (heart! - (_newCampaign.qty * _action.cost)) <
+                                        _action.cost
                                     ? Colors.grey
                                     : Colors.pink,
                             onPressed: () {
                               if ((heart! -
-                                      (_newCampaign.qty! * cost!)) >=
-                                  cost!) {
+                                      (_newCampaign.qty * _action.cost)) >=
+                                  _action.cost) {
                                 setState(() {
                                   _newCampaign = CampaignClass(
+                                    id: 0,
+                                    author: 0,
+                                    authorName: '',
                                     name: _newCampaign.name,
-                                    media: _newCampaign.media,
-                                    action: _newCampaign.action,
+                                    actionId: _actionId,
                                     pageUrl: _newCampaign.pageUrl,
-                                    qty: _newCampaign.qty! + 1,
-                                    cost: cost,
+                                    qty: _newCampaign.qty + 1,
+                                    cost: _action.cost,
+                                    createdOn: DateTime.now(),
                                   );
                                 });
                               }
@@ -479,12 +456,15 @@ class _CreateCampaignState extends State<CreateCampaign> with WidgetsBindingObse
         onTap: () {
           setState(() {
             _newCampaign = CampaignClass(
+              id: 0,
+              author: 0,
+              authorName: '',
               name: _editedProfile.name,
-              media: _newCampaign.media,
-              action: _newCampaign.action,
+              actionId: _actionId,
               pageUrl: _newCampaign.pageUrl,
               qty: _newCampaign.qty,
-              cost: cost,
+              cost: _action.cost,
+              createdOn: DateTime.now(),
             );
           });
           _saveForm();

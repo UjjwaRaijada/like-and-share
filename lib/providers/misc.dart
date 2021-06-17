@@ -1,8 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:http/http.dart' as http;
-
-import './campaignData.dart';
 
 class FAQs {
   final String? ques;
@@ -14,13 +13,35 @@ class FAQs {
   });
 }
 
+String? actionIcon;
+IconData get stringToAction {
+  switch (actionIcon) {
+    case 'Like':
+      return FontAwesomeIcons.solidThumbsUp;
+    case 'Share':
+      return FontAwesomeIcons.shareAlt;
+    case 'Follow':
+      return FontAwesomeIcons.user;
+    case 'Rate':
+      return FontAwesomeIcons.solidStar;
+    case 'Subscribe':
+      return FontAwesomeIcons.solidBell;
+    case 'Review':
+      return FontAwesomeIcons.penFancy;
+    default:
+      return FontAwesomeIcons.question;
+  }
+}
+
 class ActionCost {
-  final ActionType? name;
-  final int? cost;
+  final int id;
+  final String name;
+  final int cost;
 
   ActionCost({
-    this.name,
-    this.cost,
+    required this.id,
+    required this.name,
+    required this.cost,
   });
 }
 
@@ -42,29 +63,47 @@ class Badges {
   });
 }
 
-List <ActionCost> _actionCostData = [
-  ActionCost(name: ActionType.Like, cost: 20),
-  ActionCost(name: ActionType.Share, cost: 60),
-  ActionCost(name: ActionType.Follow, cost: 100),
-  ActionCost(name: ActionType.Retweet, cost: 60),
-  ActionCost(name: ActionType.Rate, cost: 60),
-  ActionCost(name: ActionType.Love, cost: 20),
-  ActionCost(name: ActionType.Subscribe, cost: 160),
-  ActionCost(name: ActionType.Review, cost: 100),
-];
-
-List<ActionCost> get actionCostData {
-  return [..._actionCostData];
-}
 
 class Misc extends ChangeNotifier {
   final String? _auth;
   final int? _user;
-
   Misc(this._auth, this._user);
 
+  String _website = 'www.likeandshare.app';
+  String _address = '/admin/v2/misc/';
+
+  List <ActionCost> _actionCostData = [];
+
+  List<ActionCost> get actionCostData {
+    return [..._actionCostData];
+  }
+
+  Future<int> actionCost() async {
+    final _url = Uri.https(_website, '$_address/actionCost.php');
+
+    final result = await http.get(
+      _url,
+      headers: {'content-type': 'application/json', 'authorization': '$_auth'},
+    );
+print(jsonDecode(result.body));
+    if(result.statusCode == 200) {
+      final _extData = jsonDecode(result.body) as Map<String, dynamic>;
+      List<ActionCost> _newData = [];
+      _extData['data']['misc'].forEach((val) {
+        _newData.add(ActionCost(
+          id: int.parse(val['id']),
+          name: val['name'],
+          cost: int.parse(val['hearts']),
+        ));
+      });
+      _actionCostData = _newData;
+      notifyListeners();
+    }
+    return result.statusCode;
+  }
+
   Future<bool> sendSuggestion(String? suggestion) async {
-    final _url = Uri.https('www.likeandshare.app', '/admin/v1/misc/suggestion.php');
+    final _url = Uri.https(_website, '$_address/suggestion.php');
 
     final result = await http
         .post(
@@ -92,7 +131,7 @@ class Misc extends ChangeNotifier {
   }
 
   Future<void> faqs() async {
-    final _url = Uri.https('www.likeandshare.app', '/admin/v1/misc/faq.php');
+    final _url = Uri.https(_website, '$_address/faq.php');
 
     final result = await http
         .get(_url, headers: {'authorization': '$_auth'}).catchError((error) {
@@ -116,7 +155,7 @@ class Misc extends ChangeNotifier {
   Badges _badgeData = Badges(
     level: 0,
     name: '',
-    image: 'https://www.likeandshare.app/admin/v1/badgeImages/NEWBIE.png',
+    image: 'https:/_website/admin/v2/badgeImages/NEWBIE.png',
     nextName: '',
     nextScore: 0,
   );
@@ -125,7 +164,7 @@ class Misc extends ChangeNotifier {
   }
 
   Future<void> getBadge(int? score) async {
-    final _url = Uri.https('www.likeandshare.app', '/admin/v1/misc/badges.php', {'score': '$score'});
+    final _url = Uri.https(_website, '$_address/badges.php', {'score': '$score'});
 
     final result = await http.get(
         _url, headers: {'authorization': '$_auth'}).catchError((error) {
@@ -147,7 +186,7 @@ class Misc extends ChangeNotifier {
   }
 
   Future<String> getDisclaimer() async {
-    final _url = Uri.https('www.likeandshare.app', '/admin/v1/misc/disclaimer.php');
+    final _url = Uri.https(_website, '$_address/disclaimer.php');
 
     final result = await http.get(_url).catchError((error) {
       throw error;

@@ -45,8 +45,10 @@ class Completed {
 class CompletedData with ChangeNotifier {
   final String? _auth;
   final int? _userId;
-
   CompletedData(this._auth, this._userId);
+
+  final String _website = 'www.likeandshare.app';
+  final String _address = '/admin/v2/completed';
 
   bool? status;
 
@@ -57,7 +59,7 @@ class CompletedData with ChangeNotifier {
   }
 
   Future<void> next(Completed newData) async {
-    final _url = Uri.https('www.likeandshare.app', '/admin/v1/completed/next.php');
+    final _url = Uri.https(_website, '$_address/next.php');
 
     final result = await http.post(
         _url,
@@ -76,7 +78,7 @@ class CompletedData with ChangeNotifier {
 
   Future<void> read(int? campId) async {
     print('ok ok');
-    final _url = Uri.https('www.likeandshare.app', '/admin/v1/completed/read.php',
+    final _url = Uri.https(_website, '$_address/read.php',
         {'camp': '$campId', 'author': '$_userId'});
 
     final result = await http
@@ -118,7 +120,7 @@ print(json.decode(result.body));
     _data.removeWhere((ele) => ele.id == compId);
     notifyListeners();
 
-    final _url = Uri.https('www.likeandshare.app', '/admin/v1/completed/approve.php', {'id': '$compId'});
+    final _url = Uri.https(_website, '$_address/approve.php', {'id': '$compId'});
 
     final result = await http
         .patch(_url, headers: {'authorization': '$_auth'}).catchError((error) {
@@ -137,7 +139,7 @@ print(json.decode(result.body));
   }
 
   Future<bool> cancel(int? compId, String? complain) async {
-    final _url = Uri.https('www.likeandshare.app', '/admin/v1/completed/complain.php');
+    final _url = Uri.https(_website, '$_address/complain.php');
 
     return await http
         .patch(_url,

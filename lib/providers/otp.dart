@@ -8,8 +8,11 @@ class OtpData extends ChangeNotifier {
   int? id;
   int? _userId;
 
+  final String _website = 'www.likeandshare.app';
+  final String _address = '/admin/v2/user';
+
   Future<bool> forgotPassword(String? email) async {
-    final _url = Uri.https('www.likeandshare.app', '/admin/v1/user/forgot_password.php');
+    final _url = Uri.https(_website, '$_address/forgot_password.php');
 
     Map<String, String> _header = {'content-type': 'application/json'};
     final Map _body = {'email': email};
@@ -37,7 +40,7 @@ class OtpData extends ChangeNotifier {
   }
 
   Future<bool> resendOtp() async {
-    final _url = Uri.https('www.likeandshare.app', '/admin/v1/user/resend_otp.php', {'userId': '$_userId'});
+    final _url = Uri.https(_website, '$_address/resend_otp.php', {'userId': '$_userId'});
 
     final result =  await http.post(_url).catchError((error) {
       throw error;
@@ -54,7 +57,7 @@ class OtpData extends ChangeNotifier {
   }
 
   Future<bool> enterOtp(int? pass) async {
-    final _url = Uri.https('www.likeandshare.app', '/admin/v1/user/enter_otp.php');
+    final _url = Uri.https(_website, '$_address/enter_otp.php');
 
     Map<String, String> _header = {'content-type': 'application/json'};
     final Map _body = {'otpId': id, 'pass': pass};
@@ -81,7 +84,7 @@ class OtpData extends ChangeNotifier {
   }
 
   Future<bool> resetPassword(String? password) async {
-    final _url = Uri.https('www.likeandshare.app', '/admin/v1/user/reset_password.php');
+    final _url = Uri.https(_website, '$_address/reset_password.php');
 
     Map<String, String> _header = {'content-type': 'application/json'};
     final Map _body = {

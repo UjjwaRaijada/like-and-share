@@ -18,7 +18,6 @@ import '../providers/misc.dart';
 import '../providers/myProfile.dart';
 import '../widgets/customDrawer.dart';
 import '../widgets/customDivider.dart';
-import '../widgets/socialMediaIcon.dart';
 import '../widgets/homeButtonModal.dart';
 
 class Home extends StatefulWidget {
@@ -39,8 +38,6 @@ class _HomeState extends State<Home> {
 
   @override
   void initState() {
-    media = Media.Facebook;
-    action = ActionType.Like;
     SchedulerBinding.instance!.addPostFrameCallback((Duration duration) {
       FeatureDiscovery.discoverFeatures(
         context,
@@ -99,11 +96,6 @@ class _HomeState extends State<Home> {
     Future.delayed(Duration.zero, () => _disclaimer());
     _myProfile = Provider.of<MyProfileData>(context).data;
     _premium = Provider.of<CampaignData>(context).premiumData;
-
-    if (_premium.isNotEmpty) {
-      actionIcon = _premium[0].action;
-      mediaImage = _premium[0].media;
-    }
 
     return Scaffold(
       key: _scaffoldKey,
@@ -172,77 +164,71 @@ class _HomeState extends State<Home> {
                 ),
                 child: Column(
                         children: [
-                          // Text(
-                          //   'Categories: Opens in Inbuilt Browser',
-                          //   style: TextStyle(
-                          //     color: Colors.white,
-                          //   ),
-                          // ),
                           SizedBox(height: 10),
-                          Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                SocialMediaIcon(
-                                  onPress: () {
-                                    Provider.of<CampaignData>(context, listen: false).clearData();
-                                    Navigator.pushNamed(
-                                        context, SocialMediaNew.id,
-                                        arguments: Media.Facebook);
-                                  },
-                                  icon: FontAwesomeIcons.facebookF,
-                                ),
-                                SocialMediaIcon(
-                                  onPress: () {
-                                    Provider.of<CampaignData>(context, listen: false).clearData();
-                                    Navigator.pushNamed(
-                                        context, SocialMediaNew.id,
-                                        arguments: Media.Instagram);
-                                  },
-                                  icon: FontAwesomeIcons.instagramSquare,
-                                ),
-                                SocialMediaIcon(
-                                  onPress: () {
-                                    Provider.of<CampaignData>(context, listen: false).clearData();
-                                    Navigator.pushNamed(
-                                        context, SocialMediaNew.id,
-                                        arguments: Media.Twitter);
-                                  },
-                                  icon: FontAwesomeIcons.twitter,
-                                ),
-                                DescribedFeatureOverlay(
-                                  featureId: 'social_media',
-                                  title: Text('Categories'),
-                                  description: Text(
-                                    'You can earn hearts & points by taking required action on the campaigns created by other people. These Icons are purely for categorisation purpose. On clicking on any of these icons, it will open campaigns created by other people of chosen category in our inbuilt browser.',
-                                  ),
-                                  backgroundColor: Theme.of(context).primaryColor,
-                                  targetColor: Colors.white,
-                                  textColor: Colors.white,
-                                  contentLocation: ContentLocation.below,
-                                  tapTarget: SocialMediaInfo(
-                                    icon: FontAwesomeIcons.youtube,
-                                  ),
-                                  child: SocialMediaIcon(
-                                    onPress: () {
-                                      Provider.of<CampaignData>(context, listen: false).clearData();
-                                      Navigator.pushNamed(
-                                          context, SocialMediaNew.id,
-                                          arguments: Media.YouTube);
-                                    },
-                                    icon: FontAwesomeIcons.youtube,
-                                  ),
-                                ),
-                                SocialMediaIcon(
-                                  onPress: () {
-                                    Provider.of<CampaignData>(context, listen: false).clearData();
-                                    Navigator.pushNamed(
-                                        context, SocialMediaNew.id,
-                                        arguments: Media.GoogleReview);
-                                  },
-                                  icon: FontAwesomeIcons.google,
-                                ),
-                              ],
-                            ),
+                          // Row(
+                          //     mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          //     children: [
+                          //       SocialMediaIcon(
+                          //         onPress: () {
+                          //           Provider.of<CampaignData>(context, listen: false).clearData();
+                          //           Navigator.pushNamed(
+                          //               context, SocialMediaNew.id,
+                          //               arguments: Media.Facebook);
+                          //         },
+                          //         icon: FontAwesomeIcons.facebookF,
+                          //       ),
+                          //       SocialMediaIcon(
+                          //         onPress: () {
+                          //           Provider.of<CampaignData>(context, listen: false).clearData();
+                          //           Navigator.pushNamed(
+                          //               context, SocialMediaNew.id,
+                          //               arguments: Media.Instagram);
+                          //         },
+                          //         icon: FontAwesomeIcons.instagramSquare,
+                          //       ),
+                          //       SocialMediaIcon(
+                          //         onPress: () {
+                          //           Provider.of<CampaignData>(context, listen: false).clearData();
+                          //           Navigator.pushNamed(
+                          //               context, SocialMediaNew.id,
+                          //               arguments: Media.Twitter);
+                          //         },
+                          //         icon: FontAwesomeIcons.twitter,
+                          //       ),
+                          //       DescribedFeatureOverlay(
+                          //         featureId: 'social_media',
+                          //         title: Text('Categories'),
+                          //         description: Text(
+                          //           'You can earn hearts & points by taking required action on the campaigns created by other people. These Icons are purely for categorisation purpose. On clicking on any of these icons, it will open campaigns created by other people of chosen category in our inbuilt browser.',
+                          //         ),
+                          //         backgroundColor: Theme.of(context).primaryColor,
+                          //         targetColor: Colors.white,
+                          //         textColor: Colors.white,
+                          //         contentLocation: ContentLocation.below,
+                          //         tapTarget: SocialMediaInfo(
+                          //           icon: FontAwesomeIcons.youtube,
+                          //         ),
+                          //         child: SocialMediaIcon(
+                          //           onPress: () {
+                          //             Provider.of<CampaignData>(context, listen: false).clearData();
+                          //             Navigator.pushNamed(
+                          //                 context, SocialMediaNew.id,
+                          //                 arguments: Media.YouTube);
+                          //           },
+                          //           icon: FontAwesomeIcons.youtube,
+                          //         ),
+                          //       ),
+                          //       SocialMediaIcon(
+                          //         onPress: () {
+                          //           Provider.of<CampaignData>(context, listen: false).clearData();
+                          //           Navigator.pushNamed(
+                          //               context, SocialMediaNew.id,
+                          //               arguments: Media.GoogleReview);
+                          //         },
+                          //         icon: FontAwesomeIcons.google,
+                          //       ),
+                          //     ],
+                          //   ),
                           // ),
                           CustomDivider(),
                           Expanded(
@@ -291,16 +277,16 @@ class _HomeState extends State<Home> {
                                                   padding: EdgeInsets.all(20),
                                                   width: 150,
                                                   height: 150,
-                                                  child: FaIcon(mediaToImage),
+                                                  child: Icon(IconDataSolid(int.parse(_premium[0].actionIcon!))),
                                                 ),
                                                 Text(
-                                                  _premium[0].authorName!,
+                                                  _premium[0].authorName,
                                                   style: Theme.of(context)
                                                       .textTheme
                                                       .headline1,
                                                 ),
                                                 Text(
-                                                  _premium[0].pageUrl!,
+                                                  _premium[0].pageUrl,
                                                   overflow: TextOverflow.fade,
                                                   maxLines: 2,
                                                   textAlign: TextAlign.center,
@@ -334,7 +320,7 @@ class _HomeState extends State<Home> {
                                                           children: [
                                                             const Text('Action Required :  '),
                                                             Icon(
-                                                              actionToIcon,
+                                                              IconDataSolid(int.parse(_premium[0].actionIcon!)),
                                                               size: 18,
                                                             ),
                                                           ],
@@ -406,14 +392,14 @@ class _HomeState extends State<Home> {
                 _scaffoldKey.currentState!.openDrawer();
               },
               icon: FontAwesomeIcons.bars,
-              label: 'Menu',
+              // label: 'Menu',
             ),
             BottomButton(
               onPress: () {
                 Navigator.pushNamed(context, Badge.id);
               },
               icon: FontAwesomeIcons.medal,
-              label: 'Badge',
+              // label: 'Badge',
             ),
             DescribedFeatureOverlay(
               featureId: 'add_camp',
@@ -434,35 +420,40 @@ class _HomeState extends State<Home> {
                       color: Theme.of(context).accentColor,
                       size: 25,
                     ),
-                    const SizedBox(height: 3),
-                    Text(
-                      'Add',
-                      style: TextStyle(
-                        color: Theme.of(context).accentColor,
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
+                    // const SizedBox(height: 3),
+                    // Text(
+                    //   'Add',
+                    //   style: TextStyle(
+                    //     color: Theme.of(context).accentColor,
+                    //     fontSize: 12,
+                    //     fontWeight: FontWeight.bold,
+                    //   ),
+                    // ),
                   ],
                 ),
               ),
               child: BottomButton(
                 onPress: () {
-                  media = Media.Facebook;
-                  action = ActionType.Like;
                   _modalBottomSheetMenu();
                 },
                 icon: FontAwesomeIcons.plus,
-                label: 'Add',
+                // label: 'Add',
               ),
             ),
             BottomButton(
-            onPress: () {
-              Navigator.pushNamed(context, MyCampaign.id);
-            },
-            icon: FontAwesomeIcons.database,
-            label: 'Campaigns',
-          ),
+              onPress: () {
+                Navigator.pushNamed(context, SocialMediaNew.id);
+              },
+              icon: FontAwesomeIcons.play,
+              // label: 'Campaigns',
+            ),
+            BottomButton(
+              onPress: () {
+                Navigator.pushNamed(context, MyCampaign.id);
+              },
+              icon: FontAwesomeIcons.database,
+              // label: 'Campaigns',
+            ),
           ],
         ),
       ),
@@ -495,15 +486,15 @@ class BottomButton extends StatelessWidget {
             color: Theme.of(context).accentColor,
             size: 25,
           ),
-          const SizedBox(height: 3),
-          Text(
-            label!,
-            style: TextStyle(
-              color: Theme.of(context).accentColor,
-              fontSize: 12,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
+          // const SizedBox(height: 3),
+          // Text(
+          //   label!,
+          //   style: TextStyle(
+          //     color: Theme.of(context).accentColor,
+          //     fontSize: 12,
+          //     fontWeight: FontWeight.bold,
+          //   ),
+          // ),
         ],
       ),
     );

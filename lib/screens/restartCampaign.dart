@@ -31,9 +31,7 @@ class _RestartCampaignState extends State<RestartCampaign> {
   CampaignClass _camp = CampaignClass(
     id: 0,
     author: 0,
-    media: Media.Facebook,
-    action: ActionType.Like,
-    urlImage: '',
+    authorName: '',
     pageUrl: '',
     qty: 0,
     cost: 200,
@@ -58,17 +56,14 @@ class _RestartCampaignState extends State<RestartCampaign> {
           .data
           .firstWhere((val) => val.id == _campId);
       _camp = CampaignClass(
-        id: _campData.id,
-        author: _campData.author,
-        media: _campData.media,
-        action: _campData.action,
+        id: 0,
+        author: 0,
+        authorName: '',
         pageUrl: _campData.pageUrl,
         qty: 0,
         cost: _campData.cost,
+        createdOn: DateTime.now(),
       );
-
-    media = _camp.media;
-    action = _camp.action;
 
     _editedProfile = Provider.of<MyProfileData>(context).data;
     super.didChangeDependencies();
@@ -87,7 +82,7 @@ class _RestartCampaignState extends State<RestartCampaign> {
     });
 
     /// add new campaign
-    if (_camp.qty != null) {
+    if (_camp.qty > 0) {
       Provider.of<CampaignData>(context, listen: false)
           .addCampaign(_camp)
           .then((value) {
@@ -147,15 +142,6 @@ class _RestartCampaignState extends State<RestartCampaign> {
           key: _form,
           child: Column(
             children: [
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 5, vertical: 3),
-                color: Colors.black12,
-                child: Text(
-                  '$mediaString Campaign for $actionString',
-                  style:
-                  const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                ),
-              ),
               Container(
                 padding:
                 const EdgeInsets.symmetric(horizontal: 25, vertical: 20),
@@ -220,7 +206,7 @@ class _RestartCampaignState extends State<RestartCampaign> {
                           color: Colors.redAccent,
                           size: 14,
                         ),
-                        Text(' / $actionString)'),
+                        Text(' / ${_camp.actionName})'),
                       ],
                     ),
                     Container(
@@ -229,7 +215,7 @@ class _RestartCampaignState extends State<RestartCampaign> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            '${_camp.cost! * _camp.qty!} ',
+                            '${_camp.cost * _camp.qty} ',
                             style: const TextStyle(
                               fontSize: 22,
                               fontWeight: FontWeight.bold,
@@ -268,15 +254,17 @@ class _RestartCampaignState extends State<RestartCampaign> {
                             fillColor:
                             _camp.qty == 0 ? Colors.grey : Colors.pink,
                             onPressed: () {
-                              if (_camp.qty! > 0) {
+                              if (_camp.qty > 0) {
                                 setState(() {
                                   _camp = CampaignClass(
+                                    id: 0,
+                                    author: 0,
+                                    authorName: '',
                                     name: _camp.name,
-                                    media: _camp.media,
-                                    action: _camp.action,
                                     pageUrl: _camp.pageUrl,
-                                    qty: _camp.qty! - 1,
+                                    qty: _camp.qty - 1,
                                     cost: _camp.cost,
+                                    createdOn: DateTime.now(),
                                   );
                                 });
                               }
@@ -292,7 +280,7 @@ class _RestartCampaignState extends State<RestartCampaign> {
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: 8),
                           child: Text(
-                            _camp.qty! < 10
+                            _camp.qty < 10
                                 ? '0${_camp.qty}'
                                 : _camp.qty.toString(),
                             style: const TextStyle(fontSize: 25),
@@ -303,22 +291,24 @@ class _RestartCampaignState extends State<RestartCampaign> {
                           width: 30,
                           child: RawMaterialButton(
                             fillColor:
-                            (heart - (_camp.qty! * _camp.cost!)) <
-                                _camp.cost!
+                            (heart - (_camp.qty * _camp.cost)) <
+                                _camp.cost
                                 ? Colors.grey
                                 : Colors.pink,
                             onPressed: () {
                               if ((heart -
-                                  (_camp.qty! * _camp.cost!)) >=
-                                  _camp.cost!) {
+                                  (_camp.qty * _camp.cost)) >=
+                                  _camp.cost) {
                                 setState(() {
                                   _camp = CampaignClass(
+                                    id: 0,
+                                    author: 0,
+                                    authorName: '',
                                     name: _camp.name,
-                                    media: _camp.media,
-                                    action: _camp.action,
                                     pageUrl: _camp.pageUrl,
-                                    qty: _camp.qty! + 1,
+                                    qty: _camp.qty + 1,
                                     cost: _camp.cost,
+                                    createdOn: DateTime.now(),
                                   );
                                 });
                               }
@@ -368,12 +358,14 @@ class _RestartCampaignState extends State<RestartCampaign> {
         onTap: () {
           setState(() {
             _camp = CampaignClass(
+              id: 0,
+              author: 0,
+              authorName: '',
               name: _editedProfile.name,
-              media: _camp.media,
-              action: _camp.action,
               pageUrl: _camp.pageUrl,
               qty: _camp.qty,
               cost: _camp.cost,
+              createdOn: DateTime.now(),
             );
           });
           _saveForm();

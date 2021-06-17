@@ -4,6 +4,8 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Auth extends ChangeNotifier {
+  final String _website = 'www.likeandshare.app';
+  final String _address = '/admin/v2/user';
   String? _auth;
   int? _userId;
   // DateTime _expiryDate;
@@ -33,7 +35,7 @@ class Auth extends ChangeNotifier {
   }
 
   Future<int> authenticate(String? email, String? password) async {
-    final _url = Uri.https('www.likeandshare.app', '/admin/v1/user/login.php');
+    final _url = Uri.https(_website, '$_address/login.php');
     Map _body = {
       'email': email,
       'password': password,
@@ -70,7 +72,7 @@ class Auth extends ChangeNotifier {
   }
 
   Future<bool> googleAuthenticate(String email) async {
-    final _url = Uri.https('www.likeandshare.app', '/admin/v1/user/login_google.php');
+    final _url = Uri.https(_website, '$_address/login_google.php');
     Map _body = {
       'email': email,
     };
@@ -102,7 +104,7 @@ class Auth extends ChangeNotifier {
   }
 
   Future<bool> registerOtp(int otp, int? id) async {
-    final _url = Uri.https('www.likeandshare.app', '/admin/v1/user/register_otp.php');
+    final _url = Uri.https(_website, '$_address/register_otp.php');
 
     final result = await http.post(
       _url,
@@ -135,7 +137,7 @@ class Auth extends ChangeNotifier {
   }
 
   Future<bool> resendOtp(int? id) async {
-    final _url = Uri.https('www.likeandshare.app', '/admin/v1/user/resend_otp.php', {'userId': '$id'});
+    final _url = Uri.https(_website, '$_address/resend_otp.php', {'userId': '$id'});
 
 
     final result =  await http.post(_url).catchError((error) {

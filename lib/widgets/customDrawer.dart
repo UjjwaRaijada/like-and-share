@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 import '../screens/profile.dart';
 import '../screens/changePassword.dart';
 import '../menuScreens/referAndEarn.dart';
-import '../menuScreens/buyHearts.dart';
+// import '../menuScreens/buyHearts.dart';
 import '../menuScreens/faq.dart';
 import '../menuScreens/tAndC.dart';
 import '../menuScreens/aboutUs.dart';
@@ -56,11 +56,11 @@ class CustomDrawer extends StatelessWidget {
                 icon: FontAwesomeIcons.solidHeart,
                 title: 'Refer & Earn',
               ),
-              DrawerButton(
-                onPress: () => Navigator.popAndPushNamed(context, BuyHearts.id),
-                icon: FontAwesomeIcons.handHoldingHeart,
-                title: 'Buy Hearts',
-              ),
+              // DrawerButton(
+              //   onPress: () => Navigator.popAndPushNamed(context, BuyHearts.id),
+              //   icon: FontAwesomeIcons.handHoldingHeart,
+              //   title: 'Buy Hearts',
+              // ),
               DrawerButton(
                 onPress: () =>
                     Navigator.popAndPushNamed(context, ChangePassword.id),

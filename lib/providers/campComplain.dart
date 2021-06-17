@@ -25,8 +25,11 @@ class CampComplainData with ChangeNotifier {
   final int? _userId;
   CampComplainData(this._auth, this._userId);
 
+  final String _website = 'www.likeandshare.app';
+  final String _address = '/admin/v2/campComplain';
+
   Future<bool> createComplain(CampComplain newData) async {
-    final _url = Uri.https('www.likeandshare.app', '/admin/v1/campComplain/create.php');
+    final _url = Uri.https(_website, '$_address/create.php');
 
     final result = await http
         .post(

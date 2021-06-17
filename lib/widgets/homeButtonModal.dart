@@ -1,12 +1,11 @@
 import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
 
 import '../screens/createCampaign.dart';
-import '../providers/campaignData.dart';
+import '../providers/misc.dart';
 import '../widgets/customDivider.dart';
-import '../widgets/socialMediaIcon.dart';
 
 class HomeBottomModal extends StatefulWidget {
 
@@ -15,12 +14,26 @@ class HomeBottomModal extends StatefulWidget {
 }
 
 class _HomeBottomModalState extends State<HomeBottomModal> {
+  bool _loadOnce = true;
+  int chosenId = 0;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if(_loadOnce == true) {
+      Provider.of<Misc>(context, listen: false).actionCost();
+      setState(() {
+        _loadOnce = false;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+  List<ActionCost> _data = Provider.of<Misc>(context).actionCostData;
+
     return Container(
-      height: 350,
-      color: Colors.transparent, //could change this to Color(0xFF737373),
-      //so you don't have to change MaterialApp canvasColor
+      color: Colors.transparent,
       child: BackdropFilter(
         filter: ImageFilter.blur(
           sigmaX: 20.0,
@@ -42,308 +55,39 @@ class _HomeBottomModalState extends State<HomeBottomModal> {
               Container(
                 padding: EdgeInsets.only(top: 10),
                 child: Text(
-                  "Add Campaign",
+                  "Add Campaign For?",
                   style: Theme.of(context).textTheme.headline1,
                 ),
               ),
               CustomDivider(),
-              Container(
-                padding: EdgeInsets.only(top: 10, bottom: 20),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    SocialMediaIcon(
-                      onPress: () {
-                        setState(() {
-                          media = Media.Facebook;
-                          action = ActionType.Like;
-                        });
-                      },
-                      icon: FontAwesomeIcons.facebookF,
-                      iconColor: media == Media.Facebook
-                          ? Colors.blueAccent
-                          : Colors.black,
-                    ),
-                    SocialMediaIcon(
-                      onPress: () {
-                        setState(() {
-                          media = Media.Instagram;
-                          action = ActionType.Like;
-                        });
-                      },
-                      icon: FontAwesomeIcons.instagramSquare,
-                      iconColor: media == Media.Instagram
-                          ? Color(0xFFF58529)
-                          : Colors.black,
-                    ),
-                    SocialMediaIcon(
-                      onPress: () {
-                        setState(() {
-                          media = Media.Twitter;
-                          action = ActionType.Love;
-                        });
-                      },
-                      icon: FontAwesomeIcons.twitter,
-                      iconColor: media == Media.Twitter
-                          ? Colors.lightBlueAccent
-                          : Colors.black,
-                    ),
-                    SocialMediaIcon(
-                      onPress: () {
-                        setState(() {
-                          media = Media.YouTube;
-                          action = ActionType.Like;
-                        });
-                      },
-                      icon: FontAwesomeIcons.youtube,
-                      iconColor: media == Media.YouTube
-                          ? Colors.red
-                          : Colors.black,
-                    ),
-                    SocialMediaIcon(
-                      onPress: () {
-                        setState(() {
-                          media = Media.GoogleReview;
-                          action = ActionType.Rate;
-                        });
-                      },
-                      icon: FontAwesomeIcons.google,
-                      iconColor: media == Media.GoogleReview
-                          ? Colors.redAccent
-                          : Colors.black,
-                    ),
-                  ],
-                ),
-              ),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                height: 48,
-                child: ((() {
-                  if (media == Media.Facebook) {
-                    return Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          /// Facebook Like
-                          BottomButtonAny(
-                            onPress: (){
-                              setState(() {
-                                action = ActionType.Like;
-                              });
-                            },
-                            icon: FontAwesomeIcons.solidThumbsUp,
-                            iconColor: action == ActionType.Like
-                                ? Theme.of(context).accentColor
-                                : Colors.black,
-                            label: 'Like',
-                          ),
-
-                          /// Face Share
-                          BottomButtonAny(
-                            onPress: (){
-                              setState(() {
-                                action = ActionType.Share;
-                              });
-                            },
-                            icon: FontAwesomeIcons.shareAlt,
-                            iconColor: action == ActionType.Share
-                                ? Theme.of(context).accentColor
-                                : Colors.black,
-                            label: 'Share',
-                          ),
-
-                          /// Face Follow
-                          BottomButtonAny(
-                            onPress: (){
-                              setState(() {
-                                action = ActionType.Follow;
-                              });
-                            },
-                            icon: FontAwesomeIcons.users,
-                            iconColor: action == ActionType.Follow
-                                ? Theme.of(context).accentColor
-                                : Colors.black,
-                            label: 'Follow',
-                          ),
-                        ]);
-                  } else if (media == Media.Instagram) {
-                    return Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          /// Insta Like
-                          BottomButtonAny(
-                            onPress: (){
-                              setState(() {
-                                action = ActionType.Like;
-                              });
-                            },
-                            icon: FontAwesomeIcons.solidThumbsUp,
-                            iconColor: action == ActionType.Like
-                                ? Theme.of(context).accentColor
-                                : Colors.black,
-                            label: 'Like',
-                          ),
-
-                          /// Insta Share
-                          BottomButtonAny(
-                            onPress: (){setState(() {
-                              action = ActionType.Share;
-                            });},
-                            icon: FontAwesomeIcons.shareAlt,
-                            iconColor: action == ActionType.Share
-                                ? Theme.of(context).accentColor
-                                : Colors.black,
-                            label: 'Share',
-                          ),
-
-                          /// Insta Follow
-                          BottomButtonAny(
-                            onPress: (){
-                              setState(() {
-                                action = ActionType.Follow;
-                              });
-                            },
-                            icon: FontAwesomeIcons.users,
-                            iconColor: action == ActionType.Follow
-                                ? Theme.of(context).accentColor
-                                : Colors.black,
-                            label: 'Follow',
-                          ),
-                        ]);
-                  } else if (media == Media.Twitter) {
-                    return Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          /// Twitter Like (Love)
-                          BottomButtonAny(
-                            onPress: (){
-                              setState(() {
-                                action = ActionType.Love;
-                              });
-                            },
-                            icon: FontAwesomeIcons.solidHeart,
-                            iconColor: action == ActionType.Love
-                                ? Theme.of(context).accentColor
-                                : Colors.black,
-                            label: 'Like',
-                          ),
-
-                          /// Twitter Retweet
-                          BottomButtonAny(
-                            onPress: (){
-                              setState(() {
-                                action = ActionType.Retweet;
-                              });
-                            },
-                            icon: FontAwesomeIcons.retweet,
-                            iconColor: action == ActionType.Retweet
-                                ? Theme.of(context).accentColor
-                                : Colors.black,
-                            label: 'Retweet',
-                          ),
-
-                          /// Twitter Follow
-                          BottomButtonAny(
-                            onPress: (){
-                              setState(() {
-                                action = ActionType.Follow;
-                              });
-                            },
-                            icon: FontAwesomeIcons.users,
-                            iconColor: action == ActionType.Follow
-                                ? Theme.of(context).accentColor
-                                : Colors.black,
-                            label: 'Follow',
-                          ),
-                        ]);
-                  } else if (media == Media.YouTube) {
-                    return Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          /// YouTube Like
-                          BottomButtonAny(
-                            onPress: (){
-                              setState(() {
-                                action = ActionType.Like;
-                              });
-                            },
-                            icon: FontAwesomeIcons.solidThumbsUp,
-                            iconColor: action == ActionType.Like
-                                ? Theme.of(context).accentColor
-                                : Colors.black,
-                            label: 'Like',
-                          ),
-
-                          /// YouTube Subscribe
-                          BottomButtonAny(
-                            onPress: (){
-                              setState(() {
-                                action = ActionType.Subscribe;
-                              });
-                            },
-                            icon: FontAwesomeIcons.solidBell,
-                            iconColor: action == ActionType.Subscribe
-                                ? Theme.of(context).accentColor
-                                : Colors.black,
-                            label: 'Subscribe',
-                          ),
-                        ]);
-                  } else if (media == Media.GoogleReview) {
-                    return Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          /// Google Rating
-                          BottomButtonAny(
-                            onPress: (){
-                              setState(() {
-                                action = ActionType.Rate;
-                              });
-                            },
-                            icon: FontAwesomeIcons.solidStar,
-                            iconColor: action == ActionType.Rate
-                                ? Theme.of(context).accentColor
-                                : Colors.black,
-                            label: 'Rating',
-                          ),
-
-                          /// Google Review
-                          BottomButtonAny(
-                            onPress: (){
-                              setState(() {
-                                action = ActionType.Review;
-                              });
-                            },
-                            icon: FontAwesomeIcons.penFancy,
-                            iconColor: action == ActionType.Review
-                                ? Theme.of(context).accentColor
-                                : Colors.black,
-                            label: '5 Rating & Good Review',
-                          ),
-                        ]);
-                  }
-                })()),
-              ),
-              const SizedBox(height: 20),
-              Text(
-                'Campaign category :  $mediaString',
-                style: Theme.of(context).textTheme.headline2,
-              ),
-              Text(
-                'Requesting action for :  $actionString',
-                style: Theme.of(context).textTheme.headline2,
+              ListView.builder(
+                shrinkWrap: true,
+                itemBuilder: (context, i) {
+                  actionIcon = _data[i].name;
+                  return CustomRow(
+                    onPress: (){
+                      setState(() {
+                        chosenId = _data[i].id;
+                      });
+                    },
+                    id: _data[i].id,
+                    name: _data[i].name,
+                    icon: stringToAction,
+                    chosenId: chosenId,
+                    cost: _data[i].cost,
+                  );
+                },
+                itemCount: _data.length,
               ),
               const SizedBox(height: 20),
               Container(
                 width: 100,
                 child: ElevatedButton(
                   onPressed: () {
-                    CampaignClass newCamp = CampaignClass(
-                      media: media,
-                      action: action,
-                    );
                     Navigator.pop(context);
                     Navigator.pushNamed(
                       context, CreateCampaign.id,
-                      arguments: newCamp,
+                      arguments: chosenId,
                     );
                   },
                   style: ButtonStyle(
@@ -373,44 +117,90 @@ class _HomeBottomModalState extends State<HomeBottomModal> {
   }
 }
 
-class BottomButtonAny extends StatelessWidget {
-  final Function? onPress;
-  final IconData? icon;
-  final Color? iconColor;
-  final String? label;
-  BottomButtonAny({
-    this.onPress,
-    this.icon,
-    this.iconColor,
-    this.label,
+class CustomRow extends StatelessWidget {
+  final Function onPress;
+  final int id;
+  final String name;
+  final IconData icon;
+  final int chosenId;
+  final int cost;
+  CustomRow({
+    required this.onPress,
+    required this.id,
+    required this.name,
+    required this.icon,
+    required this.chosenId,
+    required this.cost,
   });
 
   @override
   Widget build(BuildContext context) {
-    return RawMaterialButton(
-      constraints: const BoxConstraints(
-        maxHeight: 45,
-        minHeight: 45,
-      ),
-      onPressed: onPress as void Function()?,
-      child: Column(
-        children: [
-          Icon(
-            icon,
-            color: iconColor,
-            size: 25,
-          ),
-          const SizedBox(height: 3),
-          Text(
-            label!,
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 12,
-              fontWeight: FontWeight.bold,
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 18),
+          child: RawMaterialButton(
+            constraints: const BoxConstraints(
+              maxHeight: 45,
+              minHeight: 45,
+            ),
+            onPressed: onPress as void Function()?,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                      Icon(
+                        icon,
+                        color: id == chosenId
+                            ? Theme.of(context).accentColor
+                            : Colors.black,
+                        size: 25,
+                      ),
+                    const SizedBox(width: 15),
+                    Text(
+                      name,
+                      style: id == chosenId
+                          ? Theme.of(context).textTheme.headline2!.copyWith(color: Theme.of(context).accentColor)
+                          : Theme.of(context).textTheme.headline2,
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Text(
+                      cost.toString(),
+                      style: TextStyle(
+                        color: id == chosenId
+                            ? Colors.red
+                            : Colors.black,
+                        fontSize: 20,
+                      ),
+                    ),
+                    const SizedBox(width: 5),
+                    Icon(
+                      Icons.favorite,
+                      color: id == chosenId
+                          ? Colors.red
+                          : Colors.black,
+                    ),
+                  ],
+                ),
+              ],
             ),
           ),
-        ],
-      ),
+        ),
+        Container(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 20,
+          ),
+          child: const Divider(
+            height: 1,
+            color: Colors.pinkAccent,
+          ),
+        ),
+      ],
     );
   }
 }
+

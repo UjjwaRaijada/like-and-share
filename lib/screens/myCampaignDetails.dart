@@ -8,6 +8,7 @@ import 'package:url_launcher/url_launcher.dart';
 import './restartCampaign.dart';
 import '../providers/campaignData.dart';
 import '../providers/completed.dart';
+import '../providers/misc.dart';
 import '../widgets/startingCode.dart';
 import '../widgets/shadowBox.dart';
 import '../widgets/halfRow.dart';
@@ -204,15 +205,12 @@ class _MyCampaignDetailsState extends State<MyCampaignDetails> {
   Widget build(BuildContext context) {
     _dataCompleted =
         Provider.of<CompletedData>(context).data.toList();
-// print(_dataCompleted.length);
 
-    actionIcon = _campaignData.action;
-    media = _campaignData.media;
-    _approved = (_campaignData.heartGiven! / _campaignData.cost!).round() + _tempApprove;
-    _pending = ((_campaignData.heartPending! / _campaignData.cost!) - _tempApprove < 0 ? 0 : (_campaignData.heartPending! / _campaignData.cost!) - _tempApprove).round();
-
+    _approved = (_campaignData.heartGiven! / _campaignData.cost).round() + _tempApprove;
+    _pending = ((_campaignData.heartPending! / _campaignData.cost) - _tempApprove < 0 ? 0 : (_campaignData.heartPending! / _campaignData.cost) - _tempApprove).round();
+    actionIcon = _campaignData.actionName!;
     return StartingCode(
-      title: mediaString,
+      title: '',
       widget: Column(
         children: [
           Row(
@@ -235,9 +233,9 @@ class _MyCampaignDetailsState extends State<MyCampaignDetails> {
                   Container(
                     height: 18,
                     child: RawMaterialButton(
-                      onPressed: () => _launchURL(_campaignData.pageUrl!),
+                      onPressed: () => _launchURL(_campaignData.pageUrl),
                       child: Text(
-                        _campaignData.pageUrl!,
+                        _campaignData.pageUrl,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -246,7 +244,7 @@ class _MyCampaignDetailsState extends State<MyCampaignDetails> {
                   const SizedBox(height: 5),
                   Text(
                     DateFormat.yMMMd()
-                        .format(_campaignData.createdOn!)
+                        .format(_campaignData.createdOn)
                         .toString(),
                   ),
                   const SizedBox(height: 5),
@@ -263,7 +261,7 @@ class _MyCampaignDetailsState extends State<MyCampaignDetails> {
                             ),
                           ),
                           Icon(
-                            actionToIcon,
+                            stringToAction,
                             size: 12,
                           ),
                         ],
@@ -272,7 +270,7 @@ class _MyCampaignDetailsState extends State<MyCampaignDetails> {
                         children: [
                           Container(
                             child: Text(
-                              'Expense: ${_campaignData.cost!*_campaignData.qty!} ',
+                              'Expense: ${_campaignData.cost*_campaignData.qty} ',
                             ),
                           ),
                           const Icon(
@@ -314,7 +312,7 @@ class _MyCampaignDetailsState extends State<MyCampaignDetails> {
                       ],
                     ),
                   )
-                : _campaignData.qty! * _campaignData.cost! > _campaignData.heartPending! + _campaignData.heartGiven! + _campaignData.heartReturned!
+                : _campaignData.qty * _campaignData.cost > _campaignData.heartPending! + _campaignData.heartGiven! + _campaignData.heartReturned!
                   ? Padding(
                     padding: const EdgeInsets.all(18.0),
                     child: DefaultTextStyle(
@@ -323,7 +321,7 @@ class _MyCampaignDetailsState extends State<MyCampaignDetails> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          _campaignData.qty! * _campaignData.cost! != _campaignData.heartPending! + _campaignData.heartReturned! + _campaignData.heartGiven!
+                          _campaignData.qty * _campaignData.cost != _campaignData.heartPending! + _campaignData.heartReturned! + _campaignData.heartGiven!
                               ? const Text('Your Campaign is still active. Please wait for people to act on your Campaign.')
                               : const Text(
                             'Great job! You have shared hearts with people who cared about you. Create a new campaign and enjoy.',

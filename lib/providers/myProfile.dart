@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 import './auth.dart';
 
 class MyProfile with ChangeNotifier {
-  final int? id;
+  final int id;
   final String? name;
   final String? city;
   final String? email;
@@ -25,7 +25,7 @@ class MyProfile with ChangeNotifier {
   final int? score;
 
   MyProfile({
-    this.id,
+    required this.id,
     this.name,
     this.city,
     this.email,
@@ -50,6 +50,9 @@ class MyProfileData with ChangeNotifier {
   final String? _auth;
   final int? _userId;
   MyProfileData(this._auth, this._userId, this._data);
+
+  final String _website = 'www.likeandshare.app';
+  final String _address = '/admin/v2/user';
 
   bool? success;
   String? msg;
@@ -80,7 +83,7 @@ class MyProfileData with ChangeNotifier {
   }
 
   Future<int> register(MyProfile newData) async {
-    final _url = Uri.https('www.likeandshare.app', '/admin/v1/user/create.php');
+    final _url = Uri.https(_website, '$_address/create.php');
 
     Map<String, String> _header = {
       'content-type': 'application/json',
@@ -134,7 +137,7 @@ print('myProfile.dart :: register :: status :::::::::::::::::::::::::::::: ${res
   }
 
   Future<int> googleRegister(MyProfile newData) async {
-    final _url = Uri.https('www.likeandshare.app', '/admin/v1/user/create_google.php');
+    final _url = Uri.https(_website, '$_address/create_google.php');
 
     Map<String, String> _header = {
       'content-type': 'application/json',
@@ -187,16 +190,15 @@ print('myProfile.dart :: register :: status :::::::::::::::::::::::::::::: ${res
   }
 
   Future<int> refreshData() async {
-    final _url = Uri.https('www.likeandshare.app', '/admin/v1/user/read_single.php', {'id': '$_userId'});
+    final _url = Uri.https(_website, '$_address/read_single.php', {'id': '$_userId'});
 
     final result = await http
-        .get(_url, headers: {'authorization': '$_auth'}).catchError((error) {
-      throw error;
-    });
+        .get(_url, headers: {'authorization': '$_auth'});
 
       if (result.statusCode == 200) {
         final _extractedData = jsonDecode(result.body) as Map<String, dynamic>;
-        _data = MyProfile(
+        MyProfile _newData;
+        _newData = MyProfile(
           id: int.parse(_extractedData['data']['campaign']['id']),
           name: _extractedData['data']['campaign']['name'],
           city: _extractedData['data']['campaign']['city'],
@@ -206,29 +208,17 @@ print('myProfile.dart :: register :: status :::::::::::::::::::::::::::::: ${res
           holdOut: int.parse(_extractedData['data']['campaign']['holdOut']),
           holdIn: int.parse(_extractedData['data']['campaign']['holdIn']),
           status: _extractedData['data']['campaign']['status'],
-          // facebook: _extractedData['data']['campaign']['facebook'],
-          // instagram: _extractedData['data']['campaign']['instagram'],
-          // twitter: _extractedData['data']['campaign']['twitter'],
-          // youtube: _extractedData['data']['campaign']['youtube'],
-          // google: _extractedData['data']['campaign']['google'],
           chosen: int.parse(_extractedData['data']['campaign']['chosen']),
           score: int.parse(_extractedData['data']['campaign']['score']),
         );
+        _data = _newData;
         notifyListeners();
-      //   return true;
-      // } else if (result.statusCode == 401) {
-      //   Auth().logout();
-      //   SharedPreferences prefs = await SharedPreferences.getInstance();
-      //   prefs?.clear();
-      //   return false;
-      // } else {
-      //   return false;
       }
       return result.statusCode;
   }
 
   Future<bool> updateMyProfile(MyProfile newData) async {
-    final _url = Uri.https('www.likeandshare.app', '/admin/v1/user/update.php', {'id': _data.id});
+    final _url = Uri.https(_website, '$_address/update.php', {'id': _data.id});
 
     return await http
         .patch(
@@ -286,7 +276,7 @@ print('myProfile.dart :: register :: status :::::::::::::::::::::::::::::: ${res
   }
 
   Future<bool> changePassword(String? oldPassword, String? newPassword) async {
-    final _url = Uri.https('www.likeandshare.app', '/admin/v1/user/change_password.php', {'id': '$_userId'});
+    final _url = Uri.https(_website, '$_address/change_password.php', {'id': '$_userId'});
 
     return await http
         .patch(

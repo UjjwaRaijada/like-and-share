@@ -24,6 +24,7 @@ class _RegisterState extends State<Register> {
   final _passwordFocusNode = FocusNode();
   final _refByFocusNode = FocusNode();
   MyProfile _register = MyProfile(
+    id: 0,
     name: '',
     email: '',
     mobile: 0,
@@ -126,6 +127,7 @@ class _RegisterState extends State<Register> {
                   FocusScope.of(context).requestFocus(_emailFocusNode),
               onSave: (newValue) {
                 _register = MyProfile(
+                  id: 0,
                   name: newValue,
                   email: _register.email,
                   mobile: _register.mobile,
@@ -149,6 +151,7 @@ class _RegisterState extends State<Register> {
                   FocusScope.of(context).requestFocus(_mobileFocusNode),
               onSave: (newValue) {
                 _register = MyProfile(
+                  id: 0,
                   name: _register.name,
                   email: newValue,
                   mobile: _register.mobile,
@@ -178,6 +181,7 @@ class _RegisterState extends State<Register> {
                   FocusScope.of(context).requestFocus(_passwordFocusNode),
               onSave: (newValue) {
                 _register = MyProfile(
+                  id: 0,
                   name: _register.name,
                   email: _register.email,
                   mobile: int.parse(newValue),
@@ -202,6 +206,7 @@ class _RegisterState extends State<Register> {
                   FocusScope.of(context).requestFocus(_refByFocusNode),
               onSave: (newValue) {
                 _register = MyProfile(
+                  id: 0,
                   name: _register.name,
                   email: _register.email,
                   mobile: _register.mobile,
@@ -226,6 +231,7 @@ class _RegisterState extends State<Register> {
                 String val =
                 newValue == null || newValue == "" ? '0' : newValue;
                 _register = MyProfile(
+                  id: 0,
                   name: _register.name,
                   email: _register.email,
                   mobile: _register.mobile,
