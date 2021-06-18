@@ -78,6 +78,7 @@ class CustomDrawer extends StatelessWidget {
                 icon: FontAwesomeIcons.asterisk,
                 title: 'Terms Of Use',
               ),
+              CustomDivider(),
               DrawerButton(
                 onPress: () => Navigator.popAndPushNamed(context, AboutUs.id),
                 icon: FontAwesomeIcons.palette,

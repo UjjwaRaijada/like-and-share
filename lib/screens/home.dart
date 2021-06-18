@@ -11,13 +11,12 @@ import './myCampaign.dart';
 import './socialMediaNew.dart';
 import './socialMediaPremium.dart';
 import './badge.dart';
-import './disclaimer.dart';
+// import './disclaimer.dart';
 import '../providers/auth.dart';
 import '../providers/campaignData.dart';
 import '../providers/misc.dart';
 import '../providers/myProfile.dart';
 import '../widgets/customDrawer.dart';
-import '../widgets/customDivider.dart';
 import '../widgets/homeButtonModal.dart';
 
 class Home extends StatefulWidget {
@@ -42,8 +41,8 @@ class _HomeState extends State<Home> {
       FeatureDiscovery.discoverFeatures(
         context,
         const <String>{ // Feature ids for every feature that you want to showcase in order.
-          'social_media',
           'add_camp',
+          'play',
         },
       );
     });
@@ -62,18 +61,19 @@ class _HomeState extends State<Home> {
         if (value == 401) {
           _logoutUser();
         }
+        _loadOnce = false;
       });
       Provider.of<CampaignData>(context, listen: false).premiumCamp();
     }
     super.didChangeDependencies();
   }
 
-  void _disclaimer() async {
-    final prefs = await SharedPreferences.getInstance();
-    if (!prefs.containsKey('disclaimer')) {
-      Navigator.pushReplacementNamed(context, Disclaimer.id);
-    }
-  }
+  // void _disclaimer() async {
+  //   final prefs = await SharedPreferences.getInstance();
+  //   if (!prefs.containsKey('disclaimer')) {
+  //     Navigator.pushReplacementNamed(context, Disclaimer.id);
+  //   }
+  // }
 
   void _logoutUser() async {
     Navigator.pop(context);
@@ -93,9 +93,10 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    Future.delayed(Duration.zero, () => _disclaimer());
+    // Future.delayed(Duration.zero, () => _disclaimer());
     _myProfile = Provider.of<MyProfileData>(context).data;
     _premium = Provider.of<CampaignData>(context).premiumData;
+    actionIcon = _premium[0].actionIcon!;
 
     return Scaffold(
       key: _scaffoldKey,
@@ -164,73 +165,7 @@ class _HomeState extends State<Home> {
                 ),
                 child: Column(
                         children: [
-                          SizedBox(height: 10),
-                          // Row(
-                          //     mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          //     children: [
-                          //       SocialMediaIcon(
-                          //         onPress: () {
-                          //           Provider.of<CampaignData>(context, listen: false).clearData();
-                          //           Navigator.pushNamed(
-                          //               context, SocialMediaNew.id,
-                          //               arguments: Media.Facebook);
-                          //         },
-                          //         icon: FontAwesomeIcons.facebookF,
-                          //       ),
-                          //       SocialMediaIcon(
-                          //         onPress: () {
-                          //           Provider.of<CampaignData>(context, listen: false).clearData();
-                          //           Navigator.pushNamed(
-                          //               context, SocialMediaNew.id,
-                          //               arguments: Media.Instagram);
-                          //         },
-                          //         icon: FontAwesomeIcons.instagramSquare,
-                          //       ),
-                          //       SocialMediaIcon(
-                          //         onPress: () {
-                          //           Provider.of<CampaignData>(context, listen: false).clearData();
-                          //           Navigator.pushNamed(
-                          //               context, SocialMediaNew.id,
-                          //               arguments: Media.Twitter);
-                          //         },
-                          //         icon: FontAwesomeIcons.twitter,
-                          //       ),
-                          //       DescribedFeatureOverlay(
-                          //         featureId: 'social_media',
-                          //         title: Text('Categories'),
-                          //         description: Text(
-                          //           'You can earn hearts & points by taking required action on the campaigns created by other people. These Icons are purely for categorisation purpose. On clicking on any of these icons, it will open campaigns created by other people of chosen category in our inbuilt browser.',
-                          //         ),
-                          //         backgroundColor: Theme.of(context).primaryColor,
-                          //         targetColor: Colors.white,
-                          //         textColor: Colors.white,
-                          //         contentLocation: ContentLocation.below,
-                          //         tapTarget: SocialMediaInfo(
-                          //           icon: FontAwesomeIcons.youtube,
-                          //         ),
-                          //         child: SocialMediaIcon(
-                          //           onPress: () {
-                          //             Provider.of<CampaignData>(context, listen: false).clearData();
-                          //             Navigator.pushNamed(
-                          //                 context, SocialMediaNew.id,
-                          //                 arguments: Media.YouTube);
-                          //           },
-                          //           icon: FontAwesomeIcons.youtube,
-                          //         ),
-                          //       ),
-                          //       SocialMediaIcon(
-                          //         onPress: () {
-                          //           Provider.of<CampaignData>(context, listen: false).clearData();
-                          //           Navigator.pushNamed(
-                          //               context, SocialMediaNew.id,
-                          //               arguments: Media.GoogleReview);
-                          //         },
-                          //         icon: FontAwesomeIcons.google,
-                          //       ),
-                          //     ],
-                          //   ),
-                          // ),
-                          CustomDivider(),
+                          SizedBox(height: 20),
                           Expanded(
                             child: SingleChildScrollView(
                               child: Column(
@@ -277,7 +212,7 @@ class _HomeState extends State<Home> {
                                                   padding: EdgeInsets.all(20),
                                                   width: 150,
                                                   height: 150,
-                                                  child: Icon(IconDataSolid(int.parse(_premium[0].actionIcon!))),
+                                                  child: Icon(stringToAction),
                                                 ),
                                                 Text(
                                                   _premium[0].authorName,
@@ -320,7 +255,7 @@ class _HomeState extends State<Home> {
                                                           children: [
                                                             const Text('Action Required :  '),
                                                             Icon(
-                                                              IconDataSolid(int.parse(_premium[0].actionIcon!)),
+                                                              stringToAction,
                                                               size: 18,
                                                             ),
                                                           ],
@@ -392,14 +327,12 @@ class _HomeState extends State<Home> {
                 _scaffoldKey.currentState!.openDrawer();
               },
               icon: FontAwesomeIcons.bars,
-              // label: 'Menu',
             ),
             BottomButton(
               onPress: () {
                 Navigator.pushNamed(context, Badge.id);
               },
               icon: FontAwesomeIcons.medal,
-              // label: 'Badge',
             ),
             DescribedFeatureOverlay(
               featureId: 'add_camp',
@@ -420,15 +353,6 @@ class _HomeState extends State<Home> {
                       color: Theme.of(context).accentColor,
                       size: 25,
                     ),
-                    // const SizedBox(height: 3),
-                    // Text(
-                    //   'Add',
-                    //   style: TextStyle(
-                    //     color: Theme.of(context).accentColor,
-                    //     fontSize: 12,
-                    //     fontWeight: FontWeight.bold,
-                    //   ),
-                    // ),
                   ],
                 ),
               ),
@@ -437,22 +361,42 @@ class _HomeState extends State<Home> {
                   _modalBottomSheetMenu();
                 },
                 icon: FontAwesomeIcons.plus,
-                // label: 'Add',
               ),
             ),
-            BottomButton(
-              onPress: () {
-                Navigator.pushNamed(context, SocialMediaNew.id);
-              },
-              icon: FontAwesomeIcons.play,
-              // label: 'Campaigns',
+            DescribedFeatureOverlay(
+              featureId: 'play',
+              title: Text('Play Campaigns'),
+              description: Text('You can earn hearts & points by taking required action on the campaigns created by other people.'),
+              backgroundColor: Theme.of(context).primaryColor,
+              targetColor: Colors.white,
+              textColor: Colors.white,
+              tapTarget: Container(
+                constraints: const BoxConstraints(
+                  maxHeight: 45,
+                  minHeight: 45,
+                ),
+                child: Column(
+                  children: [
+                    Icon(
+                      FontAwesomeIcons.plus,
+                      color: Theme.of(context).accentColor,
+                      size: 25,
+                    ),
+                  ],
+                ),
+              ),
+              child: BottomButton(
+                onPress: () {
+                  Navigator.pushNamed(context, SocialMediaNew.id);
+                },
+                icon: FontAwesomeIcons.play,
+              ),
             ),
             BottomButton(
               onPress: () {
                 Navigator.pushNamed(context, MyCampaign.id);
               },
               icon: FontAwesomeIcons.database,
-              // label: 'Campaigns',
             ),
           ],
         ),
@@ -477,6 +421,7 @@ class BottomButton extends StatelessWidget {
       constraints: const BoxConstraints(
         maxHeight: 45,
         minHeight: 45,
+        minWidth: 45,
       ),
       onPressed: onPress as void Function()?,
       child: Column(
@@ -486,15 +431,6 @@ class BottomButton extends StatelessWidget {
             color: Theme.of(context).accentColor,
             size: 25,
           ),
-          // const SizedBox(height: 3),
-          // Text(
-          //   label!,
-          //   style: TextStyle(
-          //     color: Theme.of(context).accentColor,
-          //     fontSize: 12,
-          //     fontWeight: FontWeight.bold,
-          //   ),
-          // ),
         ],
       ),
     );
